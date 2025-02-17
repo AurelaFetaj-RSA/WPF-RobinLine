@@ -1,0 +1,208 @@
+﻿<UserControl x:Class="WPF_App.Views.AutomaticView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModel="clr-namespace:WPF_App.ViewModels"
+             xmlns:views="clr-namespace:WPF_App.Views"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             Height="300" Width="500">
+    <Grid>
+        <TextBlock Text="Automatic View" 
+                   FontSize="24" 
+                   Foreground="White" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"/>
+        <!--<Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="57" Margin="26,18,0,0" VerticalAlignment="Top" Width="132">
+        </Border>-->
+        <Border CornerRadius="10"
+                Background="Transparent"
+                Width="160"
+                Height="100"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="0,0,0,0">
+                <Border.RenderTransform>
+                    <TranslateTransform Y="-40"/>
+                    <!-- Moves Up -->
+                </Border.RenderTransform>
+            
+                <Grid>
+
+                    <!-- Dashed Border -->
+                    <Rectangle Stroke="White"
+                                   StrokeThickness="0.5"
+                                   StrokeDashArray="6 6"
+                                   RadiusX="10"
+                                   RadiusY="10"
+                                   Fill="Transparent" Margin="-19,-11,19,11"/>
+                        
+                    <!-- TextBlock Positioned at Top-Left -->
+                    <StackPanel Background="#157291"
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Top" 
+                                Margin="-5, -20, 0, 0">
+                        <TextBlock Text="Robot 1"
+                                   Foreground="White"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Padding="5, 0"/>
+                    </StackPanel>
+
+                </Grid>
+        </Border>
+
+        <Border CornerRadius="10"
+            Background="Transparent"
+            Width="160"
+            Height="100"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="180,0,0,0">
+            <Border.RenderTransform>
+                <TranslateTransform Y="-40"/>
+                <!-- Moves Up -->
+            </Border.RenderTransform>
+
+            <Grid>
+
+                <!-- Dashed Border -->
+                <Rectangle Stroke="White"
+                           StrokeThickness="0.5"
+                           StrokeDashArray="6 6"
+                           RadiusX="10"
+                           RadiusY="10"
+                           Fill="Transparent" Margin="-19,-11,19,11"/>
+
+                <!-- TextBlock Positioned at Top-Left -->
+                <StackPanel Background="#157291"
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" 
+                        Margin="-5, -20, 0, 0">
+                    <TextBlock Text="Robot 1"
+                           Foreground="White"
+                           FontSize="12"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Padding="5, 0"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <Border CornerRadius="10"
+                Background="Transparent"
+                Width="160"
+                Height="100"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="340,0,0,0">
+                <Border.RenderTransform>
+                    <TranslateTransform Y="-40"/>
+                <!--<TranslateTransform X="40"/>-->
+                <!-- Moves Up -->
+                </Border.RenderTransform>
+
+                <Grid>
+
+                    <!-- Dashed Border -->
+                    <Rectangle Stroke="White"
+                       StrokeThickness="0.5"
+                       StrokeDashArray="6 6"
+                       RadiusX="10"
+                       RadiusY="10"
+                       Fill="Transparent" Margin="-1,-11,1,11"/>
+
+                    <!-- TextBlock Positioned at Top-Left -->
+                    <StackPanel Background="#157291"
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    Margin="-5, -20, 0, 0">
+                        <TextBlock Text="Robot 1"
+                       Foreground="White"
+                       FontSize="12"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Padding="5, 0"/>
+                    </StackPanel>
+
+                </Grid>
+        </Border>
+
+        <Border CornerRadius="10"
+                Background="Transparent"
+                Width="250"
+                Height="80"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="150,200,0,0">
+                <Border.RenderTransform>
+                    <TranslateTransform Y="80"/>
+                     <!--Moves Up--> 
+                </Border.RenderTransform>
+
+            <Grid>
+
+                <!-- Dashed Border -->
+                <Rectangle Stroke="White"
+                               StrokeThickness="0.5"
+                               StrokeDashArray="6 6"
+                               RadiusX="10"
+                               RadiusY="10"
+                               Fill="Transparent" Margin="-19,-11,19,11"/>
+
+                <!--<Button Width="40" Height="40"
+                            BorderThickness="0"
+                            HorizontalAlignment="Left"
+                            Cursor="Hand"
+                            VerticalAlignment="Top"
+                            Click="Button_Click"
+                            Margin="20,20,0,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="Transparent">
+                                <ContentPresenter/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <fa:IconImage Icon="{Binding PlayStopIcon}"
+                                      Width="30"
+                                      Height="30"
+                                      Foreground="White"/>
+                </Button>-->
+                <Button Width="50" Height="60"
+                        BorderThickness="0"
+                        HorizontalAlignment="Left"
+                        Cursor="Hand"
+                        VerticalAlignment="Top"
+                        Click="Button_Click"
+                        Margin="20,20,0,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="Transparent">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <!-- Icon -->
+                                    <fa:IconImage Icon="{Binding PlayStopIcon}"
+                                                  Width="30"
+                                                  Height="30"
+                                                  Foreground="White"/>
+
+                                    <!-- Text -->
+                                    <TextBlock Text="{Binding PlayStopText}" 
+                                               Foreground="White"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
