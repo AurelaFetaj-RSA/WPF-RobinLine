@@ -1,28 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
-    <RootNamespace>WPF_RobinLine</RootNamespace>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<RootNamespace>WPF_RobinLine</RootNamespace>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Images\thumbnail_logo.rsa_solo.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Images\thumbnail_logo.rsa_solo.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
-    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
-    <PackageReference Include="Opc.UaFx.Advanced" Version="2.42.5" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25103.5738" />
+		<PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
+		<PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+		<PackageReference Include="Opc.UaFx.Advanced" Version="2.42.5" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Images\thumbnail_logo.rsa_solo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Images\thumbnail_logo.rsa_solo.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
 
 </Project>

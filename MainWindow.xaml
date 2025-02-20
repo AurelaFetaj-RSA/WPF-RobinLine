@@ -207,7 +207,7 @@
             <Border CornerRadius="10,0,0,10" Grid.Column="0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.7">
-                        <GradientStop Color="{StaticResource primaryBackColor3}" Offset="0"/>
+                        <GradientStop Color="{StaticResource primaryBackColor5}" Offset="0"/>
                         <GradientStop Color="{StaticResource primaryBackColor4}" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>

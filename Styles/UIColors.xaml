@@ -7,6 +7,7 @@
     <Color x:Key="primaryBackColor2">#1C0E49</Color>
     <Color x:Key="primaryBackColor3">#157291</Color>
     <Color x:Key="primaryBackColor4">#146C8A</Color>
+    <Color x:Key="primaryBackColor5">#177495</Color>
     <Color x:Key="secondaryBackColor1">#24105F</Color>
     <Color x:Key="secondaryBackColor2">#210F55</Color>
     <Color x:Key="secondaryBackColor3">#127797</Color>

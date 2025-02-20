@@ -4,13 +4,14 @@
              xmlns:viewModel="clr-namespace:WPF_App.ViewModels"
              xmlns:views="clr-namespace:WPF_App.Views"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:controls="http://schemas.xceed.com/wpf/xaml/toolkit"
              Height="300" Width="500">
     <Grid>
-        <TextBlock Text="Automatic View" 
+        <!--<TextBlock Text="Automatic View" 
                    FontSize="24" 
                    Foreground="White" 
                    HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"/>
+                   VerticalAlignment="Center"/>-->
         <!--<Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="57" Margin="26,18,0,0" VerticalAlignment="Top" Width="132">
         </Border>-->
         <Border CornerRadius="10"
@@ -20,45 +21,112 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="0,0,0,0">
-                <Border.RenderTransform>
-                    <TranslateTransform Y="-40"/>
-                    <!-- Moves Up -->
-                </Border.RenderTransform>
-            
-                <Grid>
+            <Border.RenderTransform>
+                <TranslateTransform Y="-40"/>
+                <!-- Moves Up -->
+            </Border.RenderTransform>
 
-                    <!-- Dashed Border -->
-                    <Rectangle Stroke="White"
+            <Grid>
+
+                <!-- Dashed Border -->
+                <Rectangle Stroke="White"
                                    StrokeThickness="0.5"
                                    StrokeDashArray="6 6"
                                    RadiusX="10"
                                    RadiusY="10"
                                    Fill="Transparent" Margin="-19,-11,19,11"/>
-                        
-                    <!-- TextBlock Positioned at Top-Left -->
-                    <StackPanel Background="#157291"
+
+                <!-- TextBlock Positioned at Top-Left -->
+                <StackPanel Background="#157291"
                                 HorizontalAlignment="Left" 
                                 VerticalAlignment="Top" 
                                 Margin="-5, -20, 0, 0">
-                        <TextBlock Text="Robot 1"
+                    <TextBlock Text="Robot 1"
                                    Foreground="White"
                                    FontSize="12"
                                    FontWeight="Bold"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Top"
                                    Padding="5, 0"/>
-                    </StackPanel>
+                </StackPanel>
+                <Border Width="20" Height="20"
+                        CornerRadius="15"
+                        Background="White"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="110, 60, 0, 0">
+                    <fa:IconImage Icon="Lightbulb"
+                                  Width="15"
+                                  Height="15"
+                                  Foreground="#02a29a"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                </Border>
 
-                </Grid>
+                <ToggleButton x:Name="RobotToggle"
+                              Width="30" Height="15"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Bottom"
+                              Margin="-10, 0, 0, 15"
+                              Background="Transparent"
+                              BorderThickness="0">
+                    <ToggleButton.RenderTransform>
+                        <TranslateTransform Y="-5"/>
+                        <!-- Move up by decreasing this -->
+                    </ToggleButton.RenderTransform>
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid Width="30" Height="15">
+                                <!-- Background Border -->
+                                <Border x:Name="ToggleBackground"
+                                        Width="30" Height="15"
+                                        CornerRadius="7"
+                                        Background="Gray"/>
+
+                                <!-- Toggle Thumb -->
+                                <Ellipse x:Name="ToggleThumb"
+                                         Width="12" Height="12"
+                                         Fill="White"
+                                         HorizontalAlignment="Left"
+                                         Margin="2, 0, 0, 0">
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform x:Name="ThumbTransform"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- Storyboard Animation -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                        <Setter.Value>
+                                            <TranslateTransform X="15"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                        <Setter.Value>
+                                            <TranslateTransform X="0"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+            </Grid>
         </Border>
 
         <Border CornerRadius="10"
-            Background="Transparent"
-            Width="160"
-            Height="100"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="180,0,0,0">
+                Background="Transparent"
+                Width="160"
+                Height="100"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="180,0,0,0">
             <Border.RenderTransform>
                 <TranslateTransform Y="-40"/>
                 <!-- Moves Up -->
@@ -76,18 +144,58 @@
 
                 <!-- TextBlock Positioned at Top-Left -->
                 <StackPanel Background="#157291"
-                        HorizontalAlignment="Left" 
-                        VerticalAlignment="Top" 
-                        Margin="-5, -20, 0, 0">
-                    <TextBlock Text="Robot 1"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           Padding="5, 0"/>
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Margin="-5, -20, 0, 0">
+                    <TextBlock Text="Oven 1"
+                               Foreground="White"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="5, 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Lamps Percentage" 
+                               Margin="-22,-5,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+
+                     <!--IntegerUpDown with arrows for increment and decrement--> 
+                    <controls:IntegerUpDown Width="43" Margin="7,-5,0,0" VerticalAlignment="Center" 
+                                Increment="1" Value="0"
+                                Minimum="0" Maximum="100"/>
                 </StackPanel>
 
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Fan Percentage" 
+                               Margin="-22,20,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+
+                     <!--IntegerUpDown with arrows for increment and decrement--> 
+                    <controls:IntegerUpDown Width="43" Margin="22,20,0,0" VerticalAlignment="Center" 
+                                            Increment="1" Value="0"
+                                            Minimum="0" Maximum="100"/>
+                </StackPanel>
+
+                <Border Width="20" Height="20"
+                        CornerRadius="15"
+                        Background="White"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="110, 60, 0, 0">
+                    <fa:IconImage Icon="Lightbulb"
+                                   Width="15"
+                                   Height="15"
+                                   Foreground="#02a29a"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+                </Border>
             </Grid>
         </Border>
 
@@ -98,50 +206,199 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="340,0,0,0">
-                <Border.RenderTransform>
-                    <TranslateTransform Y="-40"/>
+            <Border.RenderTransform>
+                <TranslateTransform Y="-40"/>
                 <!--<TranslateTransform X="40"/>-->
                 <!-- Moves Up -->
-                </Border.RenderTransform>
+            </Border.RenderTransform>
 
-                <Grid>
+            <Grid>
 
-                    <!-- Dashed Border -->
-                    <Rectangle Stroke="White"
-                       StrokeThickness="0.5"
-                       StrokeDashArray="6 6"
-                       RadiusX="10"
-                       RadiusY="10"
-                       Fill="Transparent" Margin="-1,-11,1,11"/>
+                <!-- Dashed Border -->
+                <Rectangle Stroke="White"
+                               StrokeThickness="0.5"
+                               StrokeDashArray="6 6"
+                               RadiusX="10"
+                               RadiusY="10"
+                               Fill="Transparent" Margin="-1,-11,1,11"/>
 
-                    <!-- TextBlock Positioned at Top-Left -->
-                    <StackPanel Background="#157291"
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Top" 
-                    Margin="-5, -20, 0, 0">
-                        <TextBlock Text="Robot 1"
-                       Foreground="White"
-                       FontSize="12"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Top"
-                       Padding="5, 0"/>
-                    </StackPanel>
+                <!-- TextBlock Positioned at Top-Left -->
+                <StackPanel Background="#157291"
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Top" 
+                                Margin="-5, -20, 0, 0">
+                    <TextBlock Text="Robot 2"
+                                   Foreground="White"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Padding="5, 0"/>
+                </StackPanel>
 
-                </Grid>
+                <Border Width="20" Height="20"
+                        CornerRadius="15"
+                        Background="White"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="130, 60, 0, 0">
+                    <fa:IconImage Icon="Lightbulb"
+                                  Width="15"
+                                  Height="15"
+                                  Foreground="red"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                </Border>
+                <ToggleButton x:Name="RobotToggle2"
+                                Width="30" Height="15"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Margin="8, 0, 0, 15"
+                                Background="Transparent"
+                                BorderThickness="0">
+                    <ToggleButton.RenderTransform>
+                        <TranslateTransform Y="-5"/>
+                        <!-- Move up by decreasing this -->
+                    </ToggleButton.RenderTransform>
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid Width="30" Height="15">
+                                <!-- Background Border -->
+                                <Border x:Name="ToggleBackground2"
+                                          Width="30" Height="15"
+                                          CornerRadius="7"
+                                          Background="Gray"/>
+
+                                <!-- Toggle Thumb -->
+                                <Ellipse x:Name="ToggleThumb2"
+                                           Width="12" Height="12"
+                                           Fill="White"
+                                           HorizontalAlignment="Left"
+                                           Margin="2, 0, 0, 0">
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform x:Name="ThumbTransform"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- Storyboard Animation -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="ToggleBackground2" Property="Background" Value="#02a29a"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb2">
+                                        <Setter.Value>
+                                            <TranslateTransform X="15"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="ToggleBackground2" Property="Background" Value="#d0dae1"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb2">
+                                        <Setter.Value>
+                                            <TranslateTransform X="0"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+
+            </Grid>
         </Border>
 
         <Border CornerRadius="10"
                 Background="Transparent"
-                Width="250"
-                Height="80"
+                Width="160"
+                Height="100"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="150,200,0,0">
-                <Border.RenderTransform>
-                    <TranslateTransform Y="80"/>
-                     <!--Moves Up--> 
-                </Border.RenderTransform>
+                Margin="0,120,0,0">
+            <Border.RenderTransform>
+                <TranslateTransform Y="-40"/>
+                <!-- Moves Up -->
+            </Border.RenderTransform>
+
+            <Grid>
+
+                <!-- Dashed Border -->
+                <Rectangle Stroke="White"
+                           StrokeThickness="0.5"
+                           StrokeDashArray="6 6"
+                           RadiusX="10"
+                           RadiusY="10"
+                           Fill="Transparent" Margin="-19,-11,19,11"/>
+
+                <!-- TextBlock Positioned at Top-Left -->
+                <StackPanel Background="#157291"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Margin="-5, -20, 0, 0">
+                    <TextBlock Text="Oven 2"
+                               Foreground="White"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="5, 0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Lamps Percentage" 
+                               Margin="-22,-5,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+
+                    <!--IntegerUpDown with arrows for increment and decrement-->
+                    <controls:IntegerUpDown Width="43" Margin="7,-5,0,0" VerticalAlignment="Center" 
+                                            Increment="1" Value="0"
+                                            Minimum="0" Maximum="100"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Fan Percentage" 
+                               Margin="-22,20,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+
+                    <!--IntegerUpDown with arrows for increment and decrement-->
+                    <controls:IntegerUpDown Width="43" Margin="22,20,0,0" VerticalAlignment="Center" 
+                            Increment="1" Value="0"
+                            Minimum="0" Maximum="100"/>
+                </StackPanel>
+
+                <Border Width="20" Height="20"
+                        CornerRadius="15"
+                        Background="White"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="110, 60, 0, 0">
+                    <fa:IconImage Icon="Lightbulb"
+                                  Width="15"
+                                  Height="15"
+                                  Foreground="#02a29a"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <Border CornerRadius="10"
+                Background="Transparent"
+                Width="200"
+                Height="70"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="175,200,0,0">
+            <Border.RenderTransform>
+                <TranslateTransform Y="100"/>
+                <!--Moves Up-->
+            </Border.RenderTransform>
 
             <Grid>
 
@@ -153,32 +410,13 @@
                                RadiusY="10"
                                Fill="Transparent" Margin="-19,-11,19,11"/>
 
-                <!--<Button Width="40" Height="40"
-                            BorderThickness="0"
-                            HorizontalAlignment="Left"
-                            Cursor="Hand"
-                            VerticalAlignment="Top"
-                            Click="Button_Click"
-                            Margin="20,20,0,0">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="Transparent">
-                                <ContentPresenter/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                    <fa:IconImage Icon="{Binding PlayStopIcon}"
-                                      Width="30"
-                                      Height="30"
-                                      Foreground="White"/>
-                </Button>-->
                 <Button Width="50" Height="60"
                         BorderThickness="0"
                         HorizontalAlignment="Left"
                         Cursor="Hand"
                         VerticalAlignment="Top"
-                        Click="Button_Click"
-                        Margin="20,20,0,0">
+                        Click="StartStopButton_Click"
+                        Margin="-10,0,0,0">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="Transparent">
@@ -202,6 +440,142 @@
                     </Button.Template>
                 </Button>
 
+                <Button Width="50" Height="60"
+                        BorderThickness="0"
+                        HorizontalAlignment="Left"
+                        Cursor="Hand"
+                        VerticalAlignment="Top"
+                        Margin="54,0,0,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="Transparent">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <!-- Icon -->
+                                    <fa:IconImage Icon="Pause"
+                                                  Width="30"
+                                                  Height="30"
+                                                  Foreground="White"/>
+
+                                    <!-- Text -->
+                                    <TextBlock Text="Pause" 
+                                               Foreground="White"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Width="50" Height="60"
+                        BorderThickness="0"
+                        HorizontalAlignment="Left"
+                        Cursor="Hand"
+                        VerticalAlignment="Top"
+                        Margin="120,0,0,0"
+                        Click="ResetButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="Transparent">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <!-- Icon -->
+                                    <fa:IconImage Icon="Sync"
+                                                  Width="30"
+                                                  Height="30"
+                                                  Foreground="White"/>
+
+                                    <!-- Text -->
+                                    <TextBlock Text="Reset" 
+                                               Foreground="White"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Popup x:Name="ConfirmPopup" 
+                       IsOpen="False" 
+                       HorizontalAlignment="Left" 
+                       AllowsTransparency="True"
+                       VerticalAlignment="Top"
+                       Placement="Bottom" 
+                       PlacementTarget="{Binding ElementName=StartStopButton}" 
+                       StaysOpen="False" 
+                       HorizontalOffset="-50" 
+                       VerticalOffset="-200">
+                    <Border CornerRadius="15" Background="White" BorderBrush="Red" BorderThickness="0" Padding="10,25,10,10" Width="250" Height="100">
+                        <StackPanel>
+                            <!-- Confirmation Message -->
+                            <TextBlock Text="{Binding ConfirmationMessage}" 
+                                       HorizontalAlignment="Center" 
+                                       FontSize="12" 
+                                       Foreground="#555555" 
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,20"/>
+
+                            <!-- Buttons Panel -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <!-- Yes Button -->
+                                <Button Content="Yes" 
+                                        Click="YesButton_Click" 
+                                        Margin="10,0" 
+                                        Width="60" 
+                                        Height="25" 
+                                        FontSize="14" 
+                                        FontWeight="Bold" 
+                                        Background="#4CAF50" 
+                                        Foreground="White" 
+                                        BorderBrush="#388E3C" 
+                                        BorderThickness="1" 
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="1" 
+                                                    CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <!-- No Button -->
+                                <Button Content="No" 
+                                        Click="NoButton_Click" 
+                                        Margin="10,0" 
+                                        Width="60" 
+                                        Height="25" 
+                                        FontSize="14" 
+                                        FontWeight="Bold" 
+                                        Background="#F44336" 
+                                        Foreground="White" 
+                                        BorderBrush="#D32F2F" 
+                                        BorderThickness="1" 
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="1" 
+                                                    CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" 
+                                                                  VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Popup>
             </Grid>
         </Border>
     </Grid>
