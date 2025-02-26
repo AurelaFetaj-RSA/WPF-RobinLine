@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+
+    <System:String x:Key="SettingsTitle">Impostazioni Visualizza</System:String>
+    <System:String x:Key="subTitle">Benvenuti alla pagina delle impostazioni</System:String>
+    <System:String x:Key="firstMenuItem">Automatico</System:String>
+    <System:String x:Key="secondMenuItem">Ricette</System:String>
+    <System:String x:Key="thirdMenuItem">RFID</System:String>
+    <System:String x:Key="fourthMenuItem">Commesse</System:String>
+    <System:String x:Key="fifthMenuItem">Dispositivi</System:String>
+    <System:String x:Key="sixthMenuItem">Impostazioni</System:String>
+    <System:String x:Key="seventhMenuItem">Diagnostica</System:String>
+    <System:String x:Key="eighthMenuItem">Nascondi</System:String>
+    <System:String x:Key="English">Inglese</System:String>
+    <System:String x:Key="French">Francese</System:String>
+    <System:String x:Key="Spanish">Spagnolo</System:String>
+    <System:String x:Key="Italian">Italiano</System:String>
+</ResourceDictionary>

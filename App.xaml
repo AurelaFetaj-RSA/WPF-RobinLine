@@ -9,6 +9,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/UIColors.xaml"/>
                 <ResourceDictionary Source="/Styles/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/Localization/Dictionary-en-US.xaml" />
+                <!--<ResourceDictionary Source="/Resources/Localization/Dictionary-es-ES.xaml" />
+                <ResourceDictionary Source="/Resources/Localization/Dictionary-fr-FR.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

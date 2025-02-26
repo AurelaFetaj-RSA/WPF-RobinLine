@@ -126,7 +126,7 @@
                                  Command="{Binding ShowAutomaticViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Sync" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Automatico" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource firstMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -135,7 +135,7 @@
                                  Command="{Binding ShowRecipesViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Book" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Ricette" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource secondMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -144,7 +144,7 @@
                                  Command="{Binding ShowRFIDViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="BroadcastTower" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="RFID" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource thirdMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -153,7 +153,7 @@
                                  Command="{Binding ShowOrdersViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="ClipboardList" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Commesse" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource fourthMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -162,7 +162,7 @@
                                  Command="{Binding ShowDeviceViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="MobileAlt" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Dispositivi" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource fifthMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -171,7 +171,7 @@
                                  Command="{Binding ShowSettingsViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Impostazioni" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource sixthMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -180,7 +180,7 @@
                                  Command="{Binding ShowDiagnosticsViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="LaptopMedical" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Diagnostica" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource seventhMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -189,7 +189,7 @@
                                  Command="{Binding ShowHideViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="EyeSlash" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Nascondi" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource eighthMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 

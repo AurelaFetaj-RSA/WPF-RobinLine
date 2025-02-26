@@ -17,10 +17,10 @@
         <Border CornerRadius="10"
                 Background="Transparent"
                 Width="180"
-                Height="100"
+                Height="90"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="0,0,0,0">
+                Margin="-10,0,0,0">
             <Border.RenderTransform>
                 <TranslateTransform Y="-40"/>
                 <!-- Moves Up -->
@@ -55,7 +55,7 @@
                         Background="White"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="130, 50, 0, 0">
+                        Margin="130, 40, 0, 0">
                     <fa:IconImage Icon="Lightbulb"
                                   Width="15"
                                   Height="15"
@@ -63,9 +63,9 @@
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"/>
                 </Border>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0">
                     <TextBlock Text="Ready" 
-                               Margin="110,60,0,0" 
+                               Margin="120,60,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="11" 
@@ -129,7 +129,7 @@
                 </ToggleButton>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Availability" 
-                               Margin="-20,60,0,0" 
+                               Margin="-20,50,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="11" 
@@ -141,10 +141,135 @@
         <Border CornerRadius="10"
                 Background="Transparent"
                 Width="180"
-                Height="100"
+                Height="90"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="200,0,0,0">
+                Margin="170,0,0,0">
+            <Border.RenderTransform>
+                <TranslateTransform Y="-40"/>
+                <!--<TranslateTransform X="40"/>-->
+                <!-- Moves Up -->
+            </Border.RenderTransform>
+
+            <Grid>
+
+                <!-- Dashed Border -->
+                <Rectangle Stroke="White"
+                           StrokeThickness="0.5"
+                           StrokeDashArray="6 6"
+                           RadiusX="10"
+                           RadiusY="10"
+                           Fill="Transparent" Margin="-1,-11,1,11"/>
+
+                <!-- TextBlock Positioned at Top-Left -->
+                <StackPanel Background="#157291"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Margin="10, -20, 0, 0">
+
+                    <TextBlock Text="Robot 2"
+                               Foreground="White"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="5, 0"/>
+                </StackPanel>
+
+                <Border Width="20" Height="20"
+                        CornerRadius="15"
+                        Background="White"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="150, 40, 0, 0">
+                    <fa:IconImage Icon="Lightbulb"
+                                  Width="15"
+                                  Height="15"
+                                  Foreground="red"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                </Border>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Ready" 
+                               Margin="129,50,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <ToggleButton x:Name="RobotToggle2"
+                              Width="30" Height="15"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Bottom"
+                              Margin="8, 0, 0, 15"
+                              Background="Transparent"
+                              Cursor="Hand"
+                              BorderThickness="0">
+                    <ToggleButton.RenderTransform>
+                        <TranslateTransform Y="-15"/>
+                        <!-- Move up by decreasing this -->
+                    </ToggleButton.RenderTransform>
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid Width="30" Height="15">
+                                <!-- Background Border -->
+                                <Border x:Name="ToggleBackground2"
+                                        Width="30" Height="15"
+                                        CornerRadius="7"
+                                        Background="Gray"/>
+
+                                <!-- Toggle Thumb -->
+                                <Ellipse x:Name="ToggleThumb2"
+                                         Width="12" Height="12"
+                                         Fill="White"
+                                         HorizontalAlignment="Left"
+                                         Margin="2, 0, 0, 0">
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform x:Name="ThumbTransform"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- Storyboard Animation -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="ToggleBackground2" Property="Background" Value="#02a29a"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb2">
+                                        <Setter.Value>
+                                            <TranslateTransform X="15"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="ToggleBackground2" Property="Background" Value="#d0dae1"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb2">
+                                        <Setter.Value>
+                                            <TranslateTransform X="0"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Availability" 
+                               Margin="0,50,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border CornerRadius="10"
+                Background="Transparent"
+                Width="220"
+                Height="140"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="-10,110,0,0">
             <Border.RenderTransform>
                 <TranslateTransform Y="-40"/>
                 <!-- Moves Up -->
@@ -181,8 +306,8 @@
                                FontSize="11" 
                                VerticalAlignment="Center"/>
 
-                     <!--IntegerUpDown with arrows for increment and decrement--> 
-                    <controls:IntegerUpDown Width="43" Margin="30,-10,0,0" VerticalAlignment="Center" 
+                    <!--IntegerUpDown with arrows for increment and decrement-->
+                    <controls:IntegerUpDown Width="43" Margin="70,-10,0,0" VerticalAlignment="Center" 
                                 Increment="1" Value="0"
                                 Minimum="0" Maximum="100"/>
                 </StackPanel>
@@ -195,15 +320,29 @@
                                FontSize="11" 
                                VerticalAlignment="Center"/>
 
-                     <!--IntegerUpDown with arrows for increment and decrement--> 
-                    <controls:IntegerUpDown Width="43" Margin="45,15,0,0" VerticalAlignment="Center" 
+                    <!--IntegerUpDown with arrows for increment and decrement-->
+                    <controls:IntegerUpDown Width="43" Margin="85,15,0,0" VerticalAlignment="Center" 
+                                            Increment="1" Value="0"
+                                            Minimum="0" Maximum="100"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Temperature setpoint" 
+                               Margin="-22,40,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+
+                    <!--IntegerUpDown with arrows for increment and decrement-->
+                    <controls:IntegerUpDown Width="43" Margin="53,40,0,0" VerticalAlignment="Center" 
                                             Increment="1" Value="0"
                                             Minimum="0" Maximum="100"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Temperature: " 
-                               Margin="-22,60,0,0" 
+                               Margin="-22,65,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="11" 
@@ -222,7 +361,7 @@
                         Background="White"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="130, 50, 0, 0">
+                        Margin="170, 90, 0, 0">
                     <fa:IconImage Icon="Lightbulb"
                                    Width="15"
                                    Height="15"
@@ -232,82 +371,21 @@
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Ready" 
-                               Margin="110,60,0,0" 
+                               Margin="150,100,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="11" 
                                VerticalAlignment="Center"/>
                 </StackPanel>
-            </Grid>
-        </Border>
 
-        <Border CornerRadius="10"
-                Background="Transparent"
-                Width="180"
-                Height="100"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="-19,120,0,0">
-            <Border.RenderTransform>
-                <TranslateTransform Y="-40"/>
-                <!--<TranslateTransform X="40"/>-->
-                <!-- Moves Up -->
-            </Border.RenderTransform>
-
-            <Grid>
-
-                <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                               StrokeThickness="0.5"
-                               StrokeDashArray="6 6"
-                               RadiusX="10"
-                               RadiusY="10"
-                               Fill="Transparent" Margin="-1,-11,1,11"/>
-
-                <!-- TextBlock Positioned at Top-Left -->
-                <StackPanel Background="#157291"
-                                HorizontalAlignment="Left" 
-                                VerticalAlignment="Top" 
-                                Margin="10, -20, 0, 0">
-                    
-                    <TextBlock Text="Robot 2"
-                                   Foreground="White"
-                                   FontSize="14"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"
-                                   Padding="5, 0"/>
-                </StackPanel>
-
-                <Border Width="20" Height="20"
-                        CornerRadius="15"
-                        Background="White"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Margin="150, 50, 0, 0">
-                    <fa:IconImage Icon="Lightbulb"
-                                  Width="15"
-                                  Height="15"
-                                  Foreground="red"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"/>
-                </Border>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Ready" 
-                               Margin="128,60,0,0" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               FontSize="11" 
-                               VerticalAlignment="Center"/>
-                </StackPanel>
-                <ToggleButton x:Name="RobotToggle2"
-                                Width="30" Height="15"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Bottom"
-                                Margin="8, 0, 0, 15"
-                                Background="Transparent"
-                                Cursor="Hand"
-                                BorderThickness="0">
+                <ToggleButton x:Name="Oven1Toggle"
+                              Width="30" Height="15"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Bottom"
+                              Margin="-10, 0, 0, 15"
+                              Background="Transparent"
+                              Cursor="Hand"
+                              BorderThickness="0">
                     <ToggleButton.RenderTransform>
                         <TranslateTransform Y="-15"/>
                         <!-- Move up by decreasing this -->
@@ -316,17 +394,17 @@
                         <ControlTemplate TargetType="ToggleButton">
                             <Grid Width="30" Height="15">
                                 <!-- Background Border -->
-                                <Border x:Name="ToggleBackground2"
-                                          Width="30" Height="15"
-                                          CornerRadius="7"
-                                          Background="Gray"/>
+                                <Border x:Name="ToggleBackground"
+                                        Width="30" Height="15"
+                                        CornerRadius="7"
+                                        Background="Gray"/>
 
                                 <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb2"
-                                           Width="12" Height="12"
-                                           Fill="White"
-                                           HorizontalAlignment="Left"
-                                           Margin="2, 0, 0, 0">
+                                <Ellipse x:Name="ToggleThumb"
+                                         Width="12" Height="12"
+                                         Fill="White"
+                                         HorizontalAlignment="Left"
+                                         Margin="2, 0, 0, 0">
                                     <Ellipse.RenderTransform>
                                         <TranslateTransform x:Name="ThumbTransform"/>
                                     </Ellipse.RenderTransform>
@@ -336,16 +414,16 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground2" Property="Background" Value="#02a29a"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb2">
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="15"/>
                                         </Setter.Value>
                                     </Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground2" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb2">
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="0"/>
                                         </Setter.Value>
@@ -357,7 +435,7 @@
                 </ToggleButton>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Availability" 
-                               Margin="0,60,0,0" 
+                               Margin="-20,100,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="11" 
@@ -368,13 +446,13 @@
 
         <Border CornerRadius="10"
                 Background="Transparent"
-                Width="180"
-                Height="100"
+                Width="220"
+                Height="130"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="200,120,0,0">
+                Margin="230,70,0,0">
             <Border.RenderTransform>
-                <TranslateTransform Y="-40"/>
+                <TranslateTransform Y="0"/>
                 <!-- Moves Up -->
             </Border.RenderTransform>
 
@@ -432,7 +510,7 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Temperature: " 
-                               Margin="-22,60,0,0" 
+                               Margin="60,60,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="11" 
@@ -446,7 +524,7 @@
                                    VerticalAlignment="Center"/>-->
                 </StackPanel>
 
-                <Border Width="20" Height="20"
+                <!--<Border Width="20" Height="20"
                         CornerRadius="15"
                         Background="White"
                         HorizontalAlignment="Left"
@@ -466,8 +544,71 @@
                                FontWeight="Bold" 
                                FontSize="11" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                </StackPanel>-->
 
+                <ToggleButton x:Name="Oven2Toggle"
+                              Width="30" Height="15"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Bottom"
+                              Margin="-10, 0, 0, 15"
+                              Background="Transparent"
+                              Cursor="Hand"
+                              BorderThickness="0">
+                    <ToggleButton.RenderTransform>
+                        <TranslateTransform Y="-15"/>
+                        <!-- Move up by decreasing this -->
+                    </ToggleButton.RenderTransform>
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid Width="30" Height="15">
+                                <!-- Background Border -->
+                                <Border x:Name="ToggleBackground"
+                                        Width="30" Height="15"
+                                        CornerRadius="7"
+                                        Background="Gray"/>
+
+                                <!-- Toggle Thumb -->
+                                <Ellipse x:Name="ToggleThumb"
+                                         Width="12" Height="12"
+                                         Fill="White"
+                                         HorizontalAlignment="Left"
+                                         Margin="2, 0, 0, 0">
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform x:Name="ThumbTransform"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- Storyboard Animation -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                        <Setter.Value>
+                                            <TranslateTransform X="15"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                        <Setter.Value>
+                                            <TranslateTransform X="0"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Text="Availability" 
+                               Margin="-20,60,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </Border>
 
