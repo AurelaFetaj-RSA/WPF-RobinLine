@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
 namespace WPF_App.Views
 {
@@ -13,6 +15,7 @@ namespace WPF_App.Views
         private string _playStopText = "Start";
         private string _confirmationMessage = "Are you sure you want to start the line?";
         private string _popupAction;
+        private bool _ovenStatus;
 
         public string PlayStopIcon
         {
@@ -51,6 +54,16 @@ namespace WPF_App.Views
             {
                 _popupAction = value;
                 OnPropertyChanged(nameof(PopupAction));
+            }
+        }
+
+        public bool OvenStatus
+        {
+            get => _ovenStatus;
+            set
+            {
+                _ovenStatus = value;
+                OnPropertyChanged(nameof(OvenStatus));
             }
         }
 
@@ -114,19 +127,133 @@ namespace WPF_App.Views
             ConfirmPopup.IsOpen = true;
         }
 
-        private void RobotToggle_Click(object sender, RoutedEventArgs e)
+        public void Robot1Toggle_Click(object sender, RoutedEventArgs e)
         {
-            if (RobotToggle.IsChecked == true)
+            if (Robot1Toggle.IsChecked == true)
             {
-                // Robot is ON - Green Light
-                Console.WriteLine("Robot 1 is now ON");
+                Robot1AvailabilityTextBlock.Text = "Included";
             }
             else
             {
-                // Robot is OFF - Red Light
-                Console.WriteLine("Robot 1 is now OFF");
+                Robot1AvailabilityTextBlock.Text = "Excluded";
             }
         }
+
+        public void Robot2Toggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (RobotToggle2.IsChecked == true)
+            {
+                Robot2AvailabilityTextBlock.Text = "Included";
+            }
+            else
+            {
+                Robot2AvailabilityTextBlock.Text = "Excluded";
+            }
+        }
+
+        public void Oven1Toggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (Oven1Toggle.IsChecked == true)
+            {
+                AvailabilityTextBlock.Text = "Included";
+            }
+            else
+            {
+                AvailabilityTextBlock.Text = "Excluded";
+            }
+        }
+
+        public void Oven2Toggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (Oven2Toggle.IsChecked == true)
+            {
+                Availability2TextBlock.Text = "Included";
+            }
+            else
+            {
+                Availability2TextBlock.Text = "Excluded";
+            }
+        }
+
+        public void UpdateState(int state)
+        {
+            switch (state)
+            {
+                case 0:
+                    StateText.Text = "Emergency";
+                    StateIcon.Fill = Brushes.Red;
+                    break;
+                case 1:
+                    StateText.Text = "Automatic";
+                    StateIcon.Fill = Brushes.Blue;
+                    break;
+                case 2:
+                    StateText.Text = "Manual";
+                    StateIcon.Fill = Brushes.Orange;
+                    break;
+                case 3:
+                    StateText.Text = "Cycle";
+                    StateIcon.Fill = Brushes.Green;
+                    break;
+                case 4:
+                    StateText.Text = "Alarm";
+                    StateIcon.Fill = Brushes.DarkOrange;
+                    break;
+                default:
+                    StateText.Text = "Unknown";
+                    StateIcon.Fill = Brushes.Gray;
+                    break;
+            }
+        }
+
+
+        public void OvenUpdateState(int state)
+        {
+            switch (state)
+            {
+                case 0:
+                    OvenStateText.Text = "Manual";
+                    StateIcon.Fill = Brushes.Orange;
+                    break;
+                case 1:
+                    OvenStateText.Text = "Automatic";
+                    StateIcon.Fill = Brushes.Blue;
+                    break;
+                default:
+                    OvenStateText.Text = "Status";
+                    StateIcon.Fill = Brushes.White;
+                    break;
+            }
+        }
+
+
+        //private void UpdateUI(int state)
+        //{
+        //    switch (state)
+        //    {
+        //        case 0:
+        //            StateText.Text = "Emergency";
+        //            StateIcon.Fill = Brushes.Red;
+        //            break;
+        //        case 1:
+        //            StateText.Text = "Automatic";
+        //            StateIcon.Fill = Brushes.Blue;
+        //            break;
+        //        case 2:
+        //            StateText.Text = "Manual";
+        //            StateIcon.Fill = Brushes.Orange;
+        //            break;
+        //        case 3:
+        //            StateText.Text = "Cycle";
+        //            StateIcon.Fill = Brushes.Green;
+        //            break;
+        //        case 4:
+        //            StateText.Text = "Alarm";
+        //            StateIcon.Fill = Brushes.DarkOrange;
+        //            break;
+        //    }
+        //}
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

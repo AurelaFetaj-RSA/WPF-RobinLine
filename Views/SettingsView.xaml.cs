@@ -12,7 +12,7 @@ namespace WPF_App.Views
         public SettingsView()
         {
             InitializeComponent();
-            LoadLanguage("en-US"); // Set default language
+            //LoadLanguage("en-US"); // Set default language
         }
 
         private void LanguageButton_Click(object sender, RoutedEventArgs e)
