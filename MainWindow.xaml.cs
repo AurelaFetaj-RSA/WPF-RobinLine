@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using WPF_App.Services;
 using WPF_App.ViewModels;
 
 namespace WPF_App
@@ -13,11 +14,13 @@ namespace WPF_App
     public partial class MainWindow : Window
     {
         private DispatcherTimer _timer;
+        //private readonly OpcUaClientService _opcUaClient;
 
         public MainWindow()
         {
             InitializeComponent();
             StartTimer();
+            //_opcUaClient = opcUaClient;
             DataContext = new MainViewModel();
         }
 

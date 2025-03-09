@@ -47,8 +47,9 @@
                         Background="White"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="125, 35, 0, 0">
-                    <fa:IconImage Icon="Lightbulb"
+                        Margin="120, 35, 0, 0">
+                    <fa:IconImage x:Name="ReadyLamp"
+                                  Icon="Lightbulb"
                                   Width="20"
                                   Height="20"
                                   Foreground="#02a29a"
@@ -56,8 +57,9 @@
                                   HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0">
-                    <TextBlock Text="Ready" 
-                               Margin="120,60,0,0" 
+                    <TextBlock x:Name="ReadyRobot1TextBlock"
+                               Text="Ready" 
+                               Margin="100,60,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="12" 
@@ -186,8 +188,9 @@
                                   HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Ready" 
-                               Margin="122,50,0,0" 
+                    <TextBlock x:Name="ReadyRobot2TextBlock"
+                               Text="Ready" 
+                               Margin="100,50,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="12" 
@@ -309,9 +312,17 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" Margin="90,-10,0,0" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" 
-                                Increment="1" Value="0"
-                                Minimum="0" Maximum="100"/>
+                    <controls:IntegerUpDown Width="43" 
+                                            Margin="90,-10,0,0" 
+                                            FontSize="11" 
+                                            FontWeight="Bold" 
+                                            VerticalAlignment="Center"
+                                            Increment="1" 
+                                            Value="0"
+                                            Minimum="0" 
+                                            Maximum="100"
+                                            ValueChanged="Oven1LampsPercentageUpDown_ValueChanged"/>
+
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
@@ -323,9 +334,16 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" Margin="106,15,0,0" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" 
-                                            Increment="1" Value="0"
-                                            Minimum="0" Maximum="100"/>
+                    <controls:IntegerUpDown Width="43" 
+                                            Margin="106,15,0,0" 
+                                            FontSize="11" 
+                                            FontWeight="Bold" 
+                                            VerticalAlignment="Center" 
+                                            Increment="1" 
+                                            Value="0"
+                                            Minimum="0" 
+                                            Maximum="100"
+                                            ValueChanged="Oven1FanPercentageUpDown_ValueChanged"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
@@ -337,9 +355,16 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" Margin="70,40,0,0" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" 
-                                            Increment="1" Value="0"
-                                            Minimum="0" Maximum="100"/>
+                    <controls:IntegerUpDown Width="43" 
+                                            Margin="70,40,0,0" 
+                                            FontSize="11" 
+                                            FontWeight="Bold" 
+                                            VerticalAlignment="Center" 
+                                            Increment="1" 
+                                            Value="0"
+                                            Minimum="0" 
+                                            Maximum="100"
+                                            ValueChanged="Oven1TempSetpointUpDown_ValueChanged"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
@@ -350,27 +375,45 @@
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
-                    <!--<TextBlock Text="12°" 
-                               Margin="0,55,0,0" 
+                    <TextBlock Name="TemperatureTextBlock" 
+                               Margin="5,65,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="11" 
-                               VerticalAlignment="Center"/>-->
+                               VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Reached" 
-                               Margin="144,67,0,0" 
+                    <TextBlock Name="ReachedTextBlock"
+                               Text="Reached" 
+                               Margin="120,67,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
                 </StackPanel>
 
+                <Border Name="StatusBorder"
+                        Width="22"
+                        Height="22"
+                        CornerRadius="15"
+                        Background="White"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="205, 75, 0, 0">
+                    <fa:IconImage Name="StatusIcon"
+                                  Icon="Check"
+                                  Width="17"
+                                  Height="17"
+                                  Foreground="#02a29a"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                </Border>
+
                 <Border Width="65" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
-                        Margin="75,106,0,0"
+                        Margin="35,106,0,0"
                         VerticalAlignment="Top">
                     <Border.RenderTransform>
                         <TranslateTransform Y="0"/>
@@ -382,7 +425,8 @@
                         <Ellipse x:Name="OvenStateIcon" Width="25" Height="25" Fill="White" Margin="5,0,0,0"/>
 
                         <!-- State Text below the icon -->
-                        <TextBlock x:Name="OvenStateText" Text="State" 
+                        <TextBlock x:Name="OvenStateText" 
+                                   Text="State" 
                                    Foreground="White" 
                                    FontSize="12" 
                                    FontWeight="Bold" 
@@ -393,27 +437,14 @@
 
                 </Border>
 
-                <Border Width="22" Height="22"
-                        CornerRadius="15"
-                        Background="White"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Margin="205, 75, 0, 0">
-                    <fa:IconImage Icon="Check"
-                                  Width="17"
-                                  Height="17"
-                                  Foreground="#02a29a"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"/>
-                </Border>
-
                 <Border Width="25" Height="25"
                         CornerRadius="15"
                         Background="White"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="200, 115, 0, 0">
-                    <fa:IconImage Icon="Lightbulb"
+                        Margin="195, 115, 0, 0">
+                    <fa:IconImage  x:Name="LampIcon"
+                                   Icon="Lightbulb"
                                    Width="20"
                                    Height="20"
                                    Foreground="#02a29a"
@@ -421,8 +452,9 @@
                                    HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Ready" 
-                               Margin="182,130,0,0" 
+                    <TextBlock x:Name="ReadyOven1TextBlock"
+                               Text="Ready" 
+                               Margin="170,130,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="12" 
@@ -541,9 +573,16 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" Margin="90,-10,0,0" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" 
-                                            Increment="1" Value="0"
-                                            Minimum="0" Maximum="100"/>
+                    <controls:IntegerUpDown Width="43" 
+                                            Margin="90,-10,0,0" 
+                                            FontSize="11" 
+                                            FontWeight="Bold" 
+                                            VerticalAlignment="Center" 
+                                            Increment="1" 
+                                            Value="0"
+                                            Minimum="0" 
+                                            Maximum="100"
+                                            ValueChanged="Oven2LampsPercentageUpDown_ValueChanged"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
@@ -555,9 +594,16 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" Margin="106,15,0,0" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" 
-                                            Increment="1" Value="0"
-                                            Minimum="0" Maximum="100"/>
+                    <controls:IntegerUpDown Width="43" 
+                                            Margin="106,15,0,0" 
+                                            FontSize="11" 
+                                            FontWeight="Bold" 
+                                            VerticalAlignment="Center" 
+                                            Increment="1" 
+                                            Value="0"
+                                            Minimum="0" 
+                                            Maximum="100"
+                                            ValueChanged="Oven2FanPercentageUpDown_ValueChanged"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
@@ -569,9 +615,16 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" Margin="70,40,0,0" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" 
-                            Increment="1" Value="0"
-                            Minimum="0" Maximum="100"/>
+                    <controls:IntegerUpDown Width="43" 
+                                            Margin="70,40,0,0" 
+                                            FontSize="11" 
+                                            FontWeight="Bold" 
+                                            VerticalAlignment="Center" 
+                                            Increment="1" 
+                                            Value="0"
+                                            Minimum="0" 
+                                            Maximum="100"
+                                            ValueChanged="Oven2TempSetpointUpDown_ValueChanged"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
@@ -581,21 +634,19 @@
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Not Reached" 
-                               Margin="120,67,0,0" 
+                    <TextBlock Name="Oven2TemperatureTextBlock" 
+                               Margin="5,65,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
-                               FontSize="12" 
+                               FontSize="11" 
                                VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <Border Width="65" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
-                        Margin="75,106,0,0"
+                        Margin="35,106,0,0"
                         VerticalAlignment="Top">
                     <Border.RenderTransform>
                         <TranslateTransform Y="0"/>
@@ -607,7 +658,8 @@
                         <Ellipse x:Name="Oven2StateIcon" Width="25" Height="25" Fill="White" Margin="5,0,0,0"/>
 
                         <!-- State Text below the icon -->
-                        <TextBlock x:Name="Oven2StateText" Text="State" 
+                        <TextBlock x:Name="Oven2StateText" 
+                                   Text="State" 
                                    Foreground="White" 
                                    FontSize="12" 
                                    FontWeight="Bold" 
@@ -618,13 +670,26 @@
 
                 </Border>
 
-                <Border Width="22" Height="22"
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Name="Oven2ReachedTextBlock"
+                               Text="Not Reached" 
+                               Margin="120,67,0,0" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="12" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Border Name="Oven2StatusBorder"
+                        Width="22" 
+                        Height="22"
                         CornerRadius="15"
                         Background="White"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Margin="205, 75, 0, 0">
-                    <fa:IconImage Icon="Times"
+                    <fa:IconImage Name="Oven2StatusIcon"
+                                  Icon="Times"
                                   Width="14"
                                   Height="14"
                                   Foreground="red"
@@ -637,8 +702,9 @@
                         Background="White"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="200, 115, 0, 0">
-                    <fa:IconImage Icon="Lightbulb"
+                        Margin="195, 115, 0, 0">
+                    <fa:IconImage x:Name="Oven2LampIcon"
+                                  Icon="Lightbulb"
                                   Width="20"
                                   Height="20"
                                   Foreground="#02a29a"
@@ -646,8 +712,9 @@
                                   HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Ready" 
-                               Margin="182,130,0,0" 
+                    <TextBlock x:Name="ReadyOven2TextBlock"
+                               Text="Ready" 
+                               Margin="170,130,0,0" 
                                Foreground="White" 
                                FontWeight="Bold" 
                                FontSize="12" 

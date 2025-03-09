@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WPF_App.Services;
 using WPF_App.Views;
 
 namespace WPF_App.ViewModels
@@ -35,6 +36,7 @@ namespace WPF_App.ViewModels
 
     public class MainViewModel : INotifyPropertyChanged
     {
+        private readonly OpcUaClientService _opcUaClient;
         private object _currentView;
         public object CurrentView
         {
@@ -58,6 +60,8 @@ namespace WPF_App.ViewModels
 
         public MainViewModel()
         {
+            //_opcUaClient = opcUaClient;
+
             CurrentView = new AutomaticView();
 
             ShowAutomaticViewCommand = new RelayCommand(ShowAutomaticView);
