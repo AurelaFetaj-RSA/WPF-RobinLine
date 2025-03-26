@@ -5,7 +5,7 @@
     <System:String x:Key="SettingsTitle">Settings View</System:String>
     <System:String x:Key="subTitle">Welcome to the settings page</System:String>
     <System:String x:Key="firstMenuItem">Automatic</System:String>
-    <System:String x:Key="secondMenuItem">Ricipes</System:String>
+    <System:String x:Key="secondMenuItem">Manual</System:String>
     <System:String x:Key="thirdMenuItem">RFID</System:String>
     <System:String x:Key="fourthMenuItem">Orders</System:String>
     <System:String x:Key="fifthMenuItem">Devices</System:String>
@@ -16,4 +16,6 @@
     <System:String x:Key="French">French</System:String>
     <System:String x:Key="Spanish">Spanish</System:String>
     <System:String x:Key="Italian">Italian</System:String>
+
+    <System:String x:Key="Robot1Ready">Ready</System:String>
 </ResourceDictionary>

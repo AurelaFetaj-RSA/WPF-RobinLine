@@ -13,16 +13,26 @@
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <Border Background="{TemplateBinding Background}"
-                            BorderThickness="4,0,4,0"
+                            BorderThickness="0,0,4,0"
                             BorderBrush="{TemplateBinding BorderBrush}">
                         <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Add shadow effect when selected -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="Black"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
 
         <Style.Triggers>
-            
+
             <!--Button Style on hover-->
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Margin" Value="0,0,0,5"/>
@@ -35,15 +45,21 @@
             <!--Activated button style-->
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Margin" Value="0,0,0,5"/>
-                <Setter Property="Background" Value="{StaticResource panelActiveColor3}"/>
+                <Setter Property="Background" Value="#f2f3f5"/>
+                <!--<Setter Property="Background" Value="{StaticResource panelActiveColor3}"/>-->
                 <Setter Property="Foreground" Value="{StaticResource titleColor6}"/>
                 <!--<Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>-->
                 <!--<Setter Property="BorderBrush" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>-->
                 <Setter Property="BorderBrush" Value="{StaticResource activeBorderColor}"/>
+                <Setter Property="TextBlock.Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#1d44ad"/>
+                    </Setter.Value>
+                </Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <!--Menu button icon-->
     <Style x:Key="menuButtonIcon" TargetType="fa:IconImage">
         <!--<Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>-->

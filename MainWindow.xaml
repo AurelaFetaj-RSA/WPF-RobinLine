@@ -14,11 +14,20 @@
         AllowsTransparency="True">
 
     <Window.Resources>
+        <!-- Define the Menu Shadow Style -->
+        <Style x:Key="MenuShadowStyle" TargetType="Border">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="10" Direction="270" Color="Black" Opacity="0.5" RenderingBias="Performance"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Define the Date and Time TextBlock Style -->
         <Style x:Key="MenuDateTimeText" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Varela Round"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="{StaticResource titleColor1}"/>
+            <Setter Property="Foreground" Value="{StaticResource titleColor7}"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
@@ -37,7 +46,7 @@
             </LinearGradientBrush>
         </Border.BorderBrush>
 
-        <Grid>
+        <Grid ClipToBounds="False">
             <Grid.ColumnDefinitions>
                 <!-- Content section -->
                 <ColumnDefinition Width="*"/>
@@ -46,7 +55,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Navigation menu -->
-            <Border CornerRadius="0,10,10,0" Grid.Column="1">
+            <Border Style="{StaticResource MenuShadowStyle}" CornerRadius="0,10,10,0" Grid.Column="1" BorderBrush="Gray" BorderThickness="1.5" Padding="0,0,0,0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
                         <GradientStop Color="{StaticResource secondaryBackColor3}" Offset="0"/>
@@ -61,13 +70,13 @@
                             VerticalAlignment="Center">
                         <Grid>
                             <!-- Dotted Border -->
-                            <Rectangle Stroke="White"
+                            <!--<Rectangle Stroke="White"
                                        StrokeThickness="0.5"
                                        StrokeDashArray="6 6"
                                        RadiusX="10"
                                        RadiusY="10"
                                        Fill="Transparent"
-                                       Margin="0,0,0,10"/>
+                                       Margin="0,0,0,10"/>-->
 
                             <!-- Logo StackPanel -->
                             <StackPanel Orientation="Vertical"
@@ -91,7 +100,7 @@
                                 </TextBlock>
 
                                 <TextBlock FontFamily="Segoe UI" 
-                                           Foreground="{StaticResource titleColor1}" 
+                                           Foreground="{StaticResource titleColor7}" 
                                            FontSize="10" 
                                            FontWeight="Medium"
                                            HorizontalAlignment="Center">
@@ -132,7 +141,7 @@
 
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color2}"
-                                 Command="{Binding ShowRecipesViewCommand}">
+                                 Command="{Binding ShowManualViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Book" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="{DynamicResource secondMenuItem}" Style="{StaticResource menuButtonText}"/>

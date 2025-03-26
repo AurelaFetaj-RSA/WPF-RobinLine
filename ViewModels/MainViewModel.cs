@@ -49,7 +49,7 @@ namespace WPF_App.ViewModels
         }
 
         public ICommand ShowAutomaticViewCommand { get; }
-        public ICommand ShowRecipesViewCommand { get; }
+        public ICommand ShowManualViewCommand { get; }
         public ICommand ShowRFIDViewCommand { get; }
         public ICommand ShowOrdersViewCommand { get; }
         public ICommand ShowDeviceViewCommand { get; }
@@ -65,7 +65,7 @@ namespace WPF_App.ViewModels
             CurrentView = new AutomaticView();
 
             ShowAutomaticViewCommand = new RelayCommand(ShowAutomaticView);
-            ShowRecipesViewCommand = new RelayCommand(ShowRecipesView);
+            ShowManualViewCommand = new RelayCommand(ShowManualView);
             ShowRFIDViewCommand = new RelayCommand(ShowRFIDView);
             ShowOrdersViewCommand = new RelayCommand(ShowOrderView);
             ShowDeviceViewCommand = new RelayCommand(ShowDeviceView);
@@ -80,9 +80,9 @@ namespace WPF_App.ViewModels
             CurrentView = new AutomaticView();
         }
 
-        private void ShowRecipesView()
+        private void ShowManualView()
         {
-            CurrentView = new RecipesView();
+            CurrentView = new ManualView();
         }
 
         private void ShowRFIDView()

@@ -5,7 +5,7 @@
     <System:String x:Key="SettingsTitle">Impostazioni Visualizza</System:String>
     <System:String x:Key="subTitle">Benvenuti alla pagina delle impostazioni</System:String>
     <System:String x:Key="firstMenuItem">Automatico</System:String>
-    <System:String x:Key="secondMenuItem">Ricette</System:String>
+    <System:String x:Key="secondMenuItem">Manuale</System:String>
     <System:String x:Key="thirdMenuItem">RFID</System:String>
     <System:String x:Key="fourthMenuItem">Commesse</System:String>
     <System:String x:Key="fifthMenuItem">Dispositivi</System:String>
@@ -16,4 +16,6 @@
     <System:String x:Key="French">Francese</System:String>
     <System:String x:Key="Spanish">Spagnolo</System:String>
     <System:String x:Key="Italian">Italiano</System:String>
+
+    <System:String x:Key="Robot1Ready">Pronto</System:String>
 </ResourceDictionary>

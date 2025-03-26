@@ -5,7 +5,7 @@
     <System:String x:Key="SettingsTitle">Configuración</System:String>
     <System:String x:Key="subTitle">Bienvenido a la página de configuración</System:String>
     <System:String x:Key="firstMenuItem">Automática</System:String>
-    <System:String x:Key="secondMenuItem">Recetas</System:String>
+    <System:String x:Key="secondMenuItem">Manual</System:String>
     <System:String x:Key="thirdMenuItem">RFID</System:String>
     <System:String x:Key="fourthMenuItem">Comisiones</System:String>
     <System:String x:Key="fifthMenuItem">Dispositivos</System:String>
@@ -15,5 +15,7 @@
     <System:String x:Key="English">Inglés</System:String>
     <System:String x:Key="French">Francés</System:String>
     <System:String x:Key="Spanish">Español</System:String>
-    <System:String x:Key="Italian">Italiano</System:String> 
+    <System:String x:Key="Italian">Italiano</System:String>
+
+    <System:String x:Key="Robot1Ready">Listo</System:String>
 </ResourceDictionary>

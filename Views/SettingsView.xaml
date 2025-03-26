@@ -10,10 +10,15 @@
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center"/>
 
-        <Image Source="/Images/Flags/english.png" 
+        <Image Source="/Images/Flag/icons8-grat-britain-96.png" 
                Height="30"
                HorizontalAlignment="Center"
                Margin="200,200,0,0"/>
+
+        <!--<Image Source="/Images/Icons/icons8-error-96.png" 
+               Height="30"
+               HorizontalAlignment="Center"
+               Margin="200,200,0,0"/>-->
 
         <!-- Language Button -->
         <Button x:Name="LanguageButton"
@@ -54,7 +59,7 @@
                             Background="Transparent"
                             BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Flags/english.png" Width="24" Height="16" Margin="5"/>
+                            <Image Source="/Images/Flag/icons8-grat-britain-96.png" Width="24" Height="16" Margin="5"/>
                             <TextBlock Text="{DynamicResource English}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -67,7 +72,7 @@
                             Background="Transparent"
                             BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Flags/french.png" Width="24" Height="16" Margin="5"/>
+                            <Image Source="/Images/Icons/italy.png" Width="24" Height="16" Margin="5"/>
                             <TextBlock Text="{DynamicResource French}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -93,7 +98,7 @@
                             Background="Transparent"
                             BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Flags/italian.png" Width="24" Height="16" Margin="5"/>
+                            <Image Source="/Images/Flag/italy.png" Width="24" Height="16" Margin="5"/>
                             <TextBlock Text="{DynamicResource Italian}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>

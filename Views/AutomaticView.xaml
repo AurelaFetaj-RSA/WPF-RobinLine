@@ -7,44 +7,106 @@
              xmlns:controls="http://schemas.xceed.com/wpf/xaml/toolkit"
              Height="300" Width="500">
     <Grid>
-        <Border CornerRadius="10"
+
+        <!--<Border CornerRadius="10"
                 Background="Transparent"
-                Width="180"
+                Width="170"
                 Height="90"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="265,0,0,0">
+                Margin="330,0,0,0">
             <Border.RenderTransform>
-                <TranslateTransform Y="-40"/>
+                <TransformGroup>
+                    <TranslateTransform X="60" />
+                    <TranslateTransform Y="-50" />
+                </TransformGroup>
+            </Border.RenderTransform>
+
+            <Grid>
+                <Border CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+
+                </Border>
+
+                <StackPanel HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Margin="-10, -5, 0, 0">
+                    <TextBlock Text="Automatic"
+                               Foreground="{StaticResource titleColor7}"
+                               FontSize="25"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="19, 0"/>
+                    <TextBlock Text="Monitoring"
+                               Foreground="{StaticResource titleColor7}"
+                               FontSize="25"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="15, 0"/>
+                </StackPanel>
+            </Grid>
+        </Border>-->
+
+        <Border CornerRadius="10"
+                Background="Transparent"
+                Width="170"
+                Height="90"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="-10,0,0,0">
+            <Border.RenderTransform>
+                <TranslateTransform Y="-45"/>
                 <!-- Moves Up -->
             </Border.RenderTransform>
 
             <Grid>
-                <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                                   StrokeThickness="0.5"
-                                   StrokeDashArray="6 6"
-                                   RadiusX="10"
-                                   RadiusY="10"
-                                   Fill="Transparent" Margin="-19,-11,19,11"/>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                          BlurRadius="5"
+                          ShadowDepth="1"
+                          Opacity="0.6"/>
+                    </Border.Effect>
+
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            Fill="#4471ce"
+                            RadiusX="3"
+                            RadiusY="3"
+                            Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
 
                 <!-- TextBlock Positioned at Top-Left -->
-                <StackPanel Background="#157291"
-                                HorizontalAlignment="Left" 
-                                VerticalAlignment="Top" 
-                                Margin="-5, -20, 0, 0">
-                    <TextBlock Text="Robot 1"
-                                   Foreground="White"
-                                   FontSize="15"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"
-                                   Padding="5, 0"/>
+                <StackPanel HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Margin="-10, -5, 0, 0">
+                    <TextBlock x:Name="Robot1"
+                               Text="Robot 1"
+                               Foreground="{StaticResource titleColor7}"
+                               FontSize="15"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="145"
+                            Background="{StaticResource titleColor7}" />
                 </StackPanel>
 
                 <Border Width="25" Height="25"
                         CornerRadius="15"
-                        Background="White"
+                        Background="#f1f2f6"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Margin="120, 35, 0, 0">
@@ -52,15 +114,15 @@
                                   Icon="Lightbulb"
                                   Width="20"
                                   Height="20"
-                                  Foreground="#02a29a"
+                                  Foreground="#3f73d1"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0">
                     <TextBlock x:Name="ReadyRobot1TextBlock"
-                               Text="Ready" 
-                               Margin="100,60,0,0" 
-                               Foreground="White" 
+                               Text="Ready"
+                               Margin="110,60,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -88,22 +150,22 @@
                                         CornerRadius="8"
                                         Background="Gray"/>
 
-                                    <!-- Toggle Thumb -->
-                                    <Ellipse x:Name="ToggleThumb"
+                                <!-- Toggle Thumb -->
+                                <Ellipse x:Name="ToggleThumb"
                                              Width="15" Height="15"  
                                              Fill="White"
                                              HorizontalAlignment="Left"
                                              Margin="2, 0, 0, 0">
-                                        <Ellipse.RenderTransform>
-                                            <TranslateTransform x:Name="ThumbTransform"/>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform x:Name="ThumbTransform"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
                             </Grid>
 
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="16"/>
@@ -112,7 +174,7 @@
                                     </Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="0"/>
@@ -127,7 +189,7 @@
                     <TextBlock x:Name="Robot1AvailabilityTextBlock"
                                Text="Availability" 
                                Margin="-20,50,0,0" 
-                               Foreground="White" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -138,66 +200,84 @@
 
         <Border CornerRadius="10"
                 Background="Transparent"
-                Width="180"
+                Width="170"
                 Height="90"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="245,20,0,0">
+                Margin="160,0,0,0">
             <Border.RenderTransform>
-                <TranslateTransform Y="50"/>
+                <TranslateTransform Y="-45"/>
                 <!--<TranslateTransform X="40"/>-->
                 <!-- Moves Up -->
             </Border.RenderTransform>
 
             <Grid>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-1,-11,1,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                          BlurRadius="5"
+                          ShadowDepth="1"
+                          Opacity="0.6"/>
+                    </Border.Effect>
 
-                <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                           StrokeThickness="0.5"
-                           StrokeDashArray="6 6"
-                           RadiusX="10"
-                           RadiusY="10"
-                           Fill="Transparent" Margin="-1,-11,1,11"/>
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#3f73d1"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
 
                 <!-- TextBlock Positioned at Top-Left -->
-                <StackPanel Background="#157291"
-                            HorizontalAlignment="Left" 
+                <StackPanel HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
-                            Margin="10, -20, 0, 0">
+                            Margin="10, -5, 0, 0">
 
                     <TextBlock Text="Robot 2"
-                               Foreground="White"
+                               Foreground="{StaticResource titleColor7}"
                                FontSize="15"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="145"
+                            Background="{StaticResource titleColor7}" />
                 </StackPanel>
 
                 <Border Width="25" Height="25"
                         CornerRadius="15"
-                        Background="White"
+                        Background="#f1f2f6"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="145, 35, 0, 0">
+                        Margin="135, 35, 0, 0">
                     <fa:IconImage Icon="Lightbulb"
                                   Width="20"
                                   Height="20"
-                                  Foreground="red"
+                                  Foreground="green"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="ReadyRobot2TextBlock"
                                Text="Ready" 
-                               Margin="100,50,0,0" 
-                               Foreground="White" 
+                               Margin="115,50,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center">
-                               <TextBlock.RenderTransform>
-                                   <TranslateTransform X="5"/>
-                               </TextBlock.RenderTransform>
+                        <TextBlock.RenderTransform>
+                            <TranslateTransform X="5"/>
+                        </TextBlock.RenderTransform>
                     </TextBlock>
                 </StackPanel>
                 <ToggleButton x:Name="RobotToggle2"
@@ -237,7 +317,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="16"/>
@@ -246,7 +326,7 @@
                                     </Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="0"/>
@@ -261,7 +341,7 @@
                     <TextBlock x:Name="Robot2AvailabilityTextBlock"
                                Text="Availability" 
                                Margin="0,50,0,0" 
-                               Foreground="White" 
+                               Foreground="{StaticResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="11" 
                                VerticalAlignment="Center"/>
@@ -271,49 +351,167 @@
 
         <Border CornerRadius="10"
                 Background="Transparent"
-                Width="260"
-                Height="170"
+                Width="180"
+                Height="90"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="-10,0,0,0">
+                Margin="285,0,0,0">
+            <!--<Border.RenderTransform>
+                <TranslateTransform Y="-45"/>
+                --><!--<TranslateTransform X="40"/>-->
+                <!-- Moves Up --><!--
+            </Border.RenderTransform>-->
             <Border.RenderTransform>
-                <TranslateTransform Y="-40"/>
-                <!-- Moves Up -->
+                <TransformGroup>
+                    <TranslateTransform X="60" />
+                    <TranslateTransform Y="-45" />
+                </TransformGroup>
             </Border.RenderTransform>
 
             <Grid>
-                <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                           StrokeThickness="0.5"
-                           StrokeDashArray="6 6"
-                           RadiusX="10"
-                           RadiusY="10"
-                           Fill="Transparent" Margin="-19,-11,19,11"/>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-1,-11,1,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"
+                                          Opacity="0.6"/>
+                    </Border.Effect>
+
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#3f73d1"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
 
                 <!-- TextBlock Positioned at Top-Left -->
-                <StackPanel Background="#157291"
-                            HorizontalAlignment="Left" 
+                <StackPanel HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
-                            Margin="-5, -20, 0, 0">
-                    <TextBlock Text="Oven 1"
-                               Foreground="White"
+                            Margin="10, -5, 0, 0">
+
+                    <TextBlock Text="General Status"
+                               Foreground="{StaticResource titleColor7}"
                                FontSize="15"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="120"
+                            Background="{StaticResource titleColor7}" />
+                </StackPanel>
+
+                <Border x:Name= "RedLight"
+                        Width="18" Height="18"
+                        CornerRadius="15"
+                        Background="DarkGreen"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="145, 5, 0, 0">
+                </Border>
+                <Border x:Name="YellowLight"
+                        Width="18" Height="18"
+                        CornerRadius="15"
+                        Background="DarkGreen"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="145, 30, 0, 0">
+                </Border>
+                <Border x:Name="GreenLight"
+                        Width="18" Height="18"
+                        CornerRadius="15"
+                        Background="DarkGreen"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="145, 55, 0, 0">
+                </Border>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock x:Name="Selector" 
+                               Text="Selector in Automatic"
+                               Margin="0,30,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
+                               FontWeight="Bold" 
+                               FontSize="12" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <Border CornerRadius="10"
+                Background="Transparent"
+                Width="460"
+                Height="125"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="-10,20,0,0">
+            <Border.RenderTransform>
+                <TranslateTransform Y="40"/>
+                <!-- Moves Up -->
+            </Border.RenderTransform>
+
+            <Grid>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"
+                                          Opacity="0.6"/>
+                    </Border.Effect>
+
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
+
+                <!-- TextBlock Positioned at Top-Left -->
+                <StackPanel HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Margin="-5, -5, 0, 0">
+                    <TextBlock Text="Oven 1"
+                               Foreground="{StaticResource titleColor7}"
+                               FontSize="15"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="420"
+                            Background="{StaticResource titleColor7}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Lamps Percentage" 
-                               Margin="-16,-10,0,0" 
-                               Foreground="White" 
+                               Margin="-16,15,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
                     <controls:IntegerUpDown Width="43" 
-                                            Margin="90,-10,0,0" 
+                                            Margin="60,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
                                             VerticalAlignment="Center"
@@ -327,15 +525,15 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Fan Percentage" 
-                               Margin="-16,15,0,0" 
-                               Foreground="White" 
+                               Margin="220,15,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
                     <controls:IntegerUpDown Width="43" 
-                                            Margin="106,15,0,0" 
+                                            Margin="70,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
                                             VerticalAlignment="Center" 
@@ -349,14 +547,14 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Temperature setpoint" 
                                Margin="-16,40,0,0" 
-                               Foreground="White" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
                     <controls:IntegerUpDown Width="43" 
-                                            Margin="70,40,0,0" 
+                                            Margin="40,40,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
                                             VerticalAlignment="Center" 
@@ -369,27 +567,17 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Temperature: " 
-                               Margin="-16,65,0,0" 
-                               Foreground="White" 
+                               Margin="220,40,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <TextBlock Name="TemperatureTextBlock" 
-                               Margin="5,65,0,0" 
-                               Foreground="White" 
+                               Margin="5,40,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="11" 
-                               VerticalAlignment="Center"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Name="ReachedTextBlock"
-                               Text="Reached" 
-                               Margin="120,67,0,0" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               FontSize="12" 
                                VerticalAlignment="Center"/>
                 </StackPanel>
 
@@ -397,23 +585,32 @@
                         Width="22"
                         Height="22"
                         CornerRadius="15"
-                        Background="White"
+                        Background="#f1f2f6"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="205, 75, 0, 0">
+                        Margin="275, 72, 0, 0">
                     <fa:IconImage Name="StatusIcon"
                                   Icon="Check"
                                   Width="17"
                                   Height="17"
-                                  Foreground="#02a29a"
+                                  Foreground="green"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"/>
                 </Border>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Name="ReachedTextBlock"
+                               Text="Reached" 
+                               Margin="250,85,0,0" 
+                               Foreground="{StaticResource titleColor7}"
+                               FontWeight="Bold" 
+                               FontSize="12" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
 
                 <Border Width="65" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
-                        Margin="35,106,0,0"
+                        Margin="350,60,0,0"
                         VerticalAlignment="Top">
                     <Border.RenderTransform>
                         <TranslateTransform Y="0"/>
@@ -427,7 +624,7 @@
                         <!-- State Text below the icon -->
                         <TextBlock x:Name="OvenStateText" 
                                    Text="State" 
-                                   Foreground="White" 
+                                   Foreground="{StaticResource titleColor7}" 
                                    FontSize="12" 
                                    FontWeight="Bold" 
                                    VerticalAlignment="Center" 
@@ -439,23 +636,23 @@
 
                 <Border Width="25" Height="25"
                         CornerRadius="15"
-                        Background="White"
+                        Background="#f1f2f6"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="195, 115, 0, 0">
+                        Margin="335, 70, 0, 0">
                     <fa:IconImage  x:Name="LampIcon"
                                    Icon="Lightbulb"
                                    Width="20"
                                    Height="20"
-                                   Foreground="#02a29a"
+                                   Foreground="green"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="ReadyOven1TextBlock"
                                Text="Ready" 
-                               Margin="170,130,0,0" 
-                               Foreground="White" 
+                               Margin="318,85,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -465,7 +662,7 @@
                               Width="35" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
-                              Margin="-10, 0, 0, 15"
+                              Margin="-5, 0, 0, 15"
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
@@ -498,7 +695,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="16"/>
@@ -507,7 +704,7 @@
                                     </Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="0"/>
@@ -521,8 +718,8 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="AvailabilityTextBlock" 
                                Text="Availability"
-                               Margin="-20,130,0,0" 
-                               Foreground="White" 
+                               Margin="-15,85,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -532,49 +729,67 @@
 
         <Border CornerRadius="10"
                 Background="Transparent"
-                Width="260"
-                Height="170"
+                Width="460"
+                Height="125"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="-10,100,0,0">
             <Border.RenderTransform>
-                <TranslateTransform Y="50"/>
+                <TranslateTransform Y="100"/>
                 <!-- Moves Up -->
             </Border.RenderTransform>
 
             <Grid>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                          BlurRadius="5"
+                          ShadowDepth="1"
+                          Opacity="0.6"/>
+                    </Border.Effect>
 
-                <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                           StrokeThickness="0.5"
-                           StrokeDashArray="6 6"
-                           RadiusX="10"
-                           RadiusY="10"
-                           Fill="Transparent" Margin="-19,-11,19,11"/>
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
 
-                <StackPanel Background="#157291"
-                            HorizontalAlignment="Left" 
+                <StackPanel HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
-                            Margin="-5, -20, 0, 0">
+                            Margin="-5, -5, 0, 0">
                     <TextBlock Text="Oven 2"
-                               Foreground="White"
+                               Foreground="{StaticResource titleColor7}"
                                FontSize="15"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="420"
+                            Background="{StaticResource titleColor7}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Lamps Percentage" 
-                               Margin="-16,-10,0,0" 
-                               Foreground="White" 
+                               Margin="-16,15,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
                     <controls:IntegerUpDown Width="43" 
-                                            Margin="90,-10,0,0" 
+                                            Margin="60,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
                                             VerticalAlignment="Center" 
@@ -587,15 +802,15 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Fan Percentage" 
-                               Margin="-16,15,0,0" 
-                               Foreground="White" 
+                               Margin="220,15,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
                     <controls:IntegerUpDown Width="43" 
-                                            Margin="106,15,0,0" 
+                                            Margin="70,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
                                             VerticalAlignment="Center" 
@@ -609,14 +824,14 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Temperature setpoint" 
                                Margin="-16,40,0,0" 
-                               Foreground="White" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
                     <controls:IntegerUpDown Width="43" 
-                                            Margin="70,40,0,0" 
+                                            Margin="40,40,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
                                             VerticalAlignment="Center" 
@@ -629,15 +844,15 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Temperature: " 
-                               Margin="-16,65,0,0" 
-                               Foreground="White" 
+                               Margin="220,40,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
 
                     <TextBlock Name="Oven2TemperatureTextBlock" 
-                               Margin="5,65,0,0" 
-                               Foreground="White" 
+                               Margin="5,40,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="11" 
                                VerticalAlignment="Center"/>
@@ -646,7 +861,7 @@
                 <Border Width="65" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
-                        Margin="35,106,0,0"
+                        Margin="350,60,0,0"
                         VerticalAlignment="Top">
                     <Border.RenderTransform>
                         <TranslateTransform Y="0"/>
@@ -660,7 +875,7 @@
                         <!-- State Text below the icon -->
                         <TextBlock x:Name="Oven2StateText" 
                                    Text="State" 
-                                   Foreground="White" 
+                                   Foreground="{StaticResource titleColor7}"
                                    FontSize="12" 
                                    FontWeight="Bold" 
                                    VerticalAlignment="Center" 
@@ -670,24 +885,14 @@
 
                 </Border>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Name="Oven2ReachedTextBlock"
-                               Text="Not Reached" 
-                               Margin="120,67,0,0" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               FontSize="12" 
-                               VerticalAlignment="Center"/>
-                </StackPanel>
-
                 <Border Name="Oven2StatusBorder"
                         Width="22" 
                         Height="22"
                         CornerRadius="15"
-                        Background="White"
+                        Background="#f1f2f6"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="205, 75, 0, 0">
+                        Margin="275, 72, 0, 0">
                     <fa:IconImage Name="Oven2StatusIcon"
                                   Icon="Times"
                                   Width="14"
@@ -696,26 +901,35 @@
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"/>
                 </Border>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <TextBlock Name="Oven2ReachedTextBlock"
+                               Text="Reached" 
+                               Margin="250,85,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
+                               FontWeight="Bold" 
+                               FontSize="12" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
 
                 <Border Width="25" Height="25"
                         CornerRadius="15"
-                        Background="White"
+                        Background="#f1f2f6"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="195, 115, 0, 0">
+                        Margin="335, 70, 0, 0">
                     <fa:IconImage x:Name="Oven2LampIcon"
                                   Icon="Lightbulb"
                                   Width="20"
                                   Height="20"
-                                  Foreground="#02a29a"
+                                  Foreground="green"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"/>
                 </Border>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="ReadyOven2TextBlock"
                                Text="Ready" 
-                               Margin="170,130,0,0" 
-                               Foreground="White" 
+                               Margin="318,85,0,0" 
+                               Foreground="{StaticResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -725,7 +939,7 @@
                               Width="35" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
-                              Margin="-10, 0, 0, 15"
+                              Margin="-5, 0, 0, 15"
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
@@ -758,7 +972,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="16"/>
@@ -767,7 +981,7 @@
                                     </Setter>
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="0"/>
@@ -781,8 +995,8 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="Availability2TextBlock" 
                                Text="Availability"
-                               Margin="-20,130,0,0" 
-                               Foreground="White" 
+                               Margin="-15,85,0,0" 
+                               Foreground="{StaticResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -793,10 +1007,10 @@
         <Border CornerRadius="10"
                 Background="Transparent"
                 Width="70"
-                Height="200"
+                Height="290"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Margin="400,-20,0,0">
+                Margin="400,-26,0,0">
             <Border.RenderTransform>
                 <TranslateTransform X="70"/>
                 <!--Moves Up-->
@@ -805,12 +1019,38 @@
             <Grid>
 
                 <!-- Dashed Border -->
-                <Rectangle Stroke="White"
+                <!--<Rectangle Stroke="White"
                                StrokeThickness="0.5"
                                StrokeDashArray="6 6"
                                RadiusX="10"
                                RadiusY="10"
-                               Fill="Transparent" Margin="-19,-30,15,-50"/>
+                               Fill="Transparent" Margin="-19,-30,15,-50"/>-->
+
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,73,15,-50">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"
+                                          Opacity="0.6"/>
+                    </Border.Effect>
+
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
+
 
                 <Button Width="50" Height="60"
                         BorderThickness="0"
@@ -818,7 +1058,7 @@
                         Cursor="Hand"
                         VerticalAlignment="Top"
                         Click="StartStopButton_Click"
-                        Margin="-5,-15,0,0">
+                        Margin="-5,85,0,0">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="Transparent">
@@ -827,11 +1067,11 @@
                                     <fa:IconImage Icon="{Binding PlayStopIcon}"
                                                   Width="30"
                                                   Height="30"
-                                                  Foreground="White"/>
+                                                  Foreground="#3f73d1"/>
 
                                     <!-- Text -->
                                     <TextBlock Text="{Binding PlayStopText}" 
-                                               Foreground="White"
+                                               Foreground="{StaticResource titleColor7}"
                                                FontSize="12"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -847,7 +1087,8 @@
                         HorizontalAlignment="Left"
                         Cursor="Hand"
                         VerticalAlignment="Top"
-                        Margin="-5,55,0,0">
+                        Margin="-5,150,0,0"
+                        Click="PauseButton_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="Transparent">
@@ -856,11 +1097,11 @@
                                     <fa:IconImage Icon="Pause"
                                                   Width="30"
                                                   Height="30"
-                                                  Foreground="White"/>
+                                                  Foreground="#3f73d1"/>
 
                                     <!-- Text -->
                                     <TextBlock Text="Pause" 
-                                               Foreground="White"
+                                               Foreground="{StaticResource titleColor7}"
                                                FontSize="12"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -876,7 +1117,7 @@
                         HorizontalAlignment="Left"
                         Cursor="Hand"
                         VerticalAlignment="Top"
-                        Margin="-5,120,0,0"
+                        Margin="-5,220,0,0"
                         Click="ResetButton_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -886,11 +1127,11 @@
                                     <fa:IconImage Icon="Sync"
                                                   Width="30"
                                                   Height="30"
-                                                  Foreground="White"/>
+                                                  Foreground="#3f73d1"/>
 
                                     <!-- Text -->
                                     <TextBlock Text="Reset" 
-                                               Foreground="White"
+                                               Foreground="{StaticResource titleColor7}"
                                                FontSize="12"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -904,7 +1145,7 @@
                 <Border Width="65" Height="60"
                         Background="Transparent"
                         BorderThickness="0"
-                        Margin="-30,135,0,0"
+                        Margin="-30,230,0,0"
                         VerticalAlignment="Top">
                     <Border.RenderTransform>
                         <TranslateTransform Y="50"/>
@@ -913,11 +1154,11 @@
 
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <!-- Icon (Ellipse) -->
-                        <Ellipse x:Name="StateIcon" Width="30" Height="30" Fill="White" Margin="0,0,0,0"/>
+                        <Ellipse x:Name="StateIcon" Width="30" Height="30" Fill="#3f73d1" Margin="0,0,0,0"/>
 
                         <!-- State Text below the icon -->
                         <TextBlock x:Name="StateText" Text="State" 
-                                   Foreground="White" 
+                                   Foreground="{StaticResource titleColor7}"
                                    FontSize="12" 
                                    FontWeight="Bold" 
                                    VerticalAlignment="Center" 
@@ -926,8 +1167,6 @@
                     </StackPanel>
 
                 </Border>
-
-
 
                 <Popup x:Name="ConfirmPopup" 
                        IsOpen="False" 
@@ -1006,6 +1245,54 @@
                         </StackPanel>
                     </Border>
                 </Popup>
+            </Grid>
+        </Border>
+
+        <Border x:Name="MessageBoxPanel"
+                CornerRadius="5"
+                Background="Transparent"
+                Width="450"
+                Height="40"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Visibility="Collapsed"
+                Margin="0,250,0,0">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform X="80" />
+                    <TranslateTransform Y="70" />
+                </TransformGroup>
+            </Border.RenderTransform>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <Image x:Name="MessageIcon" 
+                           Width="20" 
+                           Height="20" 
+                           Margin="10,5,5,5"/>
+                    <TextBlock x:Name="MessageText" 
+                               FontSize="14" 
+                               VerticalAlignment="Center" 
+                               Margin="5,5,20,5" 
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <Button Content="✖"
+                        Background="Transparent"
+                        Foreground="Gray"
+                        BorderThickness="0"
+                        FontSize="10"
+                        Cursor="Hand"
+                        Margin="5,0,10,0"
+                        Click="CloseMessageBox"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Grid.Column="1"/>
             </Grid>
         </Border>
     </Grid>

@@ -47,6 +47,7 @@ namespace WPF_App.Services
 
                 Console.WriteLine("Connected to OPC UA Server");
                 //_logger.LogInformation("Connected to OPC UA Server.");
+                return;
             }
             catch (Exception ex)
             {
@@ -55,6 +56,31 @@ namespace WPF_App.Services
                 //_logger.LogError(ex, "Connection error.");
             }
         }
+
+        //public async Task ConnectAsync(int retryCount = 3, int delayMs = 2000)
+        //{
+        //    if (_isConnected) return;
+
+        //    for (int attempt = 1; attempt <= retryCount; attempt++)
+        //    {
+        //        try
+        //        {
+        //            _client.Connect();
+        //            _isConnected = true; 
+        //            Console.WriteLine("Connected to OPC UA Server");
+        //            return;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine($"Connection attempt {attempt} failed: {ex.Message}");
+        //            if (attempt < retryCount) await Task.Delay(delayMs);
+        //        }
+        //    }
+
+        //    _isConnected = false;
+        //    Console.WriteLine("Failed to connect to OPC UA Server after multiple attempts.");
+        //}
+
 
         public async Task<bool> ReadBooleanAsync(string nodeId)
         {
@@ -102,7 +128,7 @@ namespace WPF_App.Services
 
             try
             {
-                await Task.Run(() => _client.WriteNode(nodeId, value));
+                await Task.FromResult(() => _client.WriteNode(nodeId, value));
             }
             catch (Exception ex)
             {
@@ -117,7 +143,7 @@ namespace WPF_App.Services
 
             try
             {
-                await Task.Run(() => _client.WriteNode(nodeId, value));
+                await Task.FromResult(() => _client.WriteNode(nodeId, value));
             }
             catch (Exception ex)
             {
