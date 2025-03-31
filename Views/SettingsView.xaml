@@ -59,7 +59,7 @@
                             Background="Transparent"
                             BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Flag/icons8-grat-britain-96.png" Width="24" Height="16" Margin="5"/>
+                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-great-britain-96.png" Width="24" Height="16" Margin="5"/>
                             <TextBlock Text="{DynamicResource English}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -72,7 +72,7 @@
                             Background="Transparent"
                             BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Icons/italy.png" Width="24" Height="16" Margin="5"/>
+                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-france-96.png" Width="24" Height="16" Margin="5"/>
                             <TextBlock Text="{DynamicResource French}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -85,7 +85,7 @@
                             Background="Transparent"
                             BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Flags/spanish.png" Width="24" Height="16" Margin="5"/>
+                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-spain-flag-96.png" Width="24" Height="16" Margin="5"/>
                             <TextBlock Text="{DynamicResource Spanish}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -98,8 +98,21 @@
                             Background="Transparent"
                             BorderThickness="0">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Flag/italy.png" Width="24" Height="16" Margin="5"/>
+                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-italy-96 (1).png" Width="24" Height="16" Margin="5"/>
                             <TextBlock Text="{DynamicResource Italian}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Italian Button -->
+                    <Button Click="SetLanguage"
+                            Tag="ch-CH"
+                            HorizontalAlignment="Stretch"
+                            Padding="5"
+                            Background="Transparent"
+                            BorderThickness="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-china-96.png" Width="24" Height="16" Margin="5"/>
+                            <TextBlock Text="{DynamicResource Chinese}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>

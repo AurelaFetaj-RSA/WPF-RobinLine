@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+
+    <System:String x:Key="SettingsTitle">设置视图</System:String>
+    <System:String x:Key="subTitle">欢迎来到设置页</System:String>
+    <System:String x:Key="firstMenuItem">自动</System:String>
+    <System:String x:Key="secondMenuItem">手动</System:String>
+    <System:String x:Key="thirdMenuItem">RFID</System:String>
+    <System:String x:Key="fourthMenuItem">订单</System:String>
+    <System:String x:Key="fifthMenuItem">设备</System:String>
+    <System:String x:Key="sixthMenuItem">设置</System:String>
+    <System:String x:Key="seventhMenuItem">诊断</System:String>
+    <System:String x:Key="eighthMenuItem">隐藏</System:String>
+    <System:String x:Key="English">英语</System:String>
+    <System:String x:Key="French">法语</System:String>
+    <System:String x:Key="Spanish">西班牙语</System:String>
+    <System:String x:Key="Italian">意大利语</System:String>
+    <System:String x:Key="Chinese">中文</System:String>
+
+    <System:String x:Key="Robot1Ready">Ready</System:String>
+</ResourceDictionary>

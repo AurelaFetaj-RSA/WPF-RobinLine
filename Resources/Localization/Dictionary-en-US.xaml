@@ -16,6 +16,7 @@
     <System:String x:Key="French">French</System:String>
     <System:String x:Key="Spanish">Spanish</System:String>
     <System:String x:Key="Italian">Italian</System:String>
+    <System:String x:Key="Chinese">Chinese</System:String>
 
     <System:String x:Key="Robot1Ready">Ready</System:String>
 </ResourceDictionary>

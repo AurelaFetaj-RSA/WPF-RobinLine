@@ -93,6 +93,10 @@ namespace WPF_App.Views
             ReadOven2Temperature();
             UpdateOven2TemperatureStatus();
             StateButton();
+            UpdateGeneralRedLightState();
+            UpdateGeneralOrangeLightState();
+            UpdateGeneralGreenLightState();
+            UpdateSelectorStatus();
         }
 
         private void StartStopButton_Click(object sender, RoutedEventArgs e)
@@ -168,28 +172,33 @@ namespace WPF_App.Views
                 case MessageType.Success:
                     MessageBoxPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DFF0D8")); // Light Green
                     MessageText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3C763D")); // Dark Green
+                    MessageBoxPanel.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3C763D")); // Dark Green Border
                     MessageIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Images/Icons/icons8-success-100.png"));
                     break;
 
                 case MessageType.Error:
                     MessageBoxPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F2DEDE")); // Light Red
                     MessageText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A94442")); // Dark Red
+                    MessageBoxPanel.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A94442")); // Dark Red Border
                     MessageIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Images/Icons/icons8-error-96.png"));
                     break;
 
                 case MessageType.Warning:
                     MessageBoxPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FCF8E3")); // Light Yellow
                     MessageText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8A6D3B")); // Dark Yellow
+                    MessageBoxPanel.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8A6D3B")); // Dark Yellow Border
                     MessageIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Images/Icons/icons8-warning-96.png"));
                     break;
 
                 case MessageType.Info:
                     MessageBoxPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D9EDF7")); // Light Blue
                     MessageText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#31708F")); // Dark Blue
+                    MessageBoxPanel.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#31708F")); // Dark Blue Border
                     MessageIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Images/Icons/icons8-info-104.png"));
                     break;
             }
 
+            MessageBoxPanel.BorderThickness = new Thickness(2);
             MessageBoxPanel.Visibility = Visibility.Visible;
 
             // Auto-hide the message after 3 seconds
@@ -427,41 +436,6 @@ namespace WPF_App.Views
             TemperatureTextBlock.Text = $"{temperature}°";
         }
 
-        //private async void ReadOven1Temperature()
-        //{
-        //    // Read the temperature from the OPC UA server
-        //    var temperature = await _opcUaClient.ReadIntegerAsync("Tags.Robin_eren/pc_temperatura_forno_primer");
-
-        //    // Only update if the temperature changes
-        //    if (temperature != _previousTemperature)
-        //    {
-        //        Dispatcher.Invoke(() =>
-        //        {
-        //            TemperatureTextBlock.Text = $"{temperature}°";
-
-        //            // Define temperature thresholds
-        //            if (temperature < 50)
-        //            {
-        //                ShowMessage($"Oven temperature is low: {temperature}°.", MessageType.Info);
-        //            }
-        //            else if (temperature >= 50 && temperature <= 180)
-        //            {
-        //                ShowMessage($"Oven is at optimal temperature: {temperature}°.", MessageType.Success);
-        //            }
-        //            else if (temperature > 180 && temperature <= 220)
-        //            {
-        //                ShowMessage($"Warning: Oven temperature is high: {temperature}°.", MessageType.Warning);
-        //            }
-        //            else
-        //            {
-        //                ShowMessage($"Critical alert! Oven temperature is too high: {temperature}°.", MessageType.Error);
-        //            }
-        //        });
-
-        //        _previousTemperature = temperature; // Update stored value
-        //    }
-        //}
-
         private async void UpdateOven1TemperatureStatus()
         {
             // Read the temperature reached status from the OPC UA server
@@ -495,30 +469,6 @@ namespace WPF_App.Views
                 _lastTemperatureStatus = temperatureReached;
             }
         }
-
-        //private async void UpdateOven1TemperatureStatus()
-        //{
-        //    // Read the temperature reached status from the OPC UA server
-        //    var temperatureReached = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_forno_primer_in_temperatura");
-
-        //    // Update the UI based on the temperature reached status
-        //    if (temperatureReached)
-        //    {
-        //        // If the value is 1 (true), set "Reached" and green check icon
-        //        ReachedTextBlock.Text = "Reached";
-        //        StatusIcon.Icon = FontAwesome.Sharp.IconChar.Check;
-        //        StatusIcon.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#02a29a"));
-        //        StatusBorder.Background = new SolidColorBrush(Colors.White);
-        //    }
-        //    else
-        //    {
-        //        // If the value is 0 (false), set "Not Reached" and red X icon
-        //        ReachedTextBlock.Text = "Not Reached";
-        //        StatusIcon.Icon = FontAwesome.Sharp.IconChar.Times;
-        //        StatusIcon.Foreground = new SolidColorBrush(Colors.Red);
-        //        StatusBorder.Background = new SolidColorBrush(Colors.White);
-        //    }
-        //}
 
         private async void UpdateOven1ReadyStatus()
         {
@@ -694,30 +644,6 @@ namespace WPF_App.Views
             Oven2TemperatureTextBlock.Text = $"{temperature}°";
         }
 
-        //private async void UpdateOven2TemperatureStatus()
-        //{
-        //    // Read the temperature reached status from the OPC UA server
-        //    var temperatureReached = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_forno_colla_in_temperatura");
-
-        //    // Update the UI based on the temperature reached status
-        //    if (temperatureReached)
-        //    {
-        //        // If the value is 1 (true), set "Reached" and green check icon
-        //        Oven2ReachedTextBlock.Text = "Reached";
-        //        Oven2StatusIcon.Icon = FontAwesome.Sharp.IconChar.Check;
-        //        Oven2StatusIcon.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#02a29a"));
-        //        Oven2StatusBorder.Background = new SolidColorBrush(Colors.White);
-        //    }
-        //    else
-        //    {
-        //        // If the value is 0 (false), set "Not Reached" and red X icon
-        //        Oven2ReachedTextBlock.Text = "Not Reached";
-        //        Oven2StatusIcon.Icon = FontAwesome.Sharp.IconChar.Times;
-        //        Oven2StatusIcon.Foreground = new SolidColorBrush(Colors.Red);
-        //        Oven2StatusBorder.Background = new SolidColorBrush(Colors.White);
-        //    }
-        //}
-
         private async void UpdateOven2TemperatureStatus()
         {
             // Read the temperature reached status from the OPC UA server
@@ -751,6 +677,115 @@ namespace WPF_App.Views
                 _lastTemperatureStatus = temperatureReached;
             }
         }
+
+        private async void UpdateGeneralRedLightState()
+        {
+            //var isRedLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[9]");
+
+            //if (isRedLight)
+            //{
+            //    RedLight.Background = new SolidColorBrush(Colors.Red);
+            //    ShowMessage("Something is wrong.", MessageType.Info);
+            //}
+            //else
+            //{
+            //    RedLight.Background = new SolidColorBrush(Colors.DarkGreen);
+            //}
+
+            try
+            {
+                var isRedLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[9]");
+
+                RedLight.Dispatcher.Invoke(() =>
+                {
+                    RedLight.Background = new SolidColorBrush(isRedLight ? Colors.Red : Colors.DarkGreen);
+                    if (isRedLight)
+                    {
+                        ShowMessage("Something is wrong.", MessageType.Info);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Error reading OPC UA tag: {ex.Message}", MessageType.Error);
+            }
+
+        }
+
+        private async void UpdateGeneralOrangeLightState()
+        {
+            var isOrangeLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[10]");
+
+            //if (isOrangeLight)
+            //{
+            //    OrangeLight.Background = new SolidColorBrush(Colors.Orange);
+            //}
+            //else
+            //{
+            //    OrangeLight.Background = new SolidColorBrush(Colors.DarkGreen);
+            //}
+
+            OrangeLight.Dispatcher.Invoke(() =>
+            {
+                OrangeLight.Background = new SolidColorBrush(isOrangeLight ? Colors.Orange : Colors.DarkGreen);
+                //if (isOrangeLight)
+                //{
+                //    ShowMessage("Something is wrong.", MessageType.Info);
+                //}
+            });
+        }
+
+        private async void UpdateGeneralGreenLightState()
+        {
+            var isGreenLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[11]");
+
+            //if (isGreenLight)
+            //{
+            //    GreenLight.Background = new SolidColorBrush(Colors.Green);
+            //}
+            //else
+            //{
+            //    GreenLight.Background = new SolidColorBrush(Colors.DarkGreen);
+            //}
+
+            GreenLight.Dispatcher.Invoke(() =>
+            {
+                GreenLight.Background = new SolidColorBrush(isGreenLight ? Colors.Green : Colors.DarkGreen);
+            });
+        }
+
+        private async void UpdateSelectorStatus()
+        {
+            try
+            {
+                var isAutomatic = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_input_plc_linea[2]");
+
+                Selector.Dispatcher.Invoke(() =>
+                {
+                    Selector.Text = isAutomatic ? "Selector in Automatic" : "Selector in Manual";
+                });
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Error reading OPC UA tag: {ex.Message}", MessageType.Error);
+            }
+        }
+
+        //public void RedLightToggle_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (lightToggle.IsChecked == true)
+        //    {
+        //        //await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_primer", true);
+        //        RedLight.Background = new SolidColorBrush(Colors.Orange);
+        //        ShowMessage("Something is wrong", MessageType.Error);
+        //    }
+        //    else
+        //    {
+        //        //await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_primer", false);
+        //        RedLight.Background = new SolidColorBrush(Colors.DarkGreen);
+        //        //ShowMessage("Oven 1 has been excluded", MessageType.Info);
+        //    }
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

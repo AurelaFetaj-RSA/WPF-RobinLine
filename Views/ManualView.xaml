@@ -20,33 +20,51 @@
             </Border.RenderTransform>
 
             <Grid>
-                <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                           StrokeThickness="0.5"
-                           StrokeDashArray="6 6"
-                           RadiusX="10"
-                           RadiusY="10"
-                           Fill="Transparent" Margin="-19,-11,19,11"/>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                          BlurRadius="5"
+                          ShadowDepth="1"
+                          Opacity="0.6"/>
+                    </Border.Effect>
 
-                <!-- TextBlock Positioned at Top-Left -->
-                <StackPanel Background="#157291"
-                            HorizontalAlignment="Left" 
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
+
+                <StackPanel HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
-                            Margin="-5, -20, 0, 0">
+                            Margin="-5, -5, 0, 0">
                     <TextBlock Text="Oven 1"
-                               Foreground="White"
+                               Foreground="{DynamicResource titleColor7}"
                                FontSize="15"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="190"
+                            Background="{DynamicResource titleColor7}" />
                 </StackPanel>
-                
+
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Lamps" 
-                               Margin="-16,5,0,0" 
-                               Foreground="White" 
+                               Margin="-16,15,0,0" 
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -62,7 +80,7 @@
                               BorderThickness="0"
                               Click="Oven1LampsToggle_Click">
                     <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-123"/>
+                        <TranslateTransform Y="-113"/>
                     </ToggleButton.RenderTransform>
                     <ToggleButton.Template>
                         <ControlTemplate TargetType="ToggleButton">
@@ -89,7 +107,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -109,12 +127,12 @@
                         </ControlTemplate>
                     </ToggleButton.Template>
                 </ToggleButton>
-                
+
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="LampsTextBlock" 
                                Text="On/Off"
-                               Margin="125, 5, 0, 15"
-                               Foreground="White" 
+                               Margin="125, 15, 0, 15"
+                               Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -123,13 +141,13 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Fans" 
-                               Margin="-16,35,0,0" 
-                               Foreground="White" 
+                               Margin="-16,45,0,0" 
+                               Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
                 </StackPanel>
-                
+
                 <ToggleButton x:Name="Oven1FansToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
@@ -140,7 +158,7 @@
                               BorderThickness="0"
                               Click="Oven1FansToggle_Click">
                     <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-93"/>
+                        <TranslateTransform Y="-83"/>
                     </ToggleButton.RenderTransform>
                     <ToggleButton.Template>
                         <ControlTemplate TargetType="ToggleButton">
@@ -167,7 +185,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -187,12 +205,12 @@
                         </ControlTemplate>
                     </ToggleButton.Template>
                 </ToggleButton>
-                
+
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="FansTextBlock" 
                                Text="On/Off"
-                               Margin="125, 35, 0, 15"
-                               Foreground="White" 
+                               Margin="125, 45, 0, 15"
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -201,8 +219,8 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Belt" 
-                               Margin="-16,65,0,0" 
-                               Foreground="White" 
+                               Margin="-16,75,0,0" 
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -218,7 +236,7 @@
                               BorderThickness="0"
                               Click="Oven1BeltToggle_Click">
                     <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-63"/>
+                        <TranslateTransform Y="-53"/>
                     </ToggleButton.RenderTransform>
                     <ToggleButton.Template>
                         <ControlTemplate TargetType="ToggleButton">
@@ -245,7 +263,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -265,13 +283,13 @@
                         </ControlTemplate>
                     </ToggleButton.Template>
                 </ToggleButton>
-                
+
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    
+
                     <TextBlock x:Name="Oven1BeltTextBlock" 
                                Text="Start/Stop"
-                               Margin="125, 65, 0, 15"
-                               Foreground="White" 
+                               Margin="125, 75, 0, 15"
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -293,32 +311,50 @@
 
             <Grid>
                 <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                           StrokeThickness="0.5"
-                           StrokeDashArray="6 6"
-                           RadiusX="10"
-                           RadiusY="10"
-                           Fill="Transparent" Margin="-19,-11,19,11"/>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"
+                                          Opacity="0.6"/>
+                    </Border.Effect>
 
-                <!-- TextBlock Positioned at Top-Left -->
-                <StackPanel Background="#157291"
-                            HorizontalAlignment="Left" 
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
+
+                <StackPanel HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
-                            Margin="-5, -20, 0, 0">
+                            Margin="-5, -5, 0, 0">
                     <TextBlock Text="Oven 2"
-                               Foreground="White"
+                               Foreground="{DynamicResource titleColor7}"
                                FontSize="15"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="190"
+                            Background="{DynamicResource titleColor7}" />
                 </StackPanel>
-
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Lamps" 
-                               Margin="-16,5,0,0" 
-                               Foreground="White" 
+                               Margin="-16,15,0,0" 
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -334,7 +370,7 @@
                               BorderThickness="0"
                               Click="Oven2LampsToggle_Click">
                     <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-123"/>
+                        <TranslateTransform Y="-113"/>
                     </ToggleButton.RenderTransform>
                     <ToggleButton.Template>
                         <ControlTemplate TargetType="ToggleButton">
@@ -361,7 +397,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -385,8 +421,8 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="Oven2LampsTextBlock" 
                                Text="On/Off"
-                               Margin="125, 5, 0, 15"
-                               Foreground="White" 
+                               Margin="125, 15, 0, 15"
+                               Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -395,8 +431,8 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Fans" 
-                               Margin="-16,35,0,0" 
-                               Foreground="White" 
+                               Margin="-16,45,0,0" 
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -412,7 +448,7 @@
                               BorderThickness="0"
                               Click="Oven2FansToggle_Click">
                     <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-93"/>
+                        <TranslateTransform Y="-83"/>
                     </ToggleButton.RenderTransform>
                     <ToggleButton.Template>
                         <ControlTemplate TargetType="ToggleButton">
@@ -439,7 +475,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -463,8 +499,8 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="Oven2FansTextBlock" 
                        Text="On/Off"
-                       Margin="125, 35, 0, 15"
-                       Foreground="White" 
+                       Margin="125, 45, 0, 15"
+                       Foreground="{DynamicResource titleColor7}" 
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
@@ -473,8 +509,8 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Belt" 
-                       Margin="-16,65,0,0" 
-                       Foreground="White" 
+                       Margin="-16,75,0,0" 
+                       Foreground="{DynamicResource titleColor7}"
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
@@ -490,7 +526,7 @@
                       BorderThickness="0"
                       Click="Oven2BeltToggle_Click">
                     <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-63"/>
+                        <TranslateTransform Y="-53"/>
                     </ToggleButton.RenderTransform>
                     <ToggleButton.Template>
                         <ControlTemplate TargetType="ToggleButton">
@@ -517,7 +553,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -542,8 +578,8 @@
 
                     <TextBlock x:Name="Oven2BeltTextBlock" 
                        Text="Start/Stop"
-                       Margin="125, 65, 0, 15"
-                       Foreground="White" 
+                       Margin="125, 75, 0, 15"
+                       Foreground="{DynamicResource titleColor7}"
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
@@ -564,19 +600,36 @@
             </Border.RenderTransform>
 
             <Grid>
-                <!-- Dashed Border -->
-                <Rectangle Stroke="White"
-                           StrokeThickness="0.5"
-                           StrokeDashArray="6 6"
-                           RadiusX="10"
-                           RadiusY="10"
-                           Fill="Transparent" Margin="-19,-11,19,11"/>
+                <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"
+                                          Opacity="0.6"/>
+                    </Border.Effect>
+
+                    <!-- Blue line at the top -->
+                    <Grid>
+                        <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                        <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                    </Grid>
+                </Border>
 
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Input Belt" 
                                Margin="-16,5,0,0" 
-                               Foreground="White" 
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -619,7 +672,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -644,7 +697,7 @@
                     <TextBlock x:Name="InputBeltTextBlock" 
                                Text="Start/Stop"
                                Margin="130, 5, 0, 15"
-                               Foreground="White" 
+                               Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -654,7 +707,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock Text="Central Belt" 
                        Margin="250,5,0,0" 
-                       Foreground="White" 
+                       Foreground="{DynamicResource titleColor7}" 
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
@@ -697,7 +750,7 @@
                             <!-- Storyboard Animation -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#02a29a"/>
+                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
                                     <Setter Property="RenderTransform" TargetName="ToggleThumb">
                                         <Setter.Value>
                                             <TranslateTransform X="20"/>
@@ -722,7 +775,7 @@
                     <TextBlock x:Name="CentralBeltTextBlock" 
                                Text="Start/Stop"
                                Margin="400, 5, 0, 15"
-                               Foreground="White" 
+                               Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
@@ -731,7 +784,7 @@
             </Grid>
         </Border>
 
-        <Border x:Name="MessageBoxPanel"
+        <!--<Border x:Name="MessageBoxPanel"
                 CornerRadius="5"
                 Background="Transparent"
                 Width="450"
@@ -745,6 +798,24 @@
                     <TranslateTransform X="80" />
                     <TranslateTransform Y="70" />
                 </TransformGroup>
+            </Border.RenderTransform>-->
+
+        <Border x:Name="ManualMessageBoxPanel"
+                BorderThickness="2"
+                BorderBrush="Black"
+                CornerRadius="5"
+                Background="Transparent"
+                Width="350"
+                Height="30"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Visibility="Collapsed"
+                Margin="0,260,0,0">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform X="180" />
+                    <TranslateTransform Y="75" />
+                </TransformGroup>
             </Border.RenderTransform>
 
             <Grid>
@@ -754,12 +825,12 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <Image x:Name="MessageIcon" 
-                           Width="20" 
-                           Height="20" 
+                    <Image x:Name="ManualMessageIcon" 
+                           Width="15" 
+                           Height="15" 
                            Margin="10,5,5,5"/>
-                    <TextBlock x:Name="MessageText" 
-                               FontSize="14" 
+                    <TextBlock x:Name="ManualMessageText" 
+                               FontSize="12" 
                                VerticalAlignment="Center" 
                                Margin="5,5,20,5" 
                                TextWrapping="Wrap"/>
@@ -770,7 +841,7 @@
                         Background="Transparent"
                         Foreground="Gray"
                         BorderThickness="0"
-                        FontSize="10"
+                        FontSize="8"
                         Cursor="Hand"
                         Margin="5,0,10,0"
                         Click="CloseMessageBox"

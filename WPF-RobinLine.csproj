@@ -10,6 +10,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Images\Robots\iot_off.jpg" />
+		<None Remove="Images\Robots\iot_on.jpg" />
+		<None Remove="Images\Robots\robotic-arm-error.jpg" />
 		<None Remove="Images\thumbnail_logo.rsa_solo.png" />
 	</ItemGroup>
 
@@ -32,6 +35,15 @@
 		</Resource>
 		<Resource Include="Images\Icons\icons8-warning-96.png">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\Robots\iot_off.jpg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\Robots\iot_on.jpg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\Robots\robotic-arm-error.jpg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="Images\thumbnail_logo.rsa_solo.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
