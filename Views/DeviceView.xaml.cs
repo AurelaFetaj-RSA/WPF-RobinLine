@@ -23,7 +23,7 @@ namespace WPF_App.Views
 
         private async void UpdateIOT()
         {
-            var isConnected = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_manuale_automatico_forno_primer");
+            var isConnected = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_manuale_automatico_forno_primer");
 
             if (!isConnected)
             {
@@ -34,7 +34,7 @@ namespace WPF_App.Views
 
         private async void UpdateRobot1()
         {
-            var isConnected = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_manuale_automatico_forno_primer");
+            var isConnected = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_manuale_automatico_forno_primer");
 
             if (!isConnected)
             {
@@ -45,7 +45,7 @@ namespace WPF_App.Views
 
         private async void UpdateRobot2()
         {
-            var isConnected = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_manuale_automatico_forno_primer");
+            var isConnected = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_manuale_automatico_forno_primer");
 
             if (!isConnected)
             {

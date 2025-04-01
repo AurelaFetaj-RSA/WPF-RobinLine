@@ -81,22 +81,31 @@ namespace WPF_App.Views
         {
             InitializeComponent();
             DataContext = this;
-            //_opcUaClient = opcUaClient;
-            UpdateRobot1ReadyStatus();
-            UpdateRobot2ReadyStatus();
-            ReadOven1Temperature();
-            UpdateOven1TemperatureStatus();
-            UpdateOven1State();
-            UpdateOven1ReadyStatus();
-            UpdateOven2State();
-            UpdateOven2ReadyStatus();
-            ReadOven2Temperature();
-            UpdateOven2TemperatureStatus();
-            StateButton();
-            UpdateGeneralRedLightState();
-            UpdateGeneralOrangeLightState();
-            UpdateGeneralGreenLightState();
-            UpdateSelectorStatus();
+            OpcServerConnection();
+
+            //UpdateRobot1ReadyStatus();
+            //UpdateRobot2ReadyStatus();
+            Task.Run(UpdateRobot1ReadyStatus);
+            Task.Run(UpdateRobot2ReadyStatus);
+            Task.Run(ReadOven1Temperature);
+            Task.Run(UpdateOven1TemperatureStatus);
+            Task.Run(UpdateOven1State);
+            Task.Run(UpdateOven1ReadyStatus);
+            Task.Run(UpdateOven2State);
+            Task.Run(UpdateOven2ReadyStatus);
+            Task.Run(ReadOven2Temperature);
+            Task.Run(UpdateOven2TemperatureStatus);
+            Task.Run(StateButton);
+            Task.Run(UpdateGeneralLightsState);
+            //UpdateGeneralRedLightState();
+            //UpdateGeneralOrangeLightState();
+            //UpdateGeneralGreenLightState();
+            Task.Run(UpdateSelectorStatus);
+        }
+
+        private async void OpcServerConnection()
+        {
+            await _opcUaClient.ConnectAsync();
         }
 
         private void StartStopButton_Click(object sender, RoutedEventArgs e)
@@ -117,7 +126,7 @@ namespace WPF_App.Views
 
         private async void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_pausa", true);
+            await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_pausa", true);
             ShowMessage("The line has paused", MessageType.Info);
         }
 
@@ -129,7 +138,7 @@ namespace WPF_App.Views
                 // Handle Start logic
                 PlayStopIcon = "Stop"; // Change icon
                 PlayStopText = "Stop"; // Change text
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_start_stop", true);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_stop", true);
 
                 //ShowMessage("The line has started", Colors.DarkGreen, (Color)ColorConverter.ConvertFromString("#def0d8"));
                 ShowMessage("The line has started", MessageType.Success);
@@ -139,14 +148,14 @@ namespace WPF_App.Views
                 // Handle Stop logic
                 PlayStopIcon = "Play";
                 PlayStopText = "Start";
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_start_stop", false);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_stop", false);
                 ShowMessage("The line has stopped", MessageType.Warning);
             }
             else if (PopupAction == "Reset")
             {
                 // Handle Reset logic (you can add any reset logic here)
                 //MessageBox.Show("Line has been reset.");
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_reset_generale", true);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_reset_generale", true);
                 ShowMessage("The line has been reset", MessageType.Info);
             }
 
@@ -222,49 +231,53 @@ namespace WPF_App.Views
 
         private async void StateButton()
         {
-            // Read the status mode from the OPC UA server
-            var status = await _opcUaClient.ReadIntegerAsync("Tags.Robin_eren/pc_stato_macchina");
-
-            if (status != _previousState)
+            while (true)
             {
-                Dispatcher.Invoke(() =>
-                {
-                    switch (status)
-                    {
-                        case 0:
-                            StateText.Text = "Emergency";
-                            StateIcon.Fill = new SolidColorBrush(Colors.Red);
-                            ShowMessage("Emergency mode activated! Immediate attention required.", MessageType.Error);
-                            break;
-                        case 1:
-                            StateText.Text = "Automatic";
-                            StateIcon.Fill = new SolidColorBrush(Colors.Blue);
-                            ShowMessage("The system is running in automatic mode.", MessageType.Info);
-                            break;
-                        case 2:
-                            StateText.Text = "Manual";
-                            StateIcon.Fill = new SolidColorBrush(Colors.Orange);
-                            ShowMessage("Manual mode enabled. Operator control required.", MessageType.Warning);
-                            break;
-                        case 3:
-                            StateText.Text = "Cycle";
-                            StateIcon.Fill = new SolidColorBrush(Colors.Green);
-                            ShowMessage("The system is executing a cycle.", MessageType.Success);
-                            break;
-                        case 4:
-                            StateText.Text = "Alarm";
-                            StateIcon.Fill = new SolidColorBrush(Colors.DarkOrange);
-                            ShowMessage("An alarm has been triggered. Please check the system.", MessageType.Error);
-                            break;
-                        default:
-                            StateText.Text = "Status";
-                            StateIcon.Fill = new SolidColorBrush(Colors.White);
-                            ShowMessage("Unknown status received. Verify OPC UA connection.", MessageType.Warning);
-                            break;
-                    }
-                });
+                var status = await _opcUaClient.ReadIntegerAsync("ns=2;s=Tags.Eren_robin/pc_stato_macchina");
 
-                _previousState = status; // Update the stored state
+                if (status != _previousState)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        switch (status)
+                        {
+                            case 0:
+                                StateText.Text = "Emergency";
+                                StateIcon.Fill = new SolidColorBrush(Colors.Red);
+                                ShowMessage("Emergency mode activated!", MessageType.Error);
+                                break;
+                            case 1:
+                                StateText.Text = "Automatic";
+                                StateIcon.Fill = new SolidColorBrush(Colors.Blue);
+                                ShowMessage("The system is running in automatic mode.", MessageType.Info);
+                                break;
+                            case 2:
+                                StateText.Text = "Manual";
+                                StateIcon.Fill = new SolidColorBrush(Colors.Orange);
+                                ShowMessage("Manual mode enabled. Operator control required.", MessageType.Warning);
+                                break;
+                            case 3:
+                                StateText.Text = "Cycle";
+                                StateIcon.Fill = new SolidColorBrush(Colors.Green);
+                                ShowMessage("The system is executing a cycle.", MessageType.Success);
+                                break;
+                            case 4:
+                                StateText.Text = "Alarm";
+                                StateIcon.Fill = new SolidColorBrush(Colors.DarkOrange);
+                                ShowMessage("An alarm has been triggered. Please check the system.", MessageType.Error);
+                                break;
+                            default:
+                                StateText.Text = "Status";
+                                StateIcon.Fill = new SolidColorBrush(Colors.White);
+                                ShowMessage("Unknown status received. Verify OPC UA connection.", MessageType.Warning);
+                                break;
+                        }
+                    });
+
+                    _previousState = status; // Update the stored state
+                }
+
+                await Task.Delay(1000); // Check every second
             }
         }
 
@@ -285,15 +298,13 @@ namespace WPF_App.Views
         {
             if (Robot1Toggle.IsChecked == true)
             {
-                //await _opcUaClient.WriteBooleanAsync("ns=2;s=Robot1.Availability", true);
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_robot_robin_primer", true);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_robot_robin_primer", true);
                 Robot1AvailabilityTextBlock.Text = "Included";
                 ShowMessage("Robot 1 has been included", MessageType.Info);
             }
             else
             {
-                //await _opcUaClient.WriteBooleanAsync("ns=2;s=Robot1.Availability", false);
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_robot_robin_primer", false);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_robot_robin_primer", false);
                 Robot1AvailabilityTextBlock.Text = "Excluded";
                 ShowMessage("Robot 1 has been excluded", MessageType.Info);
             }
@@ -303,17 +314,13 @@ namespace WPF_App.Views
         {
             while (true)
             {
-                //bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Robot1.Ready");
-                bool isReady = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_robot_robin_primer_ready");
+                bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_robot_robin_primer_ready");
 
-                // Update the UI on the main thread
                 Dispatcher.Invoke(() =>
                 {
                     if (isReady)
                     {
-                        //ReadyLamp.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("green"));
                         ReadyLamp.Foreground = new SolidColorBrush(Colors.Green);
-                        //ReadyRobot1TextBlock.Text = "Ready";
 
                         if (!_previousReadyState) // Show message only if state changes
                         {
@@ -324,7 +331,6 @@ namespace WPF_App.Views
                     else
                     {
                         ReadyLamp.Foreground = new SolidColorBrush(Colors.Red);
-                        //ReadyRobot1TextBlock.Text = "Not Ready";
 
                         if (_previousReadyState) // Show message only if state changes
                         {
@@ -342,13 +348,13 @@ namespace WPF_App.Views
         {
             if (RobotToggle2.IsChecked == true)
             {
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_robot_robin_colla", true);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_robot_robin_colla", true);
                 Robot2AvailabilityTextBlock.Text = "Included";
                 ShowMessage("Robot 2 has been included", MessageType.Info);
             }
             else
             {
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_robot_robin_colla", false);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_robot_robin_colla", false);
                 Robot2AvailabilityTextBlock.Text = "Excluded";
                 ShowMessage("Robot 2 has been excluded", MessageType.Info);
             }
@@ -358,8 +364,7 @@ namespace WPF_App.Views
         {
             while (true)
             {
-                //bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Robot1.Ready");
-                bool isReady = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_robot_robin_colla_ready");
+                bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_robot_robin_colla_ready");
 
                 // Update the UI on the main thread
                 Dispatcher.Invoke(() =>
@@ -385,13 +390,13 @@ namespace WPF_App.Views
         {
             if (Oven1Toggle.IsChecked == true)
             {
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_primer", true);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_forno_primer", true);
                 AvailabilityTextBlock.Text = "Included";
                 ShowMessage("Oven 1 has been included", MessageType.Info);
             }
             else
             {
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_primer", false);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_forno_primer", false);
                 AvailabilityTextBlock.Text = "Excluded";
                 ShowMessage("Oven 1 has been excluded", MessageType.Info);
             }
@@ -403,7 +408,7 @@ namespace WPF_App.Views
             if (e.NewValue is int lampsPercentage)
             {
                 // Write the value to the OPC UA server
-                await _opcUaClient.WriteIntegerAsync("Tags.Robin_eren/pc_percentuale_accensione_lampade_forno_primer", lampsPercentage);
+                await _opcUaClient.WriteIntegerAsync("ns=2;s=Tags.Eren_robin/pc_percentuale_accensione_lampade_forno_primer", lampsPercentage);
             }
         }
 
@@ -413,7 +418,7 @@ namespace WPF_App.Views
             if (e.NewValue is int fanPercentage)
             {
                 // Write the value to the OPC UA server
-                await _opcUaClient.WriteIntegerAsync("Tags.Robin_eren/pc_percentuale_velocita_ventole_forno_primer", fanPercentage);
+                await _opcUaClient.WriteIntegerAsync("ns=2;s=Tags.Eren_robin/pc_percentuale_velocita_ventole_forno_primer", fanPercentage);
             }
         }
 
@@ -423,14 +428,14 @@ namespace WPF_App.Views
             if (e.NewValue is int tempSetpoint)
             {
                 // Write the value to the OPC UA server
-                await _opcUaClient.WriteIntegerAsync("Tags.Robin_eren/pc_setpoint_temperatura_forno_primer", tempSetpoint);
+                await _opcUaClient.WriteIntegerAsync("ns=2;s=Tags.Eren_robin/pc_setpoint_temperatura_forno_primer", tempSetpoint);
             }
         }
 
         private async void ReadOven1Temperature()
         {
             // Read the temperature from the OPC UA server
-            var temperature = await _opcUaClient.ReadIntegerAsync("Tags.Robin_eren/pc_temperatura_forno_primer");
+            var temperature = await _opcUaClient.ReadIntegerAsync("ns=2;s=Tags.Eren_robin/pc_temperatura_forno_primer");
 
             // Update the UI with the temperature value
             TemperatureTextBlock.Text = $"{temperature}°";
@@ -439,7 +444,7 @@ namespace WPF_App.Views
         private async void UpdateOven1TemperatureStatus()
         {
             // Read the temperature reached status from the OPC UA server
-            var temperatureReached = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_forno_primer_in_temperatura");
+            var temperatureReached = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_forno_primer_in_temperatura");
 
             // Update UI only if the status has changed
             if (temperatureReached != _lastTemperatureStatus)
@@ -475,7 +480,7 @@ namespace WPF_App.Views
             while (true)
             {
                 //bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Robot1.Ready");
-                bool isReady = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_forno_primer_ready");
+                bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_forno_primer_ready");
 
                 // Update the UI on the main thread
                 if (isReady != _lastOvenReadyStatus)
@@ -511,7 +516,7 @@ namespace WPF_App.Views
         private async void UpdateOven1State()
         {
             // Read the oven mode from the OPC UA server
-            var isAutomatic = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_manuale_automatico_forno_primer");
+            var isAutomatic = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_manuale_automatico_forno_primer");
 
             // Update UI elements based on the oven mode
             if (isAutomatic)
@@ -534,13 +539,13 @@ namespace WPF_App.Views
         {
             if (Oven2Toggle.IsChecked == true)
             {
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_colla", true);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_forno_colla", true);
                 Availability2TextBlock.Text = "Included";
                 ShowMessage("Oven 2 has been included", MessageType.Info);
             }
             else
             {
-                await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_colla", false);
+                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_inclusione_esclusione_forno_colla", false);
                 Availability2TextBlock.Text = "Excluded";
                 ShowMessage("Oven 2 has been excluded", MessageType.Info);
             }
@@ -549,7 +554,7 @@ namespace WPF_App.Views
         private async void UpdateOven2State()
         {
             // Read the oven mode from the OPC UA server
-            var isAutomatic = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_manuale_automatico_forno_colla");
+            var isAutomatic = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_manuale_automatico_forno_colla");
 
             // Update UI elements based on the oven mode
             if (isAutomatic)
@@ -571,7 +576,7 @@ namespace WPF_App.Views
             while (true)
             {
                 //bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Robot1.Ready");
-                bool isReady = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_forno_colla_ready");
+                bool isReady = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_forno_colla_ready");
 
                 // Update the UI on the main thread
                 if (isReady != _lastOvenReadyStatus)
@@ -610,7 +615,7 @@ namespace WPF_App.Views
             if (e.NewValue is int lampsPercentage)
             {
                 // Write the value to the OPC UA server
-                await _opcUaClient.WriteIntegerAsync("Tags.Robin_eren/pc_percentuale_accensione_lampade_forno_colla", lampsPercentage);
+                await _opcUaClient.WriteIntegerAsync("ns=2;s=Tags.Eren_robin/pc_percentuale_accensione_lampade_forno_colla", lampsPercentage);
             }
         }
 
@@ -620,7 +625,7 @@ namespace WPF_App.Views
             if (e.NewValue is int fanPercentage)
             {
                 // Write the value to the OPC UA server
-                await _opcUaClient.WriteIntegerAsync("Tags.Robin_eren/pc_percentuale_velocita_ventole_forno_colla", fanPercentage);
+                await _opcUaClient.WriteIntegerAsync("ns=2;s=Tags.Eren_robin/pc_percentuale_velocita_ventole_forno_colla", fanPercentage);
             }
         }
 
@@ -630,14 +635,14 @@ namespace WPF_App.Views
             if (e.NewValue is int tempSetpoint)
             {
                 // Write the value to the OPC UA server
-                await _opcUaClient.WriteIntegerAsync("Tags.Robin_eren/ pc_setpoint_temperatura_forno_colla", tempSetpoint);
+                await _opcUaClient.WriteIntegerAsync("ns=2;s=Tags.Eren_robin/pc_setpoint_temperatura_forno_colla", tempSetpoint);
             }
         }
 
         private async void ReadOven2Temperature()
         {
             // Read the temperature from the OPC UA server
-            var temperature = await _opcUaClient.ReadIntegerAsync("Tags.Robin_eren/pc_temperatura_forno_colla");
+            var temperature = await _opcUaClient.ReadIntegerAsync("ns=2;s=Tags.Eren_robin/pc_temperatura_forno_colla");
 
             // Update the UI with the temperature value
             // Make sure to run this on the UI thread
@@ -647,7 +652,7 @@ namespace WPF_App.Views
         private async void UpdateOven2TemperatureStatus()
         {
             // Read the temperature reached status from the OPC UA server
-            var temperatureReached = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_forno_colla_in_temperatura");
+            var temperatureReached = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_forno_colla_in_temperatura");
 
             // Update UI only if the status has changed
             if (temperatureReached != _lastTemperatureStatus)
@@ -678,91 +683,130 @@ namespace WPF_App.Views
             }
         }
 
-        private async void UpdateGeneralRedLightState()
+        private async void UpdateGeneralLightsState()
         {
-            //var isRedLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[9]");
-
-            //if (isRedLight)
-            //{
-            //    RedLight.Background = new SolidColorBrush(Colors.Red);
-            //    ShowMessage("Something is wrong.", MessageType.Info);
-            //}
-            //else
-            //{
-            //    RedLight.Background = new SolidColorBrush(Colors.DarkGreen);
-            //}
-
             try
             {
-                var isRedLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[9]");
+                // Read the entire array from OPC UA
+                bool[] lightArray = await _opcUaClient.ReadArrayAsync<bool>("ns=2;s=Tags.Eren_robin/pc_output_plc_linea");
 
-                RedLight.Dispatcher.Invoke(() =>
+                // Define light mappings (Index -> UI Border Element + Color)
+                var lights = new (int Index, System.Windows.Controls.Border Light, Color OnColor)[]
                 {
-                    RedLight.Background = new SolidColorBrush(isRedLight ? Colors.Red : Colors.DarkGreen);
-                    if (isRedLight)
+                    (9, RedLight, Colors.Red),
+                    (10, OrangeLight, Colors.Orange),
+                    (11, GreenLight, Colors.Green)
+                };
+
+                foreach (var (index, light, onColor) in lights)
+                {
+                    if (lightArray.Length > index)
                     {
-                        ShowMessage("Something is wrong.", MessageType.Info);
+                        bool isLightOn = lightArray[index];
+
+                        light.Dispatcher.Invoke(() =>
+                        {
+                            light.Background = new SolidColorBrush(isLightOn ? onColor : Colors.DarkGreen);
+                            if (isLightOn)
+                            {
+                                ShowMessage("Something is wrong.", MessageType.Info);
+                            }
+                        });
                     }
-                });
+                    else
+                    {
+                        ShowMessage($"OPC UA array is smaller than expected (missing index {index})!", MessageType.Warning);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                ShowMessage($"Error reading OPC UA tag: {ex.Message}", MessageType.Error);
+                ShowMessage($"Error reading OPC UA tag array: {ex.Message}", MessageType.Error);
             }
-
         }
 
-        private async void UpdateGeneralOrangeLightState()
-        {
-            var isOrangeLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[10]");
+        //private async void UpdateGeneralOrangeLightState()
+        //{
+        //    var isOrangeLight = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_output_plc_linea[10]");
 
-            //if (isOrangeLight)
-            //{
-            //    OrangeLight.Background = new SolidColorBrush(Colors.Orange);
-            //}
-            //else
-            //{
-            //    OrangeLight.Background = new SolidColorBrush(Colors.DarkGreen);
-            //}
+        //    //if (isOrangeLight)
+        //    //{
+        //    //    OrangeLight.Background = new SolidColorBrush(Colors.Orange);
+        //    //}
+        //    //else
+        //    //{
+        //    //    OrangeLight.Background = new SolidColorBrush(Colors.DarkGreen);
+        //    //}
 
-            OrangeLight.Dispatcher.Invoke(() =>
-            {
-                OrangeLight.Background = new SolidColorBrush(isOrangeLight ? Colors.Orange : Colors.DarkGreen);
-                //if (isOrangeLight)
-                //{
-                //    ShowMessage("Something is wrong.", MessageType.Info);
-                //}
-            });
-        }
+        //    OrangeLight.Dispatcher.Invoke(() =>
+        //    {
+        //        OrangeLight.Background = new SolidColorBrush(isOrangeLight ? Colors.Orange : Colors.DarkGreen);
+        //        //if (isOrangeLight)
+        //        //{
+        //        //    ShowMessage("Something is wrong.", MessageType.Info);
+        //        //}
+        //    });
 
-        private async void UpdateGeneralGreenLightState()
-        {
-            var isGreenLight = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_output_plc_linea[11]");
+        //    try
+        //    {
+        //        // Read the entire array from OPC UA
+        //        bool[] lightArray = await _opcUaClient.ReadArrayAsync<bool>("ns=2;s=Tags.Eren_robin/pc_output_plc_linea");
 
-            //if (isGreenLight)
-            //{
-            //    GreenLight.Background = new SolidColorBrush(Colors.Green);
-            //}
-            //else
-            //{
-            //    GreenLight.Background = new SolidColorBrush(Colors.DarkGreen);
-            //}
+        //        if (redLightArray.Length > 9)
+        //        {
+        //            bool isRedLight = redLightArray[9];
 
-            GreenLight.Dispatcher.Invoke(() =>
-            {
-                GreenLight.Background = new SolidColorBrush(isGreenLight ? Colors.Green : Colors.DarkGreen);
-            });
-        }
+        //            RedLight.Dispatcher.Invoke(() =>
+        //            {
+        //                RedLight.Background = new SolidColorBrush(isRedLight ? Colors.Red : Colors.DarkGreen);
+        //                if (isRedLight)
+        //                {
+        //                    ShowMessage("Something is wrong.", MessageType.Info);
+        //                }
+        //            });
+        //        }
+        //        else
+        //        {
+        //            ShowMessage("OPC UA array is smaller than expected!", MessageType.Warning);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ShowMessage($"Error reading OPC UA tag array: {ex.Message}", MessageType.Error);
+        //    }
+        //}
+
+        //private async void UpdateGeneralGreenLightState()
+        //{
+        //    var isGreenLight = await _opcUaClient.ReadBooleanAsync("ns=2;s=Tags.Eren_robin/pc_output_plc_linea[11]");
+
+        //    //if (isGreenLight)
+        //    //{
+        //    //    GreenLight.Background = new SolidColorBrush(Colors.Green);
+        //    //}
+        //    //else
+        //    //{
+        //    //    GreenLight.Background = new SolidColorBrush(Colors.DarkGreen);
+        //    //}
+
+        //    GreenLight.Dispatcher.Invoke(() =>
+        //    {
+        //        GreenLight.Background = new SolidColorBrush(isGreenLight ? Colors.Green : Colors.DarkGreen);
+        //    });
+        //}
 
         private async void UpdateSelectorStatus()
         {
             try
             {
-                var isAutomatic = await _opcUaClient.ReadBooleanAsync("Tags.Robin_eren/pc_input_plc_linea[2]");
+                bool[] isAutomatic = await _opcUaClient.ReadArrayAsync<bool>("ns=2;s=Tags.Eren_robin/pc_input_plc_linea");
+
+                // Use the value from index 2 for the selector status
+                bool isSelectorAutomatic = isAutomatic[2];
 
                 Selector.Dispatcher.Invoke(() =>
                 {
-                    Selector.Text = isAutomatic ? "Selector in Automatic" : "Selector in Manual";
+                    Selector.Text = isSelectorAutomatic ? "Selector in Automatic" : "Selector in Manual";
                 });
             }
             catch (Exception ex)
@@ -770,22 +814,6 @@ namespace WPF_App.Views
                 ShowMessage($"Error reading OPC UA tag: {ex.Message}", MessageType.Error);
             }
         }
-
-        //public void RedLightToggle_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (lightToggle.IsChecked == true)
-        //    {
-        //        //await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_primer", true);
-        //        RedLight.Background = new SolidColorBrush(Colors.Orange);
-        //        ShowMessage("Something is wrong", MessageType.Error);
-        //    }
-        //    else
-        //    {
-        //        //await _opcUaClient.WriteBooleanAsync("Tags.Robin_eren/pc_inclusione_esclusione_forno_primer", false);
-        //        RedLight.Background = new SolidColorBrush(Colors.DarkGreen);
-        //        //ShowMessage("Oven 1 has been excluded", MessageType.Info);
-        //    }
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

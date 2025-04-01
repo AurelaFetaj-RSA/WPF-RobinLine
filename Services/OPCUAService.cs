@@ -30,7 +30,15 @@ namespace WPF_App.Services
             //}
 
             // Initialize the OPC Client
-            _client = new OpcClient(ServerUrl); 
+            _client = new OpcClient(ServerUrl);
+
+            _client.Security.AutoAcceptUntrustedCertificates = true;
+            _client.CertificateValidationFailed += HandleCertificateValidationFailed;
+        }
+
+        private void HandleCertificateValidationFailed(object sender, OpcCertificateValidationFailedEventArgs e)
+        {
+            e.Accept = true;
         }
 
         public async Task ConnectAsync()
@@ -84,6 +92,7 @@ namespace WPF_App.Services
 
         public async Task<bool> ReadBooleanAsync(string nodeId)
         {
+            await ConnectAsync();
             if (!_isConnected) return false;
 
             try
@@ -104,6 +113,7 @@ namespace WPF_App.Services
 
         public async Task<int> ReadIntegerAsync(string nodeId)
         {
+            await ConnectAsync();
             if (!_isConnected) return 0;
 
             try
@@ -124,11 +134,17 @@ namespace WPF_App.Services
 
         public async Task WriteBooleanAsync(string nodeId, bool value)
         {
+            await ConnectAsync();
             if (!_isConnected) return;
 
             try
             {
-                await Task.FromResult(() => _client.WriteNode(nodeId, value));
+                var opcStatus = await Task.Run(() => _client.WriteNode(nodeId, value));
+
+                if(opcStatus != OpcStatusCode.Good)
+                {
+                    return;
+                }
             }
             catch (Exception ex)
             {
@@ -139,6 +155,7 @@ namespace WPF_App.Services
 
         public async Task WriteIntegerAsync(string nodeId, int value)
         {
+            await ConnectAsync();
             if (!_isConnected) return;
 
             try
@@ -151,6 +168,38 @@ namespace WPF_App.Services
                 //_logger.LogError(ex, "Error writing integer to {NodeId}", nodeId);
             }
         }
+
+        public async Task<T[]> ReadArrayAsync<T>(string nodeId)
+        {
+            await ConnectAsync();
+            if (!_isConnected) return Array.Empty<T>();
+
+            try
+            {
+                return await Task.Run(() =>
+                {
+                    var result = _client.ReadNode(nodeId).Value;
+
+                    if (result is T[] arrayResult)
+                    {
+                        return arrayResult;
+                    }
+
+                    if (result is IEnumerable<object> objectArray)
+                    {
+                        return objectArray.Select(item => (T)Convert.ChangeType(item, typeof(T))).ToArray();
+                    }
+
+                    throw new InvalidCastException($"Unable to convert OPC UA value to an array of {typeof(T).Name}");
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading array from {nodeId}: {ex.Message}");
+                return Array.Empty<T>(); // Return an empty array in case of failure
+            }
+        }
+
 
         public void Disconnect()
         {
