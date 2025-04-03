@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WPF_App.Services;
 using static WPF_App.Views.AutomaticView;
@@ -24,130 +23,130 @@ namespace WPF_App.Views
 
         public async void Oven1LampsToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (Oven1LampsToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_primer", true);
-                LampsTextBlock.Text = "On";
-                ShowMessage("Oven 1 lamps have been turned on", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_primer", false);
-                LampsTextBlock.Text = "Off";
-                ShowMessage("Oven 1 lamps have been turned off", MessageType.Info);
-            }
+            //if (Oven1LampsToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_primer", true);
+            //    LampsTextBlock.Text = "On";
+            //    ShowMessage("Oven 1 lamps have been turned on", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_primer", false);
+            //    LampsTextBlock.Text = "Off";
+            //    ShowMessage("Oven 1 lamps have been turned off", MessageType.Info);
+            //}
         }
 
         public async void Oven1FansToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (Oven1FansToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_primer", true);
-                FansTextBlock.Text = "On";
-                ShowMessage("Oven 1 fans have been turned on", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_primer", false);
-                FansTextBlock.Text = "Off";
-                ShowMessage("Oven 1 fans have been turned off", MessageType.Info);
-            }
+            //if (Oven1FansToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_primer", true);
+            //    FansTextBlock.Text = "On";
+            //    ShowMessage("Oven 1 fans have been turned on", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_primer", false);
+            //    FansTextBlock.Text = "Off";
+            //    ShowMessage("Oven 1 fans have been turned off", MessageType.Info);
+            //}
         }
 
         public async void Oven1BeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (Oven1BeltToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_primer", true);
-                Oven1BeltTextBlock.Text = "Start";
-                ShowMessage("Oven 1 belt has been started", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_primer", false);
-                Oven1BeltTextBlock.Text = "Stop";
-                ShowMessage("Oven 1 belt has been turned off", MessageType.Info);
-            }
+            //if (Oven1BeltToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_primer", true);
+            //    Oven1BeltTextBlock.Text = "Start";
+            //    ShowMessage("Oven 1 belt has been started", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_primer", false);
+            //    Oven1BeltTextBlock.Text = "Stop";
+            //    ShowMessage("Oven 1 belt has been turned off", MessageType.Info);
+            //}
         }
 
         public async void Oven2LampsToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (Oven2LampsToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_colla", true);
-                Oven2LampsTextBlock.Text = "On";
-                ShowMessage("Oven 2 lamps have been turned on", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_colla", false);
-                Oven2LampsTextBlock.Text = "Off";
-                ShowMessage("Oven 2 lamps have been turned off", MessageType.Info);
-            }
+            //if (Oven2LampsToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_colla", true);
+            //    Oven2LampsTextBlock.Text = "On";
+            //    ShowMessage("Oven 2 lamps have been turned on", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_colla", false);
+            //    Oven2LampsTextBlock.Text = "Off";
+            //    ShowMessage("Oven 2 lamps have been turned off", MessageType.Info);
+            //}
         }
 
         public async void Oven2FansToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (Oven2FansToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_colla", true);
-                Oven2FansTextBlock.Text = "On";
-                ShowMessage("Oven 2 fans have been turned on", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_colla", false);
-                Oven2FansTextBlock.Text = "Off";
-                ShowMessage("Oven 2 fans have been turned off", MessageType.Info);
-            }
+            //if (Oven2FansToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_colla", true);
+            //    Oven2FansTextBlock.Text = "On";
+            //    ShowMessage("Oven 2 fans have been turned on", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_colla", false);
+            //    Oven2FansTextBlock.Text = "Off";
+            //    ShowMessage("Oven 2 fans have been turned off", MessageType.Info);
+            //}
         }
 
         public async void Oven2BeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (Oven2BeltToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_colla", true);
-                Oven2BeltTextBlock.Text = "Start";
-                ShowMessage("Oven 2 belt has started", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_colla", false);
-                Oven2BeltTextBlock.Text = "Stop";
-                ShowMessage("Oven 2 belt has stopped", MessageType.Info);
-            }
+            //if (Oven2BeltToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_colla", true);
+            //    Oven2BeltTextBlock.Text = "Start";
+            //    ShowMessage("Oven 2 belt has started", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_colla", false);
+            //    Oven2BeltTextBlock.Text = "Stop";
+            //    ShowMessage("Oven 2 belt has stopped", MessageType.Info);
+            //}
         }
 
         public async void InputBeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (InputBeltToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastro_ingresso", true);
-                InputBeltTextBlock.Text = "Start";
-                ShowMessage("Input belt has started", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastro_ingresso", false);
-                InputBeltTextBlock.Text = "Stop";
-                ShowMessage("Input belt has stopped", MessageType.Info);
-            }
+            //if (InputBeltToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastro_ingresso", true);
+            //    InputBeltTextBlock.Text = "Start";
+            //    ShowMessage("Input belt has started", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastro_ingresso", false);
+            //    InputBeltTextBlock.Text = "Stop";
+            //    ShowMessage("Input belt has stopped", MessageType.Info);
+            //}
         }
 
         public async void CentralBeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (CentralBeltToggle.IsChecked == true)
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastro_centrale", true);
-                CentralBeltTextBlock.Text = "Start";
-                ShowMessage("Central belt has started", MessageType.Info);
-            }
-            else
-            {
-                await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastro_centrale", false);
-                CentralBeltTextBlock.Text = "Stop";
-                ShowMessage("Central belt has stopped", MessageType.Info);
-            }
+            //if (CentralBeltToggle.IsChecked == true)
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastro_centrale", true);
+            //    CentralBeltTextBlock.Text = "Start";
+            //    ShowMessage("Central belt has started", MessageType.Info);
+            //}
+            //else
+            //{
+            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastro_centrale", false);
+            //    CentralBeltTextBlock.Text = "Stop";
+            //    ShowMessage("Central belt has stopped", MessageType.Info);
+            //}
         }
 
         private void ShowMessage(string message, MessageType messageType)

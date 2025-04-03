@@ -1,226 +1,355 @@
-﻿using Microsoft.Extensions.Logging;
-using Opc.UaFx;
-using Opc.UaFx.Client;
-using WPF_RobinLine.Services;
+﻿using Opc.Ua;
+using Opc.Ua.Client;
+using System.Net.Sockets;
+using System;
 
 namespace WPF_App.Services
 {
     public class OpcUaClientService : IDisposable
     {
-        private OpcClient _client; // Change OpcAdvancedClient to OpcClient
-        private const string ServerUrl = "opc.tcp://172.31.20.101:48011";
-        private bool _isConnected = false; // Track connection status manually
-        //private readonly ILogger<OpcUaClientService> _logger;
-        protected ILicenseInfo _opcLicenseInfo { get; set; } = null;
+        private ApplicationConfiguration _config;
+        private Session _session;
+        private Subscription _subscription;
+        private bool _disposed;
+        private readonly OpcConfiguration _configuration;
+
+        public event Action<string> ConnectionStatusChanged;
+        public event Action<string, object> ValueUpdated;
 
         public OpcUaClientService()
         {
-            //_logger = logger;
-
-            if (OpcClientKey.Key != string.Empty)
-            {
-                Opc.UaFx.Client.Licenser.LicenseKey = OpcClientKey.Key;
-                _opcLicenseInfo = Opc.UaFx.Client.Licenser.LicenseInfo;
-            }
-
-            //if (OpcServerKey.Key != string.Empty)
-            //{
-            //    Opc.UaFx.Server.Licenser.LicenseKey = OpcServerKey.Key;
-            //    _opcLicenseInfo = Opc.UaFx.Client.Licenser.LicenseInfo;
-            //}
-
-            // Initialize the OPC Client
-            _client = new OpcClient(ServerUrl);
-
-            _client.Security.AutoAcceptUntrustedCertificates = true;
-            _client.CertificateValidationFailed += HandleCertificateValidationFailed;
+            _configuration = new RobinLineOpcConfiguration();
+            if (_configuration == null)
+                throw new InvalidOperationException("Failed to create default configuration");
         }
 
-        private void HandleCertificateValidationFailed(object sender, OpcCertificateValidationFailedEventArgs e)
+        public OpcUaClientService(OpcConfiguration configuration)
         {
-            e.Accept = true;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task ConnectAsync()
-        {
-            if (_isConnected) return;
-
-            try
-            {
-                await Task.Run(() =>
-                {
-                    _client.Connect();
-                    _isConnected = true;
-                });
-
-                Console.WriteLine("Connected to OPC UA Server");
-                //_logger.LogInformation("Connected to OPC UA Server.");
-                return;
-            }
-            catch (Exception ex)
-            {
-                _isConnected = false;
-                Console.WriteLine($"Connection Error: {ex.Message}");
-                //_logger.LogError(ex, "Connection error.");
-            }
-        }
-
-        //public async Task ConnectAsync(int retryCount = 3, int delayMs = 2000)
+        //public async Task InitializeAsync()
         //{
-        //    if (_isConnected) return;
-
-        //    for (int attempt = 1; attempt <= retryCount; attempt++)
+        //    try
         //    {
-        //        try
+        //        _config = new ApplicationConfiguration()
         //        {
-        //            _client.Connect();
-        //            _isConnected = true; 
-        //            Console.WriteLine("Connected to OPC UA Server");
-        //            return;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine($"Connection attempt {attempt} failed: {ex.Message}");
-        //            if (attempt < retryCount) await Task.Delay(delayMs);
-        //        }
-        //    }
+        //            ApplicationName = "WPF-RobinLine",
+        //            ApplicationType = ApplicationType.Client,
+        //            SecurityConfiguration = new SecurityConfiguration
+        //            {
+        //                AutoAcceptUntrustedCertificates = true,
+        //                RejectSHA1SignedCertificates = false,
+        //                MinimumCertificateKeySize = 1024
+        //            },
+        //            TransportQuotas = new TransportQuotas { OperationTimeout = 15000 },
+        //            ClientConfiguration = new ClientConfiguration { DefaultSessionTimeout = 60000 }
+        //        };
 
-        //    _isConnected = false;
-        //    Console.WriteLine("Failed to connect to OPC UA Server after multiple attempts.");
+        //        await _config.Validate(ApplicationType.Client);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ConnectionStatusChanged?.Invoke($"Initialization failed: {ex.Message}");
+        //        throw;
+        //    }
         //}
 
-
-        public async Task<bool> ReadBooleanAsync(string nodeId)
+        public async Task InitializeAsync()
         {
-            await ConnectAsync();
-            if (!_isConnected) return false;
-
             try
             {
-                return await Task.Run(() =>
+                _config = new ApplicationConfiguration()
                 {
-                    var result = _client.ReadNode(nodeId).Value;
-                    return Convert.ToBoolean(result);
-                });
+                    ApplicationName = "WPF-RobinLine",
+                    ApplicationType = ApplicationType.Client,
+                    SecurityConfiguration = new SecurityConfiguration
+                    {
+                        AutoAcceptUntrustedCertificates = false, // Disable auto-accept (handle manually)
+                        RejectSHA1SignedCertificates = true,
+                        MinimumCertificateKeySize = 2048,
+                        ApplicationCertificate = new CertificateIdentifier
+                        {
+                            StoreType = CertificateStoreType.X509Store,
+                            StorePath = "CurrentUser\\My",
+                            SubjectName = "CN=WPF-RobinLine"
+                        }
+                    },
+                    TransportQuotas = new TransportQuotas { OperationTimeout = 15000 },
+                    ClientConfiguration = new ClientConfiguration { DefaultSessionTimeout = 60000 }
+                };
+
+                // Set up certificate validation
+                _config.CertificateValidator = new CertificateValidator();
+                _config.CertificateValidator.CertificateValidation += HandleCertificateValidationFailed;
+
+                await _config.Validate(ApplicationType.Client);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error reading boolean from {nodeId}: {ex.Message}");
-                //_logger.LogError(ex, "Error reading boolean from {NodeId}", nodeId);
-                return false; // Return a default value in case of failure
+                ConnectionStatusChanged?.Invoke($"Initialization failed: {ex.Message}");
+                throw;
             }
         }
 
-        public async Task<int> ReadIntegerAsync(string nodeId)
+        private void HandleCertificateValidationFailed(CertificateValidator sender, CertificateValidationEventArgs e)
         {
-            await ConnectAsync();
-            if (!_isConnected) return 0;
+            // Auto-accept untrusted certificates (for testing only - disable in production)
+            e.Accept = true;
 
+            // Log the certificate details
+            ConnectionStatusChanged?.Invoke($"Certificate validation: Subject={e.Certificate.Subject}, Thumbprint={e.Certificate.Thumbprint}");
+
+            // Example: Only accept certificates from trusted issuers
+            // if (e.Certificate.Subject.Contains("MyTrustedCA"))
+            // {
+            //     e.Accept = true;
+            // }
+        }
+
+
+        public async Task ConnectAsync(string serverUrl)
+        {
+            if (string.IsNullOrWhiteSpace(serverUrl))
+                throw new ArgumentException("Server URL cannot be empty");
+
+            // 1. First validate URL format
+            if (!serverUrl.StartsWith("opc.tcp://"))
+                serverUrl = "opc.tcp://" + serverUrl;
+
+            var uri = new Uri(serverUrl);
+
+            // 2. Run TCP connectivity test
             try
             {
-                return await Task.Run(() =>
-                {
-                    var result = _client.ReadNode(nodeId).Value;
-                    return Convert.ToInt32(result);
-                });
+                Console.WriteLine($"Testing connection to {uri.Host}:{uri.Port}...");
+
+                using var tcpClient = new TcpClient();
+                await tcpClient.ConnectAsync(uri.Host, uri.Port).WaitAsync(TimeSpan.FromSeconds(5));
+
+                Console.WriteLine("TCP connection successful");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error reading integer from {nodeId}: {ex.Message}");
-                //_logger.LogError(ex, "Error reading integer from {NodeId}", nodeId);
-                return 0;
+                Console.WriteLine($"TCP connection failed: {ex.Message}");
+                throw new ServiceResultException(
+                    StatusCodes.BadConnectionRejected,
+                    $"Cannot reach OPC UA server at {serverUrl}. Check:\n" +
+                    $"1. Server is running\n" +
+                    $"2. Firewall allows port {uri.Port}\n" +
+                    $"3. Network connectivity exists");
+            }
+
+            // 3. Proceed with OPC UA endpoint discovery
+            try
+            {
+                var endpoint = CoreClientUtils.SelectEndpoint(serverUrl, false, 10000);
+                var endpointConfig = EndpointConfiguration.Create(_config);
+                var endpointDescription = new ConfiguredEndpoint(null, endpoint, endpointConfig);
+
+                _session = await Session.Create(
+                    _config,
+                    endpointDescription,
+                    updateBeforeConnect: true,
+                    sessionName: "WPF-RobinLine",
+                    sessionTimeout: 60000,
+                    identity: new UserIdentity(),
+                    preferredLocales: null);
+
+                ConnectionStatusChanged?.Invoke($"Connected to {serverUrl}");
+            }
+            catch (Exception ex)
+            {
+                ConnectionStatusChanged?.Invoke($"Connection failed: {ex.Message}");
+                throw;
             }
         }
 
-        public async Task WriteBooleanAsync(string nodeId, bool value)
+        public async Task SubscribeToNodesAsync()
         {
-            await ConnectAsync();
-            if (!_isConnected) return;
+            if (_session == null || !_session.Connected)
+                throw new InvalidOperationException("Session not connected");
 
-            try
+            if (_configuration?.Nodes == null || !_configuration.Nodes.Any())
             {
-                var opcStatus = await Task.Run(() => _client.WriteNode(nodeId, value));
+                ConnectionStatusChanged?.Invoke("No nodes configured for subscription");
+                return;
+            }
 
-                if(opcStatus != OpcStatusCode.Good)
+            await Task.Run(() =>
+            {
+                try
                 {
-                    return;
+                    _subscription = new Subscription(_session.DefaultSubscription)
+                    {
+                        PublishingInterval = 1000,
+                        Priority = 100
+                    };
+
+                    _session.AddSubscription(_subscription);
+                    _subscription.Create();
+
+                    foreach (var node in _configuration.Nodes)
+                    {
+                        if (node == null) continue;
+
+                        var monitoredItem = new MonitoredItem(_subscription.DefaultItem)
+                        {
+                            StartNodeId = new NodeId(node.NodeId),
+                            AttributeId = Attributes.Value,
+                            SamplingInterval = 1000,
+                            QueueSize = 10,
+                            DiscardOldest = true
+                        };
+
+                        monitoredItem.Notification += (item, e) =>
+                        {
+                            try
+                            {
+                                var notification = e.NotificationValue as MonitoredItemNotification;
+                                if (notification?.Value != null)
+                                {
+                                    ValueUpdated?.Invoke(node.Name, notification.Value.Value);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                ConnectionStatusChanged?.Invoke($"Notification error for {node.Name}: {ex.Message}");
+                            }
+                        };
+
+                        _subscription.AddItem(monitoredItem);
+                    }
+
+                    _subscription.ApplyChanges();
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error writing boolean to {nodeId}: {ex.Message}");
-                //_logger.LogError(ex, "Error writing boolean to {NodeId}", nodeId);
-            }
-        }
-
-        public async Task WriteIntegerAsync(string nodeId, int value)
-        {
-            await ConnectAsync();
-            if (!_isConnected) return;
-
-            try
-            {
-                await Task.FromResult(() => _client.WriteNode(nodeId, value));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error writing integer to {nodeId}: {ex.Message}");
-                //_logger.LogError(ex, "Error writing integer to {NodeId}", nodeId);
-            }
-        }
-
-        public async Task<T[]> ReadArrayAsync<T>(string nodeId)
-        {
-            await ConnectAsync();
-            if (!_isConnected) return Array.Empty<T>();
-
-            try
-            {
-                return await Task.Run(() =>
+                catch (Exception ex)
                 {
-                    var result = _client.ReadNode(nodeId).Value;
-
-                    if (result is T[] arrayResult)
-                    {
-                        return arrayResult;
-                    }
-
-                    if (result is IEnumerable<object> objectArray)
-                    {
-                        return objectArray.Select(item => (T)Convert.ChangeType(item, typeof(T))).ToArray();
-                    }
-
-                    throw new InvalidCastException($"Unable to convert OPC UA value to an array of {typeof(T).Name}");
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error reading array from {nodeId}: {ex.Message}");
-                return Array.Empty<T>(); // Return an empty array in case of failure
-            }
+                    ConnectionStatusChanged?.Invoke($"Subscription failed: {ex.Message}");
+                    throw;
+                }
+            });
         }
 
-
-        public void Disconnect()
+        public async Task<object> ReadNodeAsync(string nodeName)
         {
-            if (_isConnected && _client != null)
+            if (string.IsNullOrWhiteSpace(nodeName))
+                throw new ArgumentException("Node name cannot be empty");
+
+            if (_configuration == null)
+                throw new InvalidOperationException("Configuration not initialized");
+
+            var nodeConfig = _configuration.GetNode(nodeName) ??
+                throw new ArgumentException($"Node {nodeName} not found in configuration");
+
+            if (_session == null || !_session.Connected)
+                throw new InvalidOperationException("Session not connected");
+
+            return await Task.Run(() =>
             {
-                _client.Disconnect();
-                _isConnected = false;
-                Console.WriteLine("Disconnected from OPC UA Server");
-                //_logger.LogInformation("Disconnected from OPC UA Server.");
-            }
+                try
+                {
+                    var nodeToRead = new ReadValueId
+                    {
+                        NodeId = new NodeId(nodeConfig.NodeId),
+                        AttributeId = Attributes.Value
+                    };
+
+                    var response = _session.Read(
+                        null,
+                        0,
+                        TimestampsToReturn.Both,
+                        new ReadValueIdCollection { nodeToRead },
+                        out var results,
+                        out var diagnosticInfos);
+
+                    if (StatusCode.IsBad(response.ServiceResult))
+                        throw new ServiceResultException(response.ServiceResult);
+
+                    if (results == null || results.Count == 0)
+                        throw new ServiceResultException(StatusCodes.BadNoData);
+
+                    return results[0].Value;
+                }
+                catch (Exception ex)
+                {
+                    ConnectionStatusChanged?.Invoke($"Read failed for {nodeName}: {ex.Message}");
+                    throw;
+                }
+            });
         }
 
+        public async Task WriteNodeAsync(string nodeName, object value)
+        {
+            if (string.IsNullOrWhiteSpace(nodeName))
+                throw new ArgumentException("Node name cannot be empty");
+
+            if (_configuration == null)
+                throw new InvalidOperationException("Configuration not initialized");
+
+            var nodeConfig = _configuration.GetNode(nodeName) ??
+                throw new ArgumentException($"Node '{nodeName}' not found in configuration");
+
+            if (nodeConfig.IsReadOnly)
+                throw new InvalidOperationException($"Node '{nodeName}' is read-only");
+
+            if (_session == null || !_session.Connected)
+                throw new InvalidOperationException("OPC UA session is not connected");
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    object convertedValue = value;
+                    if (value != null && value != DBNull.Value)
+                    {
+                        convertedValue = Convert.ChangeType(value, nodeConfig.DataType);
+                    }
+
+                    var nodeToWrite = new WriteValue
+                    {
+                        NodeId = new NodeId(nodeConfig.NodeId),
+                        AttributeId = Attributes.Value,
+                        Value = new DataValue(new Variant(convertedValue))
+                    };
+
+                    var response = _session.Write(
+                        null,
+                        new WriteValueCollection { nodeToWrite },
+                        out var results,
+                        out var diagnosticInfos);
+
+                    if (StatusCode.IsBad(response.ServiceResult))
+                        throw new ServiceResultException(response.ServiceResult);
+
+                    if (results == null || results.Count == 0 || StatusCode.IsBad(results[0]))
+                        throw new ServiceResultException(results?[0] ?? StatusCodes.BadUnknownResponse);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Failed to write to node '{nodeName}': {ex.Message}", ex);
+                }
+            });
+        }
 
         public void Dispose()
         {
-            if (_client != null)
+            if (_disposed) return;
+
+            try
             {
-                _client.Disconnect();
-                _client.Dispose();
+                _subscription?.Delete(false);
+                _subscription?.Dispose();
+                _subscription = null;
+
+                _session?.Close();
+                _session?.Dispose();
+                _session = null;
+            }
+            finally
+            {
+                _disposed = true;
             }
         }
-
     }
 }

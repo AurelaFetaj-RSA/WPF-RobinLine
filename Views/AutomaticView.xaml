@@ -73,7 +73,7 @@
                                   Icon="Lightbulb"
                                   Width="20"
                                   Height="20"
-                                  Foreground="#3f73d1"
+                                  Foreground="green"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"/>
                 </Border>
@@ -389,72 +389,6 @@
                         VerticalAlignment="Top"
                         Margin="145, 55, 0, 0">
                 </Border>
-
-                <!--<ToggleButton x:Name="lightToggle"
-                              Width="35" Height="17" 
-                              HorizontalAlignment="Left"
-                              VerticalAlignment="Bottom"
-                              Margin="15, 0, 0, 15"
-                              Background="Transparent"
-                              Cursor="Hand"
-                              BorderThickness="0"
-                              Click="RedLightToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-20"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="35" Height="17">
-                                -->
-                <!-- Adjusted Grid size -->
-                <!-- Background Border -->
-                <!--
-                                <Border x:Name="ToggleBackground"
-                                        Width="35" Height="17" 
-                                        CornerRadius="8"
-                                        Background="Gray"/>
-
-                                -->
-                <!-- Toggle Thumb -->
-                <!--
-                                <Ellipse x:Name="ToggleThumb"
-                                         Width="15" Height="15"  
-                                         Fill="White"
-                                         HorizontalAlignment="Left"
-                                         Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
-
-                            -->
-                <!-- Storyboard Animation -->
-                <!--
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="16"/>
-                                            -->
-                <!-- Adjusted movement -->
-                <!--
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>-->
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                     <TextBlock x:Name="Selector" 
