@@ -6,6 +6,18 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:controls="http://schemas.xceed.com/wpf/xaml/toolkit"
              Height="300" Width="500">
+
+    <UserControl.Resources>
+        <Storyboard x:Key="RedLightBlinkStoryboard">
+            <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                            From="DarkGreen" 
+                            To="Red"
+                            Duration="0:0:0.3"
+                            AutoReverse="True"
+                            RepeatBehavior="Forever"/>
+        </Storyboard>
+    </UserControl.Resources>
+
     <Grid>
 
         <Border CornerRadius="10"
@@ -219,7 +231,8 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Margin="135, 35, 0, 0">
-                    <fa:IconImage Icon="Lightbulb"
+                    <fa:IconImage x:Name="ReadyLamp2"
+                                  Icon="Lightbulb"
                                   Width="20"
                                   Height="20"
                                   Foreground="green"
@@ -368,7 +381,7 @@
                 <Border x:Name= "RedLight"
                         Width="18" Height="18"
                         CornerRadius="15"
-                        Background="DarkGreen"
+                        Background="Darkgreen"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Margin="145, 5, 0, 0">

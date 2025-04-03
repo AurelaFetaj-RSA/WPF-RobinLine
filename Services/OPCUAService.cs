@@ -16,6 +16,8 @@ namespace WPF_App.Services
         public event Action<string> ConnectionStatusChanged;
         public event Action<string, object> ValueUpdated;
 
+        public bool IsConnected => _session?.Connected == true;
+
         public OpcUaClientService()
         {
             _configuration = new RobinLineOpcConfiguration();

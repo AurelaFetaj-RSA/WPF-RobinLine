@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -27,8 +28,12 @@ namespace WPF_App.Views
         //private bool _previousReadyState = false;
         private int _previousState = -1;
         //private int _previousTemperature = int.MinValue;
-        private bool _lastTemperatureStatus = false;
+        private bool _lastOven1TemperatureStatus = false;
+        private bool _lastOven2TemperatureStatus = false;
         private bool _lastOvenReadyStatus = false;
+
+        private Storyboard _redLightBlinkStoryboard;
+        private bool _redLightShouldBlink = false;
 
         public string PlayStopIcon
         {
@@ -127,7 +132,7 @@ namespace WPF_App.Views
             try
             {
                 await _opcUaClient.InitializeAsync();
-                await _opcUaClient.ConnectAsync("opc.tcp://172.31.20.101:48011");
+                await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
                 await _opcUaClient.SubscribeToNodesAsync();
 
                 _opcUaClient.ValueUpdated += OnOpcValueChanged;
@@ -149,24 +154,24 @@ namespace WPF_App.Views
                     switch (nodeName)
                     {
                         case "Robot1Ready":
-                            bool isReady = (bool)value; // Cast to bool
-                            ReadyLamp.Foreground = new SolidColorBrush(isReady ? Colors.Green : Colors.Red);
-                            Console.WriteLine($"[UI] Robot1Ready set to: {isReady}");
+                            //bool isReady = (bool)value; // Cast to bool
+                            ReadyLamp.Foreground = new SolidColorBrush((bool)value ? Colors.Green : Colors.Red);
+                            //Console.WriteLine($"[UI] Robot1Ready set to: {isReady}");
                             break;
                         case "Robot2Ready":
-                            ReadyLamp.Foreground = new SolidColorBrush((bool)value ? Colors.Green : Colors.Red);
+                            ReadyLamp2.Foreground = new SolidColorBrush((bool)value ? Colors.Green : Colors.Red);
                             break;
                         case "Oven1Temperature":
                             TemperatureTextBlock.Text = $"{value}°";
                             break;
                         case "Oven1TemperatureReached":
-                            UpdateTemperatureStatus((bool)value, ReachedTextBlock, StatusIcon);
+                            UpdateTemperatureStatus((bool)value, ReachedTextBlock, StatusIcon, true);
                             break;
                         case "Oven2Temperature":
                             Oven2TemperatureTextBlock.Text = $"{value}°";
                             break;
                         case "Oven2TemperatureReached":
-                            UpdateTemperatureStatus((bool)value, Oven2ReachedTextBlock, Oven2StatusIcon);
+                            UpdateTemperatureStatus((bool)value, Oven2ReachedTextBlock, Oven2StatusIcon, false);
                             break;
                         case "Oven1Ready":
                             UpdateReadyStatus((bool)value, LampIcon, ReadyOven1TextBlock);
@@ -181,7 +186,7 @@ namespace WPF_App.Views
                             UpdateModeStatus((bool)value, Oven2StateIcon, Oven2StateText);
                             break;
                         case "SystemStatus":
-                            UpdateSystemState((int)value);
+                            UpdateSystemState(Convert.ToInt32(value));
                             break;
                         case "OutputPLC":
                             UpdateLights((bool[])value);
@@ -195,9 +200,10 @@ namespace WPF_App.Views
             });
         }
 
-        private void UpdateTemperatureStatus(bool isReached, TextBlock textBlock, FontAwesome.Sharp.IconImage icon)
+        private void UpdateTemperatureStatus(bool isReached, TextBlock textBlock, FontAwesome.Sharp.IconImage icon, bool isOven1)
         {
-            if (isReached != _lastTemperatureStatus)
+            ref bool lastStatus = ref (isOven1 ? ref _lastOven1TemperatureStatus : ref _lastOven2TemperatureStatus);
+            if (isReached != lastStatus)
             {
                 textBlock.Text = isReached ? "Reached" : "Not Reached";
                 icon.Icon = isReached ? FontAwesome.Sharp.IconChar.Check : FontAwesome.Sharp.IconChar.Times;
@@ -207,7 +213,7 @@ namespace WPF_App.Views
                 ShowMessage($"Temperature {(isReached ? "reached" : "not reached")}",
                     isReached ? MessageType.Success : MessageType.Warning);
 
-                _lastTemperatureStatus = isReached;
+                lastStatus = isReached;
             }
         }
 
@@ -240,8 +246,8 @@ namespace WPF_App.Views
             {
                 // Handle Start logic
                 await _opcUaClient.WriteNodeAsync("StartStop", true);
-                PlayStopIcon = "Stop"; 
-                PlayStopText = "Stop"; 
+                PlayStopIcon = "Stop";
+                PlayStopText = "Stop";
 
                 ShowMessage("Line started", MessageType.Success);
             }
@@ -475,12 +481,15 @@ namespace WPF_App.Views
 
         private async void Oven1LampsPercentageUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (_opcUaClient?.IsConnected != true)
+                return;
+
             // Check if e.NewValue is not null and then cast it to int
             if (e.NewValue is int lampsPercentage)
             {
                 try
                 {
-                    //await _opcUaClient.WriteNodeAsync("Oven1LampsPercentage", lampsPercentage);
+                    await _opcUaClient.WriteNodeAsync("Oven1LampsPercentage", lampsPercentage);
                 }
                 catch (Exception ex)
                 {
@@ -495,11 +504,14 @@ namespace WPF_App.Views
 
         private async void Oven1FanPercentageUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (_opcUaClient?.IsConnected != true)
+                return;
+
             if (e.NewValue is int fanPercentage)
             {
                 try
                 {
-                    //await _opcUaClient.WriteNodeAsync("Oven1FanPercentage", fanPercentage);
+                    await _opcUaClient.WriteNodeAsync("Oven1FanPercentage", fanPercentage);
                 }
                 catch (Exception ex)
                 {
@@ -514,11 +526,14 @@ namespace WPF_App.Views
 
         private async void Oven1TempSetpointUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (_opcUaClient?.IsConnected != true)
+                return;
+
             if (e.NewValue is int tempSetpoint)
             {
                 try
                 {
-                    //await _opcUaClient.WriteNodeAsync("Oven1TempSetpoint", tempSetpoint);
+                    await _opcUaClient.WriteNodeAsync("Oven1TempSetpoint", tempSetpoint);
                 }
                 catch (Exception ex)
                 {
@@ -709,11 +724,14 @@ namespace WPF_App.Views
 
         private async void Oven2LampsPercentageUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (_opcUaClient?.IsConnected != true)
+                return;
+
             if (e.NewValue is int lampsPercentage)
             {
                 try
                 {
-                    //await _opcUaClient.WriteNodeAsync("Oven2LampsPercentage", lampsPercentage);
+                    await _opcUaClient.WriteNodeAsync("Oven2LampsPercentage", lampsPercentage);
                 }
                 catch (Exception ex)
                 {
@@ -728,11 +746,14 @@ namespace WPF_App.Views
 
         private async void Oven2FanPercentageUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (_opcUaClient?.IsConnected != true)
+                return;
+
             if (e.NewValue is int fanPercentage)
             {
                 try
                 {
-                    //await _opcUaClient.WriteNodeAsync("Oven2FanPercentage", fanPercentage);
+                    await _opcUaClient.WriteNodeAsync("Oven2FanPercentage", fanPercentage);
                 }
                 catch (Exception ex)
                 {
@@ -747,11 +768,14 @@ namespace WPF_App.Views
 
         private async void Oven2TempSetpointUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (_opcUaClient?.IsConnected != true)
+                return;
+
             if (e.NewValue is int tempSetpoint)
             {
                 try
                 {
-                    //await _opcUaClient.WriteNodeAsync("Oven2TempSetpoint", tempSetpoint);
+                    await _opcUaClient.WriteNodeAsync("Oven2TempSetpoint", tempSetpoint);
                 }
                 catch (Exception ex)
                 {
@@ -940,8 +964,18 @@ namespace WPF_App.Views
         //    }
         //}
 
-        private void UpdateSystemState(int status)
+        private void UpdateSystemState(Object statusValue)
         {
+            int status;
+            try
+            {
+                status = Convert.ToInt32(statusValue);
+            }
+            catch
+            {
+                status = -1; //error
+            }
+
             if (status != _previousState)
             {
                 switch (status)
@@ -978,14 +1012,59 @@ namespace WPF_App.Views
 
         private void UpdateLights(bool[] lightArray)
         {
-            if (lightArray.Length > 11)
-            {
-                RedLight.Background = new SolidColorBrush(lightArray[9] ? Colors.Red : Colors.DarkGreen);
-                OrangeLight.Background = new SolidColorBrush(lightArray[10] ? Colors.Orange : Colors.DarkGreen);
-                GreenLight.Background = new SolidColorBrush(lightArray[11] ? Colors.Green : Colors.DarkGreen);
+            //if (lightArray.Length > 11)
+            //{
+            //    RedLight.Background = new SolidColorBrush(lightArray[9] ? Colors.Red : Colors.DarkGreen);
+            //    OrangeLight.Background = new SolidColorBrush(lightArray[10] ? Colors.Orange : Colors.DarkGreen);
+            //    GreenLight.Background = new SolidColorBrush(lightArray[11] ? Colors.Green : Colors.DarkGreen);
 
-                if (lightArray[9]) ShowMessage("Red light activated - check system", MessageType.Error);
+            //    if (lightArray[9]) ShowMessage("Red light activated - check system", MessageType.Error);
+            //}
+
+            if (lightArray.Length <= 11) return;
+
+            // Update other lights normally
+            OrangeLight.Background = new SolidColorBrush(lightArray[11] ? Colors.Orange : Colors.DarkGreen);
+            GreenLight.Background = new SolidColorBrush(lightArray[10] ? Colors.LightGreen : Colors.DarkGreen);
+
+            // Handle red light
+            bool isRedLightOn = lightArray[9];
+
+            if (!_redLightShouldBlink)
+            {
+                _redLightShouldBlink = true;
+                var storyboard = (Storyboard)this.Resources["RedLightBlinkStoryboard"];
+                Storyboard.SetTarget(storyboard, RedLight);
+                storyboard.Begin(RedLight, true);
+                //_redLightBlinkStoryboard.Begin(RedLight);
+                //ShowMessage("Warning: System alert!", MessageType.Error);
             }
+
+            //if (isRedLightOn)
+            //{
+            //    // Start blinking if not already blinking
+            //    if (!_redLightShouldBlink)
+            //    {
+            //        _redLightShouldBlink = true;
+            //        var storyboard = (Storyboard)this.Resources["RedLightBlinkStoryboard"]; 
+            //        Storyboard.SetTarget(storyboard, RedLight);
+            //        storyboard.Begin(RedLight, true);
+            //        //_redLightBlinkStoryboard.Begin(RedLight);
+            //        //ShowMessage("Warning: System alert!", MessageType.Error);
+            //    }
+            //}
+            //else
+            //{
+            //    // Stop blinking and reset to dark green
+            //    if (_redLightShouldBlink)
+            //    {
+            //        _redLightShouldBlink = false;
+            //        var storyboard = (Storyboard)this.Resources["RedLightBlinkStoryboard"];
+            //        storyboard.Stop(RedLight);
+            //        //_redLightBlinkStoryboard.Stop(RedLight);
+            //        RedLight.Background = new SolidColorBrush(Colors.DarkGreen);
+            //    }
+            //}
         }
 
         private void StartMonitoringTasks()
@@ -1087,7 +1166,7 @@ namespace WPF_App.Views
         {
             HideMessage();
         }
-        
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             Dispose();
