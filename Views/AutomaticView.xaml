@@ -478,7 +478,8 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" 
+                    <controls:IntegerUpDown x:Name="Oven1LampsPercentageUpDown"
+                                            Width="43" 
                                             Margin="60,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
@@ -500,7 +501,8 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" 
+                    <controls:IntegerUpDown x:Name="Oven1FanPercentageUpDown"
+                                            Width="43" 
                                             Margin="70,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
@@ -521,7 +523,8 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" 
+                    <controls:IntegerUpDown x:Name="Oven1TempSetpointUpDown"
+                                            Width="43" 
                                             Margin="40,40,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
@@ -756,7 +759,8 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" 
+                    <controls:IntegerUpDown x:Name="Oven2LampsPercentageUpDown"
+                                            Width="43" 
                                             Margin="60,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
@@ -777,7 +781,8 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" 
+                    <controls:IntegerUpDown x:Name="Oven2FanPercentageUpDown"
+                                            Width="43" 
                                             Margin="70,15,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
@@ -798,7 +803,8 @@
                                VerticalAlignment="Center"/>
 
                     <!--IntegerUpDown with arrows for increment and decrement-->
-                    <controls:IntegerUpDown Width="43" 
+                    <controls:IntegerUpDown x:Name="Oven2TempSetpointUpDown"
+                                            Width="43" 
                                             Margin="40,40,0,0" 
                                             FontSize="11" 
                                             FontWeight="Bold" 
@@ -1011,8 +1017,36 @@
                     </Grid>
                 </Border>
 
+                <StackPanel HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Margin="-15, 80, 0, 0">
+                    <TextBlock Text="General&#x0a;Control"
+                               Foreground="{DynamicResource titleColor7}"
+                               FontSize="15"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Padding="5, 0"/>
+                    <Border Height="1.5"
+                            Width="65"
+                            Background="{DynamicResource titleColor7}" />
+                </StackPanel>
 
-                <Button Width="50" Height="60"
+                <ComboBox x:Name="BeltSpeedComboBox"
+                          SelectionChanged="BeltSpeedComboBox_SelectionChanged" 
+                          Width="65"
+                          Height="20"
+                          Margin="0,5,0,0"
+                          SelectedIndex="1"
+                          FontSize="12"
+                          FontWeight="Bold">
+                    <ComboBoxItem Content="Slow Speed" Tag="1"/>
+                    <ComboBoxItem Content="Medium Speed" Tag="2" IsSelected="True"/>
+                    <ComboBoxItem Content="High Speed" Tag="3"/>
+                </ComboBox>
+
+
+                <!--<Button Width="50" Height="60"
                         BorderThickness="0"
                         HorizontalAlignment="Left"
                         Cursor="Hand"
@@ -1023,13 +1057,13 @@
                         <ControlTemplate TargetType="Button">
                             <Border Background="Transparent">
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                    <!-- Icon -->
+                                    --><!-- Icon --><!--
                                     <fa:IconImage Icon="{Binding PlayStopIcon}"
                                                   Width="30"
                                                   Height="30"
                                                   Foreground="#3f73d1"/>
 
-                                    <!-- Text -->
+                                    --><!-- Text --><!--
                                     <TextBlock Text="{Binding PlayStopText}" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontSize="12"
@@ -1040,9 +1074,9 @@
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
-                </Button>
+                </Button>-->
 
-                <Button Width="50" Height="60"
+                <!--<Button Width="50" Height="60"
                         BorderThickness="0"
                         HorizontalAlignment="Left"
                         Cursor="Hand"
@@ -1053,13 +1087,13 @@
                         <ControlTemplate TargetType="Button">
                             <Border Background="Transparent">
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                    <!-- Icon -->
+                                    --><!-- Icon --><!--
                                     <fa:IconImage Icon="Pause"
                                                   Width="30"
                                                   Height="30"
                                                   Foreground="#3f73d1"/>
 
-                                    <!-- Text -->
+                                    --><!-- Text --><!--
                                     <TextBlock Text="Pause" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontSize="12"
@@ -1070,9 +1104,9 @@
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
-                </Button>
+                </Button>-->
 
-                <Button Width="50" Height="60"
+                <!--<Button Width="50" Height="60"
                         BorderThickness="0"
                         HorizontalAlignment="Left"
                         Cursor="Hand"
@@ -1083,13 +1117,13 @@
                         <ControlTemplate TargetType="Button">
                             <Border Background="Transparent">
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                    <!-- Icon -->
+                                    --><!-- Icon --><!--
                                     <fa:IconImage Icon="Sync"
                                                   Width="30"
                                                   Height="30"
                                                   Foreground="#3f73d1"/>
 
-                                    <!-- Text -->
+                                    --><!-- Text --><!--
                                     <TextBlock Text="Reset" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontSize="12"
@@ -1100,7 +1134,7 @@
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
-                </Button>
+                </Button>-->
 
                 <Border Width="65" Height="60"
                         Background="Transparent"

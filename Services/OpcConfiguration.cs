@@ -69,6 +69,9 @@
             // Lights
             AddNode("OutputPLC", "ns=2;s=Tags.Eren_robin/pc_output_plc_linea", typeof(bool[]), true);
             AddNode("InputPLC", "ns=2;s=Tags.Eren_robin/pc_input_plc_linea", typeof(bool[]), true);
+
+            //Belt
+            AddNode("BeltSpeed", "ns=2;s=Tags.Eren_robin/pc_velocita_nastrini", typeof(int));
         }
     }
 }
