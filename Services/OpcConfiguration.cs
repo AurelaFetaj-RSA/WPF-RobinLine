@@ -72,6 +72,9 @@
 
             //Belt
             AddNode("BeltSpeed", "ns=2;s=Tags.Eren_robin/pc_velocita_nastrini", typeof(int));
+
+            AddNode("Comunicazione", "ns=2;s=Tags.Eren_robin/pc_comunicazione_da_opc_a_plc", typeof(bool));
+            AddNode("Restart", "ns=2;s=Tags.Eren_robin/pc_restart_plc", typeof(bool));
         }
     }
 }
