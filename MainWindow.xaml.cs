@@ -1,9 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Threading;
-using WPF_App.Services;
 using WPF_App.ViewModels;
 
 namespace WPF_App
@@ -14,7 +11,29 @@ namespace WPF_App
     public partial class MainWindow : Window
     {
         private DispatcherTimer _timer;
+        private string _confirmationMessage;
+        private string _popupAction;
         //private readonly OpcUaClientService _opcUaClient;
+
+        public string ConfirmationMessage
+        {
+            get => _confirmationMessage;
+            set
+            {
+                _confirmationMessage = value;
+                OnPropertyChanged(nameof(ConfirmationMessage));
+            }
+        }
+
+        public string PopupAction
+        {
+            get => _popupAction;
+            set
+            {
+                _popupAction = value;
+                OnPropertyChanged(nameof(PopupAction));
+            }
+        }
 
         public MainWindow()
         {
@@ -37,6 +56,30 @@ namespace WPF_App
             //DateTimeText.Text = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
             DateTimeText.Text = DateTime.Now.ToString("ddd, dd.MM.yy / HH:mm:ss");
 
+        }
+
+        private void ExitApp_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmationMessage = "Are you sure you want to exit the application?";
+            ConfirmPopup.IsOpen = true;
+        }
+
+        private void YesButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Close the app stop running the app
+            Application.Current.Shutdown();
+        }
+
+        private void NoButton_Click(object sender, RoutedEventArgs e)
+        {
+            //nothing happends close the popup
+            ConfirmPopup.IsOpen = false;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

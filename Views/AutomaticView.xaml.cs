@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Opc.UaFx.Client;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,8 +38,11 @@ namespace WPF_App.Views
         private bool _lastOven2TemperatureStatus = false;
         private bool _lastOvenReadyStatus = false;
 
-        private Storyboard _redLightBlinkStoryboard;
-        private bool _redLightShouldBlink = false;
+        private DispatcherTimer _updateLightsTimer;
+        private bool[] _lightsArray = new bool[12];
+        private bool[] _previousLightsArray = new bool[21];
+
+        private bool[] _previousOutputs;
 
         private IntegerUpDown? _oven1TempSetpointUpDown;
         private IntegerUpDown? _oven1FanPercentageUpDown;
@@ -185,6 +189,20 @@ namespace WPF_App.Views
 
                 await _opcUaClient.InitializeAsync();
                 await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
+                //await _opcUaClient.ConnectAsync("opc.tcp://192.31.30.40:48010");
+
+                //await SubscribeToOutputSignals();
+
+                RedLight.Loaded += (s, e) => Debug.WriteLine("RedLight loaded");
+                GreenLight.Loaded += (s, e) => Debug.WriteLine("GreenLight loaded");
+                OrangeLight.Loaded += (s, e) => Debug.WriteLine("OrangeLight loaded");
+
+                // Verify datacontext
+                Loaded += (s, e) => {
+                    Debug.WriteLine($"RedLight DataContext: {RedLight.DataContext}");
+                    Debug.WriteLine($"RedLight VisualParent: {VisualTreeHelper.GetParent(RedLight)}");
+                };
+
                 await _opcUaClient.SubscribeToNodesAsync();
 
                 _opcUaClient.ValueUpdated += OnOpcValueChanged;
@@ -240,6 +258,10 @@ namespace WPF_App.Views
                         case "SystemStatus":
                             UpdateSystemState(Convert.ToInt32(value));
                             break;
+                        case "RedLight":
+                            //RedLight.Background = (bool)value ? Brushes.Red : Brushes.DarkGreen;
+                            RedLight.Background = new SolidColorBrush((bool)value ? Colors.Red : Colors.DarkGreen);
+                            break;
                         case "OutputPLC":
                             UpdateLights((bool[])value);
                             break;
@@ -249,7 +271,7 @@ namespace WPF_App.Views
                             await HandleHandshake((bool)value));
                             break;
                         case "Restart":
-                            HandleRestartRequest((bool)value);
+                            HandleRestartRequest((bool)value); ;
                             break;
                     }
                 }
@@ -702,58 +724,29 @@ namespace WPF_App.Views
 
         private void UpdateLights(bool[] lightArray)
         {
-            //if (lightArray.Length > 11)
-            //{
-            //    RedLight.Background = new SolidColorBrush(lightArray[9] ? Colors.Red : Colors.DarkGreen);
-            //    OrangeLight.Background = new SolidColorBrush(lightArray[10] ? Colors.Orange : Colors.DarkGreen);
-            //    GreenLight.Background = new SolidColorBrush(lightArray[11] ? Colors.Green : Colors.DarkGreen);
-
-            //    if (lightArray[9]) ShowMessage("Red light activated - check system", MessageType.Error);
-            //}
-
-            if (lightArray.Length <= 11) return;
-
-            // Update other lights normally
-            OrangeLight.Background = new SolidColorBrush(lightArray[11] ? Colors.Orange : Colors.DarkGreen);
-            GreenLight.Background = new SolidColorBrush(lightArray[10] ? Colors.LightGreen : Colors.DarkGreen);
-
-            // Handle red light
-            bool isRedLightOn = lightArray[9];
-
-            if (!_redLightShouldBlink)
+            //if (lightArray.Length <= 11) return;
+            Dispatcher.Invoke(() =>
             {
-                _redLightShouldBlink = true;
-                var storyboard = (Storyboard)this.Resources["RedLightBlinkStoryboard"];
-                Storyboard.SetTarget(storyboard, RedLight);
-                storyboard.Begin(RedLight, true);
-                //_redLightBlinkStoryboard.Begin(RedLight);
-                //ShowMessage("Warning: System alert!", MessageType.Error);
-            }
+                if (lightArray.Length > 11)
+                {
+                    // Simple direct updates without any state tracking
+                    Line.Text = lightArray[7] ? "Line started" : "Stop button pressed in";
+                    Line.Foreground = new SolidColorBrush(
+                    lightArray[7] ? (Color)ColorConverter.ConvertFromString("#3f80cb") : Colors.Red
+                    );
 
-            //if (isRedLightOn)
+                    OrangeLight.Background = lightArray[11] ? Brushes.Orange : Brushes.DarkGreen;
+                    GreenLight.Background = lightArray[10] ? Brushes.LightGreen : Brushes.DarkGreen;
+                    RedLight.Background = lightArray[9] ? Brushes.Red : Brushes.DarkGreen;
+                }
+            });
+
+            //if (!_redLightShouldBlink)
             //{
-            //    // Start blinking if not already blinking
-            //    if (!_redLightShouldBlink)
-            //    {
-            //        _redLightShouldBlink = true;
-            //        var storyboard = (Storyboard)this.Resources["RedLightBlinkStoryboard"]; 
-            //        Storyboard.SetTarget(storyboard, RedLight);
-            //        storyboard.Begin(RedLight, true);
-            //        //_redLightBlinkStoryboard.Begin(RedLight);
-            //        //ShowMessage("Warning: System alert!", MessageType.Error);
-            //    }
-            //}
-            //else
-            //{
-            //    // Stop blinking and reset to dark green
-            //    if (_redLightShouldBlink)
-            //    {
-            //        _redLightShouldBlink = false;
-            //        var storyboard = (Storyboard)this.Resources["RedLightBlinkStoryboard"];
-            //        storyboard.Stop(RedLight);
-            //        //_redLightBlinkStoryboard.Stop(RedLight);
-            //        RedLight.Background = new SolidColorBrush(Colors.DarkGreen);
-            //    }
+            //    _redLightShouldBlink = true;
+            //    var storyboard = (Storyboard)this.Resources["RedLightBlinkStoryboard"];
+            //    Storyboard.SetTarget(storyboard, RedLight);
+            //    storyboard.Begin(RedLight, true);
             //}
         }
 
@@ -761,6 +754,7 @@ namespace WPF_App.Views
         {
             // Only need tasks for things not covered by subscriptions
             _ = MonitorSelectorStatus();
+            _ = HandleInput();
         }
 
         private async Task MonitorSelectorStatus()
@@ -778,6 +772,48 @@ namespace WPF_App.Views
                         Dispatcher.Invoke(() =>
                         {
                             Selector.Text = inputArray[2] ? "Selector in Automatic" : "Selector in Manual";
+                            Selector.Foreground = new SolidColorBrush(
+                                inputArray[2] ? (Color)ColorConverter.ConvertFromString("#3f80cb") : Colors.Red
+                            );
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowMessage($"Selector monitoring error: {ex.Message}", MessageType.Error);
+                    await Task.Delay(5000, _cts.Token); // Longer delay after error
+                }
+
+                await Task.Delay(1000, _cts.Token);
+            }
+        }
+
+        private async Task HandleInput()
+        {
+            while (!_cts.IsCancellationRequested)
+            {
+                try
+                {
+                    if (_opcUaClient == null) return;
+
+                    var inputArray = await _opcUaClient.ReadNodeAsync("InputPLC") as bool[];
+
+                    if (inputArray?.Length > 2)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            Selector.Text = inputArray[2] ? "Selector in Automatic" : "Selector in Manual";
+
+                            if (inputArray[1])
+                            {
+                                Emergency.Text = "Emergency ok";
+                                Emergency.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3f80cb"));
+                            }
+                            else
+                            {
+                                Emergency.Text = "Reset Emergency";
+                                Emergency.Foreground = new SolidColorBrush(Colors.Red);
+                            }
                         });
                     }
                 }

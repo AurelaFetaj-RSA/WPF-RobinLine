@@ -5,72 +5,74 @@
              xmlns:views="clr-namespace:WPF_App.Views"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:controls="http://schemas.xceed.com/wpf/xaml/toolkit"
-             Height="300" Width="500">
-    <Grid>
-        <Border CornerRadius="10"
+             Height="1200" Width="1200">
+
+    <Viewbox Stretch="Uniform">
+        <Grid>
+            <Border CornerRadius="10"
                 Background="Transparent"
                 Width="230"
                 Height="170"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="0,0,0,0">
-            <Border.RenderTransform>
-                <TranslateTransform Y="-40"/>
-                <!-- Moves Up -->
-            </Border.RenderTransform>
+                <Border.RenderTransform>
+                    <TranslateTransform Y="-40"/>
+                    <!-- Moves Up -->
+                </Border.RenderTransform>
 
-            <Grid>
-                <Border Background="#f1f2f6"
+                <Grid>
+                    <Border Background="#f1f2f6"
                         CornerRadius="0,0,3,3"
                         Margin="-19,-11,19,11">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black"
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black"
                           BlurRadius="5"
                           ShadowDepth="1"
                           Opacity="0.6"/>
-                    </Border.Effect>
+                        </Border.Effect>
 
-                    <!-- Blue line at the top -->
-                    <Grid>
-                        <Rectangle Height="2"
+                        <!-- Blue line at the top -->
+                        <Grid>
+                            <Rectangle Height="2"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Top"
                                    Fill="#4471ce"
                                    RadiusX="3"
                                    RadiusY="3"
                                    Margin="0,-3,0,10"/>
-                        <Rectangle RadiusX="6"
+                            <Rectangle RadiusX="6"
                                    RadiusY="6"
                                    Fill="#f2f3f5"/>
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
 
-                <StackPanel HorizontalAlignment="Left" 
+                    <StackPanel HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
                             Margin="-5, -5, 0, 0">
-                    <TextBlock Text="Oven 1"
+                        <TextBlock Text="Oven 1"
                                Foreground="{DynamicResource titleColor7}"
                                FontSize="15"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Padding="5, 0"/>
-                    <Border Height="1.5"
+                        <Border Height="1.5"
                             Width="190"
                             Background="{DynamicResource titleColor7}" />
-                </StackPanel>
+                    </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Lamps" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Lamps" 
                                Margin="-16,15,0,0" 
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="Oven1LampsToggle"
+                    <ToggleButton x:Name="Oven1LampsToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
@@ -79,76 +81,76 @@
                               Cursor="Hand"
                               BorderThickness="0"
                               Click="Oven1LampsToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-113"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-113"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                         Width="40" Height="17" 
                                         CornerRadius="8"
                                         Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                          Width="15" Height="15"  
                                          Fill="White"
                                          HorizontalAlignment="Left"
                                          Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock x:Name="LampsTextBlock" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock x:Name="LampsTextBlock" 
                                Text="On/Off"
                                Margin="125, 15, 0, 15"
                                Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Fans" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Fans" 
                                Margin="-16,45,0,0" 
                                Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="Oven1FansToggle"
+                    <ToggleButton x:Name="Oven1FansToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
@@ -157,76 +159,76 @@
                               Cursor="Hand"
                               BorderThickness="0"
                               Click="Oven1FansToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-83"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-83"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                         Width="40" Height="17" 
                                         CornerRadius="8"
                                         Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                          Width="15" Height="15"  
                                          Fill="White"
                                          HorizontalAlignment="Left"
                                          Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock x:Name="FansTextBlock" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock x:Name="FansTextBlock" 
                                Text="On/Off"
                                Margin="125, 45, 0, 15"
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Belt" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Belt" 
                                Margin="-16,75,0,0" 
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="Oven1BeltToggle"
+                    <ToggleButton x:Name="Oven1BeltToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
@@ -235,132 +237,132 @@
                               Cursor="Hand"
                               BorderThickness="0"
                               Click="Oven1BeltToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-53"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-53"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                         Width="40" Height="17" 
                                         CornerRadius="8"
                                         Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                          Width="15" Height="15"  
                                          Fill="White"
                                          HorizontalAlignment="Left"
                                          Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
 
-                    <TextBlock x:Name="Oven1BeltTextBlock" 
+                        <TextBlock x:Name="Oven1BeltTextBlock" 
                                Text="Start/Stop"
                                Margin="125, 75, 0, 15"
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-        <Border CornerRadius="10"
+            <Border CornerRadius="10"
                 Background="Transparent"
                 Width="230"
                 Height="170"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="270,0,0,0">
-            <Border.RenderTransform>
-                <TranslateTransform Y="-40"/>
-                <!-- Moves Up -->
-            </Border.RenderTransform>
+                <Border.RenderTransform>
+                    <TranslateTransform Y="-40"/>
+                    <!-- Moves Up -->
+                </Border.RenderTransform>
 
-            <Grid>
-                <!-- Dashed Border -->
-                <Border Background="#f1f2f6"
+                <Grid>
+                    <!-- Dashed Border -->
+                    <Border Background="#f1f2f6"
                         CornerRadius="0,0,3,3"
                         Margin="-19,-11,19,11">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black"
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black"
                                           BlurRadius="5"
                                           ShadowDepth="1"
                                           Opacity="0.6"/>
-                    </Border.Effect>
+                        </Border.Effect>
 
-                    <!-- Blue line at the top -->
-                    <Grid>
-                        <Rectangle Height="2"
+                        <!-- Blue line at the top -->
+                        <Grid>
+                            <Rectangle Height="2"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Top"
                                    Fill="#4471ce"
                                    RadiusX="3"
                                    RadiusY="3"
                                    Margin="0,-3,0,10"/>
-                        <Rectangle RadiusX="6"
+                            <Rectangle RadiusX="6"
                                    RadiusY="6"
                                    Fill="#f2f3f5"/>
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
 
-                <StackPanel HorizontalAlignment="Left" 
+                    <StackPanel HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
                             Margin="-5, -5, 0, 0">
-                    <TextBlock Text="Oven 2"
+                        <TextBlock Text="Oven 2"
                                Foreground="{DynamicResource titleColor7}"
                                FontSize="15"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top"
                                Padding="5, 0"/>
-                    <Border Height="1.5"
+                        <Border Height="1.5"
                             Width="190"
                             Background="{DynamicResource titleColor7}" />
-                </StackPanel>
+                    </StackPanel>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Lamps" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Lamps" 
                                Margin="-16,15,0,0" 
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="Oven2LampsToggle"
+                    <ToggleButton x:Name="Oven2LampsToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
@@ -369,76 +371,76 @@
                               Cursor="Hand"
                               BorderThickness="0"
                               Click="Oven2LampsToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-113"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-113"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                 Width="40" Height="17" 
                                 CornerRadius="8"
                                 Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                  Width="15" Height="15"  
                                  Fill="White"
                                  HorizontalAlignment="Left"
                                  Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock x:Name="Oven2LampsTextBlock" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock x:Name="Oven2LampsTextBlock" 
                                Text="On/Off"
                                Margin="125, 15, 0, 15"
                                Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Fans" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Fans" 
                                Margin="-16,45,0,0" 
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="Oven2FansToggle"
+                    <ToggleButton x:Name="Oven2FansToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
@@ -447,76 +449,76 @@
                               Cursor="Hand"
                               BorderThickness="0"
                               Click="Oven2FansToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-83"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-83"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                 Width="40" Height="17" 
                                 CornerRadius="8"
                                 Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                  Width="15" Height="15"  
                                  Fill="White"
                                  HorizontalAlignment="Left"
                                  Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock x:Name="Oven2FansTextBlock" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock x:Name="Oven2FansTextBlock" 
                        Text="On/Off"
                        Margin="125, 45, 0, 15"
                        Foreground="{DynamicResource titleColor7}" 
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Belt" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Belt" 
                        Margin="-16,75,0,0" 
                        Foreground="{DynamicResource titleColor7}"
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="Oven2BeltToggle"
+                    <ToggleButton x:Name="Oven2BeltToggle"
                       Width="40" Height="17" 
                       HorizontalAlignment="Left"
                       VerticalAlignment="Bottom"
@@ -525,117 +527,117 @@
                       Cursor="Hand"
                       BorderThickness="0"
                       Click="Oven2BeltToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-53"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-53"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                 Width="40" Height="17" 
                                 CornerRadius="8"
                                 Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                  Width="15" Height="15"  
                                  Fill="White"
                                  HorizontalAlignment="Left"
                                  Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
 
-                    <TextBlock x:Name="Oven2BeltTextBlock" 
+                        <TextBlock x:Name="Oven2BeltTextBlock" 
                        Text="Start/Stop"
                        Margin="125, 75, 0, 15"
                        Foreground="{DynamicResource titleColor7}"
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-        <Border CornerRadius="10"
+            <Border CornerRadius="10"
                 Background="Transparent"
                 Width="500"
                 Height="60"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="0,200,0,0">
-            <Border.RenderTransform>
-                <TranslateTransform Y="-40"/>
-                <!-- Moves Up -->
-            </Border.RenderTransform>
+                <Border.RenderTransform>
+                    <TranslateTransform Y="-40"/>
+                    <!-- Moves Up -->
+                </Border.RenderTransform>
 
-            <Grid>
-                <Border Background="#f1f2f6"
+                <Grid>
+                    <Border Background="#f1f2f6"
                         CornerRadius="0,0,3,3"
                         Margin="-19,-11,19,11">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black"
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black"
                                           BlurRadius="5"
                                           ShadowDepth="1"
                                           Opacity="0.6"/>
-                    </Border.Effect>
+                        </Border.Effect>
 
-                    <!-- Blue line at the top -->
-                    <Grid>
-                        <Rectangle Height="2"
+                        <!-- Blue line at the top -->
+                        <Grid>
+                            <Rectangle Height="2"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Top"
                                    Fill="#4471ce"
                                    RadiusX="3"
                                    RadiusY="3"
                                    Margin="0,-3,0,10"/>
-                        <Rectangle RadiusX="6"
+                            <Rectangle RadiusX="6"
                                    RadiusY="6"
                                    Fill="#f2f3f5"/>
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
 
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Input Belt" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Input Belt" 
                                Margin="-16,5,0,0" 
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="InputBeltToggle"
+                    <ToggleButton x:Name="InputBeltToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
@@ -644,76 +646,76 @@
                               Cursor="Hand"
                               BorderThickness="0"
                               Click="InputBeltToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-15"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-15"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                         Width="40" Height="17" 
                                         CornerRadius="8"
                                         Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                          Width="15" Height="15"  
                                          Fill="White"
                                          HorizontalAlignment="Left"
                                          Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock x:Name="InputBeltTextBlock" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock x:Name="InputBeltTextBlock" 
                                Text="Start/Stop"
                                Margin="130, 5, 0, 15"
                                Foreground="{DynamicResource titleColor7}" 
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock Text="Central Belt" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock Text="Central Belt" 
                        Margin="250,5,0,0" 
                        Foreground="{DynamicResource titleColor7}" 
                        FontWeight="Bold" 
                        FontSize="12" 
                        VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ToggleButton x:Name="CentralBeltToggle"
+                    <ToggleButton x:Name="CentralBeltToggle"
                               Width="40" Height="17" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Bottom"
@@ -722,69 +724,69 @@
                               Cursor="Hand"
                               BorderThickness="0"
                               Click="CentralBeltToggle_Click">
-                    <ToggleButton.RenderTransform>
-                        <TranslateTransform Y="-15"/>
-                    </ToggleButton.RenderTransform>
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="17">
-                                <!-- Adjusted Grid size -->
-                                <!-- Background Border -->
-                                <Border x:Name="ToggleBackground"
+                        <ToggleButton.RenderTransform>
+                            <TranslateTransform Y="-15"/>
+                        </ToggleButton.RenderTransform>
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid Width="40" Height="17">
+                                    <!-- Adjusted Grid size -->
+                                    <!-- Background Border -->
+                                    <Border x:Name="ToggleBackground"
                                         Width="40" Height="17" 
                                         CornerRadius="8"
                                         Background="Gray"/>
 
-                                <!-- Toggle Thumb -->
-                                <Ellipse x:Name="ToggleThumb"
+                                    <!-- Toggle Thumb -->
+                                    <Ellipse x:Name="ToggleThumb"
                                          Width="15" Height="15"  
                                          Fill="White"
                                          HorizontalAlignment="Left"
                                          Margin="2, 0, 0, 0">
-                                    <Ellipse.RenderTransform>
-                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </Grid>
+                                        <Ellipse.RenderTransform>
+                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                        </Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Grid>
 
-                            <!-- Storyboard Animation -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="20"/>
-                                            <!-- Adjusted movement -->
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
-                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                        <Setter.Value>
-                                            <TranslateTransform X="0"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                                <!-- Storyboard Animation -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="20"/>
+                                                <!-- Adjusted movement -->
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d0dae1"/>
+                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                            <Setter.Value>
+                                                <TranslateTransform X="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                    <TextBlock x:Name="CentralBeltTextBlock" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock x:Name="CentralBeltTextBlock" 
                                Text="Start/Stop"
                                Margin="400, 5, 0, 15"
                                Foreground="{DynamicResource titleColor7}"
                                FontWeight="Bold" 
                                FontSize="12" 
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
 
-            </Grid>
-        </Border>
+                </Grid>
+            </Border>
 
-        <!--<Border x:Name="MessageBoxPanel"
+            <!--<Border x:Name="MessageBoxPanel"
                 CornerRadius="5"
                 Background="Transparent"
                 Width="450"
@@ -800,44 +802,44 @@
                 </TransformGroup>
             </Border.RenderTransform>-->
 
-        <Border x:Name="ManualMessageBoxPanel"
+            <Border x:Name="ManualMessageBoxPanel"
                 BorderThickness="2"
                 BorderBrush="Black"
                 CornerRadius="5"
                 Background="Transparent"
-                Width="350"
+                Width="400"
                 Height="30"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Visibility="Collapsed"
-                Margin="0,260,0,0">
-            <Border.RenderTransform>
-                <TransformGroup>
-                    <TranslateTransform X="180" />
-                    <TranslateTransform Y="75" />
-                </TransformGroup>
-            </Border.RenderTransform>
+                Margin="0,230,0,0">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <TranslateTransform X="90" />
+                        <TranslateTransform Y="0" />
+                    </TransformGroup>
+                </Border.RenderTransform>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <Image x:Name="ManualMessageIcon" 
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <Image x:Name="ManualMessageIcon" 
                            Width="15" 
                            Height="15" 
                            Margin="10,5,5,5"/>
-                    <TextBlock x:Name="ManualMessageText" 
+                        <TextBlock x:Name="ManualMessageText" 
                                FontSize="12" 
                                VerticalAlignment="Center" 
                                Margin="5,5,20,5" 
                                TextWrapping="Wrap"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Close Button -->
-                <Button Content="✖"
+                    <!-- Close Button -->
+                    <Button Content="✖"
                         Background="Transparent"
                         Foreground="Gray"
                         BorderThickness="0"
@@ -848,7 +850,8 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Grid.Column="1"/>
-            </Grid>
-        </Border>
-    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Viewbox>
 </UserControl>

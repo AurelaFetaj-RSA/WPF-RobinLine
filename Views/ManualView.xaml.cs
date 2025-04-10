@@ -1,9 +1,11 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WPF_App.Services;
+using Xceed.Wpf.Toolkit;
 using static WPF_App.Views.AutomaticView;
 
 namespace WPF_App.Views
@@ -15,138 +17,163 @@ namespace WPF_App.Views
     {
         private readonly OpcUaClientService _opcUaClient = new OpcUaClientService();
         private DispatcherTimer _messageTimer = new DispatcherTimer();
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
         public ManualView()
         {
             InitializeComponent();
+            DataContext = this;
+
+            // Initialize with configuration
+            var config = new RobinLineOpcConfiguration();
+            _opcUaClient = new OpcUaClientService();
+            _messageTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+        }
+
+        private async void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await _opcUaClient.InitializeAsync();
+                await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
+                //await _opcUaClient.ConnectAsync("opc.tcp://192.31.30.40:48010");
+                await _opcUaClient.SubscribeToNodesAsync();
+
+                //_opcUaClient.ValueUpdated += OnOpcValueChanged;
+                //StartMonitoringTasks();
+            }
+            catch (Exception ex)
+            {
+                //ShowMessage($"Initialization failed: {ex.Message}", MessageType.Error);
+                ShowMessage($"Initialization failed", MessageType.Error);
+            }
         }
 
         public async void Oven1LampsToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (Oven1LampsToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_primer", true);
-            //    LampsTextBlock.Text = "On";
-            //    ShowMessage("Oven 1 lamps have been turned on", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_primer", false);
-            //    LampsTextBlock.Text = "Off";
-            //    ShowMessage("Oven 1 lamps have been turned off", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)Oven1LampsToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("Oven1Lamps", isChecked);
+                LampsTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Oven 1 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on oven 1 lamps: {ex.Message}", MessageType.Error);
+            }
         }
 
         public async void Oven1FansToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (Oven1FansToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_primer", true);
-            //    FansTextBlock.Text = "On";
-            //    ShowMessage("Oven 1 fans have been turned on", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_primer", false);
-            //    FansTextBlock.Text = "Off";
-            //    ShowMessage("Oven 1 fans have been turned off", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)Oven1FansToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("Oven1Fans", isChecked);
+                FansTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Oven 1 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on oven 1 fans: {ex.Message}", MessageType.Error);
+            }
         }
 
         public async void Oven1BeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (Oven1BeltToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_primer", true);
-            //    Oven1BeltTextBlock.Text = "Start";
-            //    ShowMessage("Oven 1 belt has been started", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_primer", false);
-            //    Oven1BeltTextBlock.Text = "Stop";
-            //    ShowMessage("Oven 1 belt has been turned off", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)Oven1BeltToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("Oven1Belt", isChecked);
+                Oven1BeltTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Oven 1 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on oven 1 belt: {ex.Message}", MessageType.Error);
+            }
         }
 
         public async void Oven2LampsToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (Oven2LampsToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_colla", true);
-            //    Oven2LampsTextBlock.Text = "On";
-            //    ShowMessage("Oven 2 lamps have been turned on", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_colla", false);
-            //    Oven2LampsTextBlock.Text = "Off";
-            //    ShowMessage("Oven 2 lamps have been turned off", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)Oven2LampsToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("Oven2Lamps", isChecked);
+                Oven2LampsTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Oven 2 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on oven 2 lamps: {ex.Message}", MessageType.Error);
+            }
         }
 
         public async void Oven2FansToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (Oven2FansToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_colla", true);
-            //    Oven2FansTextBlock.Text = "On";
-            //    ShowMessage("Oven 2 fans have been turned on", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_colla", false);
-            //    Oven2FansTextBlock.Text = "Off";
-            //    ShowMessage("Oven 2 fans have been turned off", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)Oven2FansToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("Oven2Fans", isChecked);
+                Oven2FansTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Oven 2 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on oven 2 fans: {ex.Message}", MessageType.Error);
+            }
         }
 
         public async void Oven2BeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (Oven2BeltToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_colla", true);
-            //    Oven2BeltTextBlock.Text = "Start";
-            //    ShowMessage("Oven 2 belt has started", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_colla", false);
-            //    Oven2BeltTextBlock.Text = "Stop";
-            //    ShowMessage("Oven 2 belt has stopped", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)Oven2BeltToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("Oven2Belt", isChecked);
+                Oven2FansTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Oven 2 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on oven 2 belt: {ex.Message}", MessageType.Error);
+            }
         }
 
         public async void InputBeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (InputBeltToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastro_ingresso", true);
-            //    InputBeltTextBlock.Text = "Start";
-            //    ShowMessage("Input belt has started", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastro_ingresso", false);
-            //    InputBeltTextBlock.Text = "Stop";
-            //    ShowMessage("Input belt has stopped", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)InputBeltToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("InputBelt", isChecked);
+                InputBeltTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Input belt {(isChecked ? "is on" : "is off")}", MessageType.Info);
+
+                Thread.Sleep(200);
+
+                await _opcUaClient.WriteNodeAsync("InputBelt", false);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on input belt: {ex.Message}", MessageType.Error);
+            }
         }
 
         public async void CentralBeltToggle_Click(object sender, RoutedEventArgs e)
         {
-            //if (CentralBeltToggle.IsChecked == true)
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_start_nastro_centrale", true);
-            //    CentralBeltTextBlock.Text = "Start";
-            //    ShowMessage("Central belt has started", MessageType.Info);
-            //}
-            //else
-            //{
-            //    await _opcUaClient.WriteBooleanAsync("ns=2;s=Tags.Eren_robin/pc_stop_nastro_centrale", false);
-            //    CentralBeltTextBlock.Text = "Stop";
-            //    ShowMessage("Central belt has stopped", MessageType.Info);
-            //}
+            try
+            {
+                bool isChecked = (bool)CentralBeltToggle.IsChecked;
+                await _opcUaClient.WriteNodeAsync("CentralBelt", isChecked);
+                InputBeltTextBlock.Text = isChecked ? "On" : "Off";
+                ShowMessage($"Central belt {(isChecked ? "is on" : "is off")}", MessageType.Info);
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Failed to turn on central belt: {ex.Message}", MessageType.Error);
+            }
         }
 
         private void ShowMessage(string message, MessageType messageType)
@@ -202,6 +229,24 @@ namespace WPF_App.Views
         private void CloseMessageBox(object sender, RoutedEventArgs e)
         {
             HideMessage();
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _messageTimer.Stop();
+            _opcUaClient?.Dispose();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

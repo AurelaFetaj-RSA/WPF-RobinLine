@@ -68,6 +68,7 @@
 
             // Lights
             AddNode("OutputPLC", "ns=2;s=Tags.Eren_robin/pc_output_plc_linea", typeof(bool[]), true);
+            AddNode("RedLight", "ns=2;s=Tags.Eren_robin/pc_output_plc_linea[9]", typeof(bool), true);
             AddNode("InputPLC", "ns=2;s=Tags.Eren_robin/pc_input_plc_linea", typeof(bool[]), true);
 
             //Belt
@@ -75,6 +76,18 @@
 
             AddNode("Comunicazione", "ns=2;s=Tags.Eren_robin/pc_comunicazione_da_opc_a_plc", typeof(bool));
             AddNode("Restart", "ns=2;s=Tags.Eren_robin/pc_restart_plc", typeof(bool));
+
+            //Manual
+            AddNode("Oven1Lamps", "ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_primer", typeof(bool));
+            AddNode("Oven1Fans", "ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_primer", typeof(bool));
+            AddNode("Oven1Belt", "ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_primer", typeof(bool));
+
+            AddNode("Oven2Lamps", "ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_colla", typeof(bool));
+            AddNode("Oven2Fans", "ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_colla", typeof(bool));
+            AddNode("Oven2Belt", "ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_colla", typeof(bool));
+
+            AddNode("InputBelt", "ns=2;s=Tags.Eren_robin/pc_start_nastro_ingresso", typeof(bool));
+            AddNode("CentralBelt", "ns=2;s=Tags.Eren_robin/pc_start_nastro_centrale", typeof(bool));
         }
     }
 }
