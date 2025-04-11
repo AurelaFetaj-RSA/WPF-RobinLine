@@ -11,7 +11,8 @@
     <System:String x:Key="fifthMenuItem">Devices</System:String>
     <System:String x:Key="sixthMenuItem">Settings</System:String>
     <System:String x:Key="seventhMenuItem">Diagnotics</System:String>
-    <System:String x:Key="eighthMenuItem">Exit</System:String>
+    <System:String x:Key="eighthMenuItem">Hide</System:String>
+    <System:String x:Key="ninthMenuItem">Exit</System:String>
     <System:String x:Key="English">English</System:String>
     <System:String x:Key="French">French</System:String>
     <System:String x:Key="Spanish">Spanish</System:String>

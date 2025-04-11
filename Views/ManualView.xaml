@@ -80,6 +80,7 @@
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
+                              PreviewMouseDown="Oven1Toggle_PreviewMouseDown"
                               Click="Oven1LampsToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-113"/>
@@ -158,6 +159,7 @@
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
+                              PreviewMouseDown="Oven1Toggle_PreviewMouseDown"
                               Click="Oven1FansToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-83"/>
@@ -218,7 +220,6 @@
                                VerticalAlignment="Center"/>
                     </StackPanel>
 
-
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                         <TextBlock Text="Belt" 
                                Margin="-16,75,0,0" 
@@ -236,6 +237,7 @@
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
+                              PreviewMouseDown="Oven1Toggle_PreviewMouseDown"
                               Click="Oven1BeltToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-53"/>
@@ -370,6 +372,7 @@
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
+                              PreviewMouseDown="Oven2Toggle_PreviewMouseDown"
                               Click="Oven2LampsToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-113"/>
@@ -430,7 +433,6 @@
                                VerticalAlignment="Center"/>
                     </StackPanel>
 
-
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                         <TextBlock Text="Fans" 
                                Margin="-16,45,0,0" 
@@ -448,6 +450,7 @@
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
+                              PreviewMouseDown="Oven2Toggle_PreviewMouseDown"
                               Click="Oven2FansToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-83"/>
@@ -508,7 +511,6 @@
                        VerticalAlignment="Center"/>
                     </StackPanel>
 
-
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                         <TextBlock Text="Belt" 
                        Margin="-16,75,0,0" 
@@ -526,6 +528,7 @@
                       Background="Transparent"
                       Cursor="Hand"
                       BorderThickness="0"
+                      PreviewMouseDown="Oven2Toggle_PreviewMouseDown"
                       Click="Oven2BeltToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-53"/>
@@ -645,6 +648,7 @@
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
+                              PreviewMouseDown="InputBeltToggle_PreviewMouseDown"
                               Click="InputBeltToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-15"/>
@@ -723,6 +727,7 @@
                               Background="Transparent"
                               Cursor="Hand"
                               BorderThickness="0"
+                              PreviewMouseDown="CentralBeltToggle_PreviewMouseDown"
                               Click="CentralBeltToggle_Click">
                         <ToggleButton.RenderTransform>
                             <TranslateTransform Y="-15"/>

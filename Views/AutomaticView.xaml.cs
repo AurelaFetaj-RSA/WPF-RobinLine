@@ -127,6 +127,15 @@ namespace WPF_App.Views
             Oven1Toggle.IsChecked = _currentConfig.Oven1Inclusion;
             Oven2Toggle.IsChecked = _currentConfig.Oven2Inclusion;
 
+            foreach (ComboBoxItem item in BeltSpeedComboBox.Items)
+            {
+                if (item.Tag != null && item.Tag.ToString() == _currentConfig.BeltSpeed.ToString())
+                {
+                    BeltSpeedComboBox.SelectedItem = item;
+                    break;
+                }
+            }
+
             // Oven settings
             Oven1TempSetpointUpDown.Value = _currentConfig.Oven1TempSetpoint;
             Oven1FanPercentageUpDown.Value = _currentConfig.Oven1FanPercentage;
@@ -146,7 +155,8 @@ namespace WPF_App.Views
                 _currentConfig.R2Inclusion = RobotToggle2.IsChecked ?? false;
                 _currentConfig.Oven1Inclusion = Oven1Toggle.IsChecked ?? false;
                 _currentConfig.Oven2Inclusion = Oven2Toggle.IsChecked ?? false;
-                _currentConfig.BeltSpeed = GetSelectedBeltSpeedValue();
+                //_currentConfig.BeltSpeed = GetSelectedBeltSpeedValue();
+                _currentConfig.BeltSpeed = (BeltSpeedComboBox.SelectedItem as ComboBoxItem)?.Tag as int? ?? 1;
 
                 _currentConfig.Oven1TempSetpoint = Oven1TempSetpointUpDown.Value ?? 0;
                 _currentConfig.Oven1FanPercentage = Oven1FanPercentageUpDown.Value ?? 0;

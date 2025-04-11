@@ -78,16 +78,24 @@
             AddNode("Restart", "ns=2;s=Tags.Eren_robin/pc_restart_plc", typeof(bool));
 
             //Manual
-            AddNode("Oven1Lamps", "ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_primer", typeof(bool));
-            AddNode("Oven1Fans", "ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_primer", typeof(bool));
-            AddNode("Oven1Belt", "ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_primer", typeof(bool));
+            AddNode("StartOven1Lamps", "ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_primer", typeof(bool));
+            AddNode("StopOven1Lamps", "ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_primer", typeof(bool));
+            AddNode("StartOven1Fans", "ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_primer", typeof(bool));
+            AddNode("StopOven1Fans", "ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_primer", typeof(bool));
+            AddNode("StartOven1Belt", "ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_primer", typeof(bool));
+            AddNode("StopOven1Belt", "ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_primer", typeof(bool));
 
-            AddNode("Oven2Lamps", "ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_colla", typeof(bool));
-            AddNode("Oven2Fans", "ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_colla", typeof(bool));
-            AddNode("Oven2Belt", "ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_colla", typeof(bool));
+            AddNode("StartOven2Lamps", "ns=2;s=Tags.Eren_robin/pc_accendi_lampade_forno_colla", typeof(bool));
+            AddNode("StopOven2Lamps", "ns=2;s=Tags.Eren_robin/pc_spegni_lampade_forno_colla", typeof(bool));
+            AddNode("StartOven2Fans", "ns=2;s=Tags.Eren_robin/pc_accendi_ventilatori_forno_colla", typeof(bool));
+            AddNode("StopOven2Fans", "ns=2;s=Tags.Eren_robin/pc_spegni_ventilatori_forno_colla", typeof(bool));
+            AddNode("StartOven2Belt", "ns=2;s=Tags.Eren_robin/pc_start_nastrino_forno_colla", typeof(bool));
+            AddNode("StopOven2Belt", "ns=2;s=Tags.Eren_robin/pc_stop_nastrino_forno_colla", typeof(bool));
 
-            AddNode("InputBelt", "ns=2;s=Tags.Eren_robin/pc_start_nastro_ingresso", typeof(bool));
-            AddNode("CentralBelt", "ns=2;s=Tags.Eren_robin/pc_start_nastro_centrale", typeof(bool));
+            AddNode("StartInputBelt", "ns=2;s=Tags.Eren_robin/pc_start_nastro_ingresso", typeof(bool));
+            AddNode("StopInputBelt", "ns=2;s=Tags.Eren_robin/pc_stop_nastro_ingresso", typeof(bool));
+            AddNode("StartCentralBelt", "ns=2;s=Tags.Eren_robin/pc_start_nastro_centrale", typeof(bool));
+            AddNode("StopCentralBelt", "ns=2;s=Tags.Eren_robin/pc_stop_nastro_centrale", typeof(bool));
         }
     }
 }

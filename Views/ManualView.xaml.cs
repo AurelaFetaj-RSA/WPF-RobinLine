@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -18,6 +19,7 @@ namespace WPF_App.Views
         private readonly OpcUaClientService _opcUaClient = new OpcUaClientService();
         private DispatcherTimer _messageTimer = new DispatcherTimer();
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+        private bool _allowToggle = true;
 
         public ManualView()
         {
@@ -54,12 +56,34 @@ namespace WPF_App.Views
 
         public async void Oven1LampsToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                Oven1LampsToggle.IsChecked = !Oven1LampsToggle.IsChecked;
+                return;
+            }
             try
             {
                 bool isChecked = (bool)Oven1LampsToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("Oven1Lamps", isChecked);
-                LampsTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Oven 1 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartOven1Lamps", isChecked);
+                    LampsTextBlock.Text = "On";
+                    ShowMessage($"Oven 1 lamps are on", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StartOven1Lamps", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopOven1Lamps", true);
+                    LampsTextBlock.Text = "Off";
+                    ShowMessage($"Oven 1 lamps are off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopOven1Lamps", false);
+                }
             }
             catch (Exception ex)
             {
@@ -69,12 +93,34 @@ namespace WPF_App.Views
 
         public async void Oven1FansToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                Oven1FansToggle.IsChecked = !Oven1FansToggle.IsChecked;
+                return;
+            }
             try
             {
                 bool isChecked = (bool)Oven1FansToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("Oven1Fans", isChecked);
-                FansTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Oven 1 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartOven1Fans", isChecked);
+                    FansTextBlock.Text = "On";
+                    ShowMessage($"Oven 1 fans are on", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StartOven1Fans", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopOven1Fans", true);
+                    FansTextBlock.Text = "Off";
+                    ShowMessage($"Oven 1 fans are off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopOven1Fans", false);
+                }
             }
             catch (Exception ex)
             {
@@ -84,12 +130,34 @@ namespace WPF_App.Views
 
         public async void Oven1BeltToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                Oven1BeltToggle.IsChecked = !Oven1BeltToggle.IsChecked;
+                return;
+            }
             try
             {
                 bool isChecked = (bool)Oven1BeltToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("Oven1Belt", isChecked);
-                Oven1BeltTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Oven 1 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartOven1Belt", isChecked);
+                    Oven1BeltTextBlock.Text = "On";
+                    ShowMessage($"Oven 1 belt is on", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StartOven1Belt", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopOven1Belt", true);
+                    Oven1BeltTextBlock.Text = "Off";
+                    ShowMessage($"Oven 1 belt is off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopOven1Belt", false);
+                }
             }
             catch (Exception ex)
             {
@@ -99,12 +167,34 @@ namespace WPF_App.Views
 
         public async void Oven2LampsToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                Oven2LampsToggle.IsChecked = !Oven2LampsToggle.IsChecked;
+                return;
+            }
             try
             {
                 bool isChecked = (bool)Oven2LampsToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("Oven2Lamps", isChecked);
-                Oven2LampsTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Oven 2 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartOven2Lamps", isChecked);
+                    Oven2LampsTextBlock.Text = "On";
+                    ShowMessage($"Oven 2 lamps are on", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StartOven2Lamps", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopOven2Lamps", true);
+                    Oven2LampsTextBlock.Text = "Off";
+                    ShowMessage($"Oven 2 lamps are off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopOven2Lamps", false);
+                }
             }
             catch (Exception ex)
             {
@@ -114,12 +204,34 @@ namespace WPF_App.Views
 
         public async void Oven2FansToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                Oven2FansToggle.IsChecked = !Oven2FansToggle.IsChecked;
+                return;
+            }
             try
             {
                 bool isChecked = (bool)Oven2FansToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("Oven2Fans", isChecked);
-                Oven2FansTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Oven 2 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartOven2Fans", isChecked);
+                    Oven2FansTextBlock.Text = "On";
+                    ShowMessage($"Oven 2 fans are on", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StartOven2Fans", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopOven2Fans", true);
+                    Oven2FansTextBlock.Text = "Off";
+                    ShowMessage($"Oven 2 fans are off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopOven2Fans", false);
+                }
             }
             catch (Exception ex)
             {
@@ -129,12 +241,34 @@ namespace WPF_App.Views
 
         public async void Oven2BeltToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                Oven2BeltToggle.IsChecked = !Oven2BeltToggle.IsChecked;
+                return;
+            }
             try
             {
                 bool isChecked = (bool)Oven2BeltToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("Oven2Belt", isChecked);
-                Oven2FansTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Oven 2 {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartOven2Belt", isChecked);
+                    Oven2BeltTextBlock.Text = "On";
+                    ShowMessage($"Oven 1 belt is on", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StartOven2Belt", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopOven2Belt", true);
+                    Oven2BeltTextBlock.Text = "Off";
+                    ShowMessage($"Oven 1 belt is off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopOven2Belt", false);
+                }
             }
             catch (Exception ex)
             {
@@ -144,16 +278,35 @@ namespace WPF_App.Views
 
         public async void InputBeltToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                InputBeltToggle.IsChecked = !InputBeltToggle.IsChecked;
+                return;
+            }
             try
             {
+
                 bool isChecked = (bool)InputBeltToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("InputBelt", isChecked);
-                InputBeltTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Input belt {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartInputBelt", isChecked);
+                    InputBeltTextBlock.Text = "On";
+                    ShowMessage("Input belt is on", MessageType.Info);
 
-                Thread.Sleep(200);
+                    Thread.Sleep(200);
 
-                await _opcUaClient.WriteNodeAsync("InputBelt", false);
+                    await _opcUaClient.WriteNodeAsync("StartInputBelt", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopInputBelt", true);
+                    InputBeltTextBlock.Text = "Off";
+                    ShowMessage("Input belt is off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopInputBelt", false);
+                }
             }
             catch (Exception ex)
             {
@@ -163,16 +316,130 @@ namespace WPF_App.Views
 
         public async void CentralBeltToggle_Click(object sender, RoutedEventArgs e)
         {
+            if (!_allowToggle)
+            {
+                CentralBeltToggle.IsChecked = !CentralBeltToggle.IsChecked;
+                return;
+            }
             try
             {
                 bool isChecked = (bool)CentralBeltToggle.IsChecked;
-                await _opcUaClient.WriteNodeAsync("CentralBelt", isChecked);
-                InputBeltTextBlock.Text = isChecked ? "On" : "Off";
-                ShowMessage($"Central belt {(isChecked ? "is on" : "is off")}", MessageType.Info);
+                if (isChecked)
+                {
+                    await _opcUaClient.WriteNodeAsync("StartCentralBelt", isChecked);
+                    CentralBeltTextBlock.Text = "On";
+                    ShowMessage("Central belt is on", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StartCentralBelt", false);
+                }
+                else
+                {
+                    await _opcUaClient.WriteNodeAsync("StopCentralBelt", true);
+                    CentralBeltTextBlock.Text = "Off";
+                    ShowMessage("Central belt is off", MessageType.Info);
+
+                    Thread.Sleep(200);
+
+                    await _opcUaClient.WriteNodeAsync("StopCentralBelt", false);
+                }
             }
             catch (Exception ex)
             {
                 ShowMessage($"Failed to turn on central belt: {ex.Message}", MessageType.Error);
+            }
+        }
+
+        public async void InputBeltToggle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var statusObject = await _opcUaClient.ReadNodeAsync("SystemStatus");
+                int status = Convert.ToInt32(statusObject);
+
+                _allowToggle = (status == 2);
+
+                if (!_allowToggle)
+                {
+                    e.Handled = true; // Block the toggle action
+                    ShowMessage("Cannot toggle input belt. Machine is not in manual mode.", MessageType.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                _allowToggle = false;
+                ShowMessage($"Error checking system status: {ex.Message}", MessageType.Error);
+                e.Handled = true; // Block on error
+            }
+        }
+
+        public async void CentralBeltToggle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var statusObject = await _opcUaClient.ReadNodeAsync("SystemStatus");
+                int status = Convert.ToInt32(statusObject);
+
+                _allowToggle = (status == 2);
+
+                if (!_allowToggle)
+                {
+                    e.Handled = true; // Block the toggle action
+                    ShowMessage("Cannot toggle central belt. Machine is not in manual mode.", MessageType.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                _allowToggle = false;
+                ShowMessage($"Error checking system status: {ex.Message}", MessageType.Error);
+                e.Handled = true; // Block on error
+            }
+        }
+
+        public async void Oven1Toggle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var isAutomaticStatus = await _opcUaClient.ReadNodeAsync("Oven1Mode");
+                var isAutomaticSelector = await _opcUaClient.ReadNodeAsync("InputPLC");
+
+                _allowToggle = (isAutomaticStatus is false && isAutomaticSelector is false);
+
+                if (!_allowToggle)
+                {
+                    e.Handled = true; // Block the toggle action
+                    ShowMessage("Cannot toggle oven 1. Machine is not in manual mode.", MessageType.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                _allowToggle = false;
+                ShowMessage($"Error checking system status: {ex.Message}", MessageType.Error);
+                e.Handled = true; // Block on error
+            }
+        }
+
+        public async void Oven2Toggle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var isAutomaticStatus = await _opcUaClient.ReadNodeAsync("Oven2Mode");
+                var isAutomaticSelector = await _opcUaClient.ReadNodeAsync("InputPLC");
+
+                _allowToggle = (isAutomaticStatus is false && isAutomaticSelector is false);
+
+                if (!_allowToggle)
+                {
+                    e.Handled = true; // Block the toggle action
+                    ShowMessage("Cannot toggle oven 2. Machine is not in manual mode.", MessageType.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                _allowToggle = false;
+                ShowMessage($"Error checking system status: {ex.Message}", MessageType.Error);
+                e.Handled = true; // Block on error
             }
         }
 

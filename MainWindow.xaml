@@ -195,11 +195,20 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
+                                 Tag="{StaticResource color7}"
+                                 Click="MinimizeApp_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="WindowMinimize" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="{DynamicResource eighthMenuItem}" Style="{StaticResource menuButtonText}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color8}"
                                  Click="ExitApp_Click">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Times" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="{DynamicResource eighthMenuItem}" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="{DynamicResource ninthMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 

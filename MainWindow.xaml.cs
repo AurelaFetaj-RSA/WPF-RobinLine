@@ -64,6 +64,12 @@ namespace WPF_App
             ConfirmPopup.IsOpen = true;
         }
 
+        private void MinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            //Application.Current.Windows = WindowState.Minimized; 
+            Window.GetWindow(this).WindowState = WindowState.Minimized;
+        }
+
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
             // Close the app stop running the app

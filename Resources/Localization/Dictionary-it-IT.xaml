@@ -12,6 +12,7 @@
     <System:String x:Key="sixthMenuItem">Impostazioni</System:String>
     <System:String x:Key="seventhMenuItem">Diagnostica</System:String>
     <System:String x:Key="eighthMenuItem">Nascondi</System:String>
+    <System:String x:Key="ninthMenuItem">Nascondi</System:String>
     <System:String x:Key="English">Inglese</System:String>
     <System:String x:Key="French">Francese</System:String>
     <System:String x:Key="Spanish">Spagnolo</System:String>

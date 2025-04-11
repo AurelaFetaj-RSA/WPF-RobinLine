@@ -12,6 +12,7 @@
     <System:String x:Key="sixthMenuItem">设置</System:String>
     <System:String x:Key="seventhMenuItem">诊断</System:String>
     <System:String x:Key="eighthMenuItem">隐藏</System:String>
+    <System:String x:Key="ninthMenuItem">隐藏</System:String>
     <System:String x:Key="English">英语</System:String>
     <System:String x:Key="French">法语</System:String>
     <System:String x:Key="Spanish">西班牙语</System:String>

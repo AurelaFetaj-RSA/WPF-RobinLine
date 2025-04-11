@@ -12,6 +12,7 @@
     <System:String x:Key="sixthMenuItem">Configuración</System:String>
     <System:String x:Key="seventhMenuItem">Diagnóstico</System:String>
     <System:String x:Key="eighthMenuItem">Ocultar</System:String>
+    <System:String x:Key="ninthMenuItem">Ocultar</System:String>
     <System:String x:Key="English">Inglés</System:String>
     <System:String x:Key="French">Francés</System:String>
     <System:String x:Key="Spanish">Español</System:String>
