@@ -96,6 +96,9 @@
             AddNode("StopInputBelt", "ns=2;s=Tags.Eren_robin/pc_stop_nastro_ingresso", typeof(bool));
             AddNode("StartCentralBelt", "ns=2;s=Tags.Eren_robin/pc_start_nastro_centrale", typeof(bool));
             AddNode("StopCentralBelt", "ns=2;s=Tags.Eren_robin/pc_stop_nastro_centrale", typeof(bool));
+
+            //Alarms
+            AddNode("GeneralAlarms", "ns=2;s=Tags.Eren_robin/pc_allarmi_generali", typeof(int[]), true);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace WPF_App.ViewModels
         public ICommand ShowOrdersViewCommand { get; }
         public ICommand ShowDeviceViewCommand { get; }
         public ICommand ShowSettingsViewCommand { get; }
-        public ICommand ShowDiagnosticsViewCommand { get; }
+        public ICommand ShowAlarmsViewCommand { get; }
         public ICommand ShowHideViewCommand { get; }
         // Add more commands for other views
 
@@ -70,7 +70,7 @@ namespace WPF_App.ViewModels
             ShowOrdersViewCommand = new RelayCommand(ShowOrderView);
             ShowDeviceViewCommand = new RelayCommand(ShowDeviceView);
             ShowSettingsViewCommand = new RelayCommand(ShowSettingsView);
-            ShowDiagnosticsViewCommand = new RelayCommand(ShowDiagnosticsView);
+            ShowAlarmsViewCommand = new RelayCommand(ShowAlarmsView);
             ShowHideViewCommand = new RelayCommand(ShowHideView);
             // Initialize other commands
         }
@@ -105,9 +105,9 @@ namespace WPF_App.ViewModels
             CurrentView = new SettingsView();
         }
 
-        private void ShowDiagnosticsView()
+        private void ShowAlarmsView()
         {
-            CurrentView = new DiagnosticsView();
+            CurrentView = new AlarmsView();
         }
 
         private void ShowHideView()

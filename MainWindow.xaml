@@ -52,7 +52,7 @@
                 <!-- Content section -->
                 <ColumnDefinition Width="*"/>
                 <!-- Navigation menu -->
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="320"/>
             </Grid.ColumnDefinitions>
 
             <!-- Navigation menu -->
@@ -141,6 +141,16 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
+                                 Tag="{StaticResource color7}"
+                                 Command="{Binding ShowAlarmsViewCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="LaptopMedical" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="{DynamicResource seventhMenuItem}" Style="{StaticResource menuButtonText}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+
+                    <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color2}"
                                  Command="{Binding ShowManualViewCommand}">
                         <StackPanel Orientation="Horizontal">
@@ -182,15 +192,6 @@
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="{DynamicResource sixthMenuItem}" Style="{StaticResource menuButtonText}"/>
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color7}"
-                                 Command="{Binding ShowDiagnosticsViewCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="LaptopMedical" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="{DynamicResource seventhMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
 
