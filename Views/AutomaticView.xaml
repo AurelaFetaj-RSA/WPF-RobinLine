@@ -1228,7 +1228,7 @@
 
                         </Border>
 
-                        <Popup x:Name="ConfirmPopup" 
+                        <!--<Popup x:Name="ConfirmPopup" 
                                IsOpen="False" 
                                HorizontalAlignment="Left" 
                                AllowsTransparency="True"
@@ -1240,7 +1240,9 @@
                                VerticalOffset="-200">
                             <Border CornerRadius="15" Background="White" BorderBrush="Red" BorderThickness="0" Padding="10,25,10,10" Width="250" Height="100">
                                 <StackPanel>
-                                    <!-- Confirmation Message -->
+                                    -->
+                        <!-- Confirmation Message -->
+                        <!--
                                     <TextBlock Text="{Binding ConfirmationMessage}" 
                                                HorizontalAlignment="Center" 
                                                FontSize="12" 
@@ -1248,9 +1250,13 @@
                                                FontWeight="Bold"
                                                Margin="0,0,0,20"/>
 
-                                    <!-- Buttons Panel -->
+                                    -->
+                        <!-- Buttons Panel -->
+                        <!--
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <!-- Yes Button -->
+                                        -->
+                        <!-- Yes Button -->
+                        <!--
                                         <Button Content="Yes" 
                                                 Click="YesButton_Click" 
                                                 Margin="10,0" 
@@ -1276,7 +1282,9 @@
                                             </Button.Template>
                                         </Button>
 
-                                        <!-- No Button -->
+                                        -->
+                        <!-- No Button -->
+                        <!--
                                         <Button Content="No" 
                                                 Click="NoButton_Click" 
                                                 Margin="10,0" 
@@ -1304,7 +1312,7 @@
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
-                        </Popup>
+                        </Popup>-->
                     </Grid>
                 </Border>
 

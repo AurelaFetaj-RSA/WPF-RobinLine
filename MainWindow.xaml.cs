@@ -43,6 +43,11 @@ namespace WPF_App
             DataContext = new MainViewModel();
         }
 
+        public static class ViewLoadGuard
+        {
+            public static readonly SemaphoreSlim TabSwitchLock = new SemaphoreSlim(1, 1);
+        }
+
         private void StartTimer()
         {
             _timer = new DispatcherTimer();
@@ -69,6 +74,7 @@ namespace WPF_App
             //Application.Current.Windows = WindowState.Minimized; 
             Window.GetWindow(this).WindowState = WindowState.Minimized;
         }
+
 
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {

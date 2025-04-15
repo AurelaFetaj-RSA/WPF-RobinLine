@@ -6,6 +6,7 @@ using WPF_App.Services;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
 using static WPF_App.Views.AutomaticView;
+using WPF_App.ViewModels;
 
 namespace WPF_App.Views
 {
@@ -94,7 +95,7 @@ namespace WPF_App.Views
             get => _robot2BeltAlarm;
             set { _robot2BeltAlarm = value; OnPropertyChanged(nameof(Robot2BeltAlarm)); }
         }
-        
+
         public bool Robot1NotReadyAlarm
         {
             get => _robot1NotReadyAlarm;
@@ -160,8 +161,6 @@ namespace WPF_App.Views
             InitializeComponent();
             InitializeSquareBitMapping();
 
-            MonitorGeneralAlarms();
-
             DataContext = this;
 
             _opcUaClient = new OpcUaClientService();
@@ -175,19 +174,28 @@ namespace WPF_App.Views
         {
             try
             {
+                //if (DataContext is MainViewModel vm)
+                //    vm.IsLoading = true;
+
                 await _opcUaClient.InitializeAsync();
                 await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
                 //await _opcUaClient.ConnectAsync("opc.tcp://192.31.30.40:48010");
 
-                await _opcUaClient.SubscribeToNodesAsync();
+                //await _opcUaClient.SubscribeToNodesAsync();
+                await _opcUaClient.SubscribeToNodeAsync("GeneralAlarms", OnOpcValueChanged);
 
                 //_opcUaClient.ValueUpdated += OnOpcValueChanged;
-                StartMonitoringTasks();
+                //StartMonitoringTasks();
             }
             catch (Exception ex)
             {
                 //ShowMessage($"Initialization failed: {ex.Message}", MessageType.Error);
                 ShowMessage($"Initialization failed", MessageType.Error);
+            }
+            finally
+            {
+                //if (DataContext is MainViewModel vm)
+                //    vm.IsLoading = false;
             }
         }
 
@@ -234,6 +242,46 @@ namespace WPF_App.Views
                 { Oven2LampStopSquare, 51 }      // A52
                 // A53-A63 would go here if needed
             };
+        }
+
+        private void OnOpcValueChanged(string nodeId, object value)
+        {
+            if (nodeId != "GeneralAlarms") return;
+
+            Dispatcher.Invoke(() =>
+            {
+                int[] testArray;
+
+                if (value is ushort[] ushortArray)
+                    testArray = ushortArray.Select(x => (int)x).ToArray();
+                else if (value is int[] intArray)
+                    testArray = intArray;
+                else
+                    return;
+
+                if (testArray.Length >= 5)
+                {
+                    // Position 1 (A1-A16)
+                    int word1 = testArray[1];
+                    string binaryWord1 = Convert.ToString(word1, 2).PadLeft(16, '0');
+                    UpdateSquaresFromBits(binaryWord1, 0);
+
+                    // Position 2 (A17-A32)
+                    int word2 = testArray[2];
+                    string binaryWord2 = Convert.ToString(word2, 2).PadLeft(16, '0');
+                    UpdateSquaresFromBits(binaryWord2, 16);
+
+                    // Position 3 (A33-A48)
+                    int word3 = testArray[3];
+                    string binaryWord3 = Convert.ToString(word3, 2).PadLeft(16, '0');
+                    UpdateSquaresFromBits(binaryWord3, 32);
+
+                    // Position 4 (A49-A64)
+                    int word4 = testArray[4];
+                    string binaryWord4 = Convert.ToString(word4, 2).PadLeft(16, '0');
+                    UpdateSquaresFromBits(binaryWord4, 48);
+                }
+            });
         }
         private void StartMonitoringTasks()
         {
@@ -320,53 +368,62 @@ namespace WPF_App.Views
                 {
                     if (_opcUaClient == null) return;
 
-                    //var generalAlarmsArray = await _opcUaClient.ReadNodeAsync("GeneralAlarms") as int[];
-                    int[] testArray = { 0, 24576, 0, 8, 8 }; // Test data
+                    var generalArray = await _opcUaClient.ReadNodeAsync("GeneralAlarms");
+                    //int[] testArray = { 0, 24576, 0, 8, 8 }; // Test data
                     //int[] testArray = { 0, 32768, 16, 4, 16 }; // Test data
 
-                    if (testArray?.Length >= 5) // Ensure we have all 5 positions
+                    if (generalArray is ushort[] ushortArray)
                     {
-                        Dispatcher.Invoke(() =>
+                        var testArray = ushortArray.Select(x => (int)x).ToArray();
+
+                        if (testArray?.Length >= 5)
                         {
-                            //DebugOutputTextBlock.Text = "Alarm Status:\n";
-
-                            // Process each position in the array
-                            for (int i = 1; i < testArray.Length; i++) // Skip position 0
+                            Dispatcher.Invoke(() =>
                             {
-                                int wordValue = testArray[i];
-                                string binary16 = Convert.ToString(wordValue, 2).PadLeft(16, '0');
-                                //DebugOutputTextBlock.Text += $"Position {i}: {binary16} ({wordValue})\n";
-                            }
+                                //DebugOutputTextBlock.Text = "Alarm Status:\n";
 
-                            // Position 1 (A1-A16)
-                            int word1 = testArray[1];
-                            string binaryWord1 = Convert.ToString(word1, 2).PadLeft(16, '0');
-                            UpdateSquaresFromBits(binaryWord1, 0); // Bits 0-15
+                                // Process each position in the array
+                                for (int i = 1; i < testArray.Length; i++) // Skip position 0
+                                {
+                                    int wordValue = testArray[i];
+                                    string binary16 = Convert.ToString(wordValue, 2).PadLeft(16, '0');
+                                    //DebugOutputTextBlock.Text += $"Position {i}: {binary16} ({wordValue})\n";
+                                }
 
-                            // Position 2 (A17-A32)
-                            int word2 = testArray[2];
-                            string binaryWord2 = Convert.ToString(word2, 2).PadLeft(16, '0');
-                            UpdateSquaresFromBits(binaryWord2, 16); // Bits 16-31
+                                // Position 1 (A1-A16)
+                                int word1 = testArray[1];
+                                string binaryWord1 = Convert.ToString(word1, 2).PadLeft(16, '0');
+                                UpdateSquaresFromBits(binaryWord1, 0); // Bits 0-15
 
-                            // Position 3 (A33-A48)
-                            int word3 = testArray[3];
-                            string binaryWord3 = Convert.ToString(word3, 2).PadLeft(16, '0');
-                            UpdateSquaresFromBits(binaryWord3, 32); // Bits 32-47
+                                // Position 2 (A17-A32)
+                                int word2 = testArray[2];
+                                string binaryWord2 = Convert.ToString(word2, 2).PadLeft(16, '0');
+                                UpdateSquaresFromBits(binaryWord2, 16); // Bits 16-31
 
-                            // Position 4 (A49-A64)
-                            int word4 = testArray[4];
-                            string binaryWord4 = Convert.ToString(word4, 2).PadLeft(16, '0');
-                            UpdateSquaresFromBits(binaryWord4, 48); // Bits 48-63
-                        });
+                                // Position 3 (A33-A48)
+                                int word3 = testArray[3];
+                                string binaryWord3 = Convert.ToString(word3, 2).PadLeft(16, '0');
+                                UpdateSquaresFromBits(binaryWord3, 32); // Bits 32-47
+
+                                // Position 4 (A49-A64)
+                                int word4 = testArray[4];
+                                string binaryWord4 = Convert.ToString(word4, 2).PadLeft(16, '0');
+                                UpdateSquaresFromBits(binaryWord4, 48); // Bits 48-63
+                            });
+                        }
+                    }
+                    else if (generalArray is int[] intArray)
+                    {
+                        var testArray = intArray; // Already correct type
                     }
                 }
                 catch (Exception ex)
                 {
                     ShowMessage($"Monitoring error: {ex.Message}", MessageType.Error);
-                    await Task.Delay(5000, _cts.Token);
+                    //await Task.Delay(5000, _cts.Token);
                 }
 
-                await Task.Delay(1000, _cts.Token);
+                //await Task.Delay(1000, _cts.Token);
             }
         }
 
@@ -452,6 +509,9 @@ namespace WPF_App.Views
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            if (_opcUaClient != null)
+                _opcUaClient.ValueUpdated -= OnOpcValueChanged;
+
             Dispose();
         }
 

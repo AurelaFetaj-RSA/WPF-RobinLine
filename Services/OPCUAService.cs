@@ -233,6 +233,69 @@ namespace WPF_App.Services
             });
         }
 
+        public async Task SubscribeToNodeAsync(string nodeName, Action<string, object> onValueChanged)
+        {
+            if (string.IsNullOrWhiteSpace(nodeName))
+                throw new ArgumentException("Node name cannot be empty");
+
+            if (_configuration == null)
+                throw new InvalidOperationException("Configuration not initialized");
+
+            var nodeConfig = _configuration.GetNode(nodeName) ??
+                throw new ArgumentException($"Node {nodeName} not found in configuration");
+
+            if (_session == null || !_session.Connected)
+                throw new InvalidOperationException("Session not connected");
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    _subscription = new Subscription(_session.DefaultSubscription)
+                    {
+                        PublishingInterval = 1000,
+                        Priority = 100
+                    };
+
+                    _session.AddSubscription(_subscription);
+                    _subscription.Create();
+
+                    var monitoredItem = new MonitoredItem(_subscription.DefaultItem)
+                    {
+                        StartNodeId = new NodeId(nodeConfig.NodeId),
+                        AttributeId = Attributes.Value,
+                        SamplingInterval = 1000,
+                        QueueSize = 10,
+                        DiscardOldest = true
+                    };
+
+                    monitoredItem.Notification += (item, e) =>
+                    {
+                        try
+                        {
+                            var notification = e.NotificationValue as MonitoredItemNotification;
+                            if (notification?.Value != null)
+                            {
+                                onValueChanged?.Invoke(nodeName, notification.Value.Value);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ConnectionStatusChanged?.Invoke($"Notification error for {nodeName}: {ex.Message}");
+                        }
+                    };
+
+                    _subscription.AddItem(monitoredItem);
+                    _subscription.ApplyChanges();
+                }
+                catch (Exception ex)
+                {
+                    ConnectionStatusChanged?.Invoke($"Single node subscription failed: {ex.Message}");
+                    throw;
+                }
+            });
+        }
+
         public async Task<object> ReadNodeAsync(string nodeName)
         {
             if (string.IsNullOrWhiteSpace(nodeName))

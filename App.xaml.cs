@@ -2,6 +2,7 @@
 using System.Data;
 using System.Globalization;
 using System.Windows;
+using WPF_App.Services;
 
 namespace WPF_App
 {
@@ -18,6 +19,10 @@ namespace WPF_App
             Thread.CurrentThread.CurrentUICulture = culture;
 
             base.OnStartup(e);
+            Task.Run(() => {
+                var client = new OpcUaClientService();
+                client.InitializeAsync();
+            });
         }
     }
 

@@ -37,7 +37,8 @@ namespace WPF_App
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null || _canExecute();
+            //return _canExecute == null || _canExecute();
+            return _canExecute?.Invoke() ?? true;
         }
 
         public void Execute(object parameter)
@@ -50,5 +51,7 @@ namespace WPF_App
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+
+        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }

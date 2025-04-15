@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using WPF_App.Services;
 using WPF_RobinLine.Configurations;
 using Xceed.Wpf.Toolkit;
+using static WPF_App.MainWindow;
 
 namespace WPF_App.Views
 {
@@ -21,12 +22,15 @@ namespace WPF_App.Views
     /// </summary>
     public partial class AutomaticView : UserControl, INotifyPropertyChanged
     {
-        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+        private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1, 1);
+        private readonly CancellationTokenSource _disposalTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _tabTokenSource;
+        private bool _isDisposed;
+        private bool _isTabInitialized;
+
+        //private readonly CancellationTokenSource _cts = new CancellationTokenSource();
         private RobinConfiguration _currentConfig = new();
 
-        private string _playStopIcon = "Play";  // Default icon
-        private string _playStopText = "Start";
-        private string _confirmationMessage = "Are you sure you want to start the line?";
         private string _popupAction;
         private bool _ovenStatus;
         private readonly OpcUaClientService _opcUaClient = new OpcUaClientService();
@@ -51,56 +55,6 @@ namespace WPF_App.Views
         private IntegerUpDown? _oven2FanPercentageUpDown;
         private IntegerUpDown? _oven2LampsPercentageUpDown;
 
-        public string PlayStopIcon
-        {
-            get => _playStopIcon;
-            set
-            {
-                _playStopIcon = value;
-                OnPropertyChanged(nameof(PlayStopIcon));
-            }
-        }
-
-        public string PlayStopText
-        {
-            get => _playStopText;
-            set
-            {
-                _playStopText = value;
-                OnPropertyChanged(nameof(PlayStopText));
-            }
-        }
-
-        public string ConfirmationMessage
-        {
-            get => _confirmationMessage;
-            set
-            {
-                _confirmationMessage = value;
-                OnPropertyChanged(nameof(ConfirmationMessage));
-            }
-        }
-
-        public string PopupAction
-        {
-            get => _popupAction;
-            set
-            {
-                _popupAction = value;
-                OnPropertyChanged(nameof(PopupAction));
-            }
-        }
-
-        public bool OvenStatus
-        {
-            get => _ovenStatus;
-            set
-            {
-                _ovenStatus = value;
-                OnPropertyChanged(nameof(OvenStatus));
-            }
-        }
-
         public AutomaticView()
         {
             InitializeComponent();
@@ -117,6 +71,8 @@ namespace WPF_App.Views
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+
+            IsVisibleChanged += OnIsVisibleChanged;
         }
 
         private void ApplyConfiguration()
@@ -188,14 +144,9 @@ namespace WPF_App.Views
         {
             try
             {
-                _oven1TempSetpointUpDown = FindName("Oven1TempSetpointUpDown") as IntegerUpDown;
-                _oven1FanPercentageUpDown = FindName("Oven1FanPercentageUpDown") as IntegerUpDown;
-                _oven1LampsPercentageUpDown = FindName("Oven1LampsPercentageUpDown") as IntegerUpDown;
+                //await ViewLoadGuard.TabSwitchLock.WaitAsync();
 
-                _oven2TempSetpointUpDown = FindName("Oven2TempSetpointUpDown") as IntegerUpDown;
-                _oven2FanPercentageUpDown = FindName("Oven2FanPercentageUpDown") as IntegerUpDown;
-                _oven2LampsPercentageUpDown = FindName("Oven2LampsPercentageUpDown") as IntegerUpDown;
-
+                InitializeOvenControls();
 
                 await _opcUaClient.InitializeAsync();
                 await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
@@ -222,6 +173,72 @@ namespace WPF_App.Views
             {
                 //ShowMessage($"Initialization failed: {ex.Message}", MessageType.Error);
                 ShowMessage($"Initialization failed", MessageType.Error);
+            }
+        }
+
+        private void InitializeOvenControls()
+        {
+            _oven1TempSetpointUpDown = FindName("Oven1TempSetpointUpDown") as IntegerUpDown;
+            _oven1FanPercentageUpDown = FindName("Oven1FanPercentageUpDown") as IntegerUpDown;
+            _oven1LampsPercentageUpDown = FindName("Oven1LampsPercentageUpDown") as IntegerUpDown;
+
+            _oven2TempSetpointUpDown = FindName("Oven2TempSetpointUpDown") as IntegerUpDown;
+            _oven2FanPercentageUpDown = FindName("Oven2FanPercentageUpDown") as IntegerUpDown;
+            _oven2LampsPercentageUpDown = FindName("Oven2LampsPercentageUpDown") as IntegerUpDown;
+        }
+
+        private async void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue)
+                await InitializeTabAsync();
+            else
+                await CleanupTabAsync();
+        }
+
+        private async Task InitializeTabAsync()
+        {
+            if (_isDisposed || _isTabInitialized)
+                return;
+
+            try
+            {
+                await _initializationLock.WaitAsync(_disposalTokenSource.Token);
+
+                if (!_opcUaClient.IsConnected)
+                {
+                    await _opcUaClient.InitializeAsync();
+                    await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
+                }
+
+                _opcUaClient.ValueUpdated += OnOpcValueChanged;
+                _tabTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_disposalTokenSource.Token);
+                _isTabInitialized = true;
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Initialization error: {ex.Message}", MessageType.Error);
+            }
+            finally
+            {
+                _initializationLock.Release();
+            }
+        }
+
+        private async Task CleanupTabAsync()
+        {
+            try
+            {
+                await _initializationLock.WaitAsync(_disposalTokenSource.Token);
+
+                _tabTokenSource?.Cancel();
+                _opcUaClient.ValueUpdated -= OnOpcValueChanged;
+                _messageTimer?.Stop();
+                _isTabInitialized = false;
+            }
+            catch { }
+            finally
+            {
+                _initializationLock.Release();
             }
         }
 
@@ -376,72 +393,6 @@ namespace WPF_App.Views
 
                 lastStatus = isReached;
             }
-        }
-
-        private void StartStopButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (PlayStopIcon == "Play")
-            {
-                ConfirmationMessage = "Are you sure you want to start the line?";
-                PopupAction = "Start";
-            }
-            else
-            {
-                ConfirmationMessage = "Are you sure you want to stop the line?";
-                PopupAction = "Stop";
-            }
-
-            ConfirmPopup.IsOpen = true;
-        }
-
-        private async void PauseButton_Click(object sender, RoutedEventArgs e)
-        {
-            await _opcUaClient.WriteNodeAsync("Pause", true);
-            ShowMessage("Line paused", MessageType.Info);
-        }
-
-        private async void YesButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Proceed with starting the line and changing the icon/text
-            if (PopupAction == "Start")
-            {
-                // Handle Start logic
-                await _opcUaClient.WriteNodeAsync("StartStop", true);
-                PlayStopIcon = "Stop";
-                PlayStopText = "Stop";
-
-                ShowMessage("Line started", MessageType.Success);
-            }
-            else if (PopupAction == "Stop")
-            {
-                // Handle Stop logic
-                await _opcUaClient.WriteNodeAsync("StartStop", false);
-                PlayStopIcon = "Play";
-                PlayStopText = "Start";
-                ShowMessage("Line stopped", MessageType.Warning);
-            }
-            else if (PopupAction == "Reset")
-            {
-                // Handle Reset logic (you can add any reset logic here)
-                await _opcUaClient.WriteNodeAsync("Reset", true);
-                ShowMessage("Line reset", MessageType.Info);
-            }
-
-            // Close the popup after confirming
-            ConfirmPopup.IsOpen = false;
-        }
-
-        private void NoButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Close the popup without making any changes
-            ConfirmPopup.IsOpen = false;
-        }
-
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
-        {
-            ConfirmationMessage = "Are you sure you want to reset the line?";
-            PopupAction = "Reset";
-            ConfirmPopup.IsOpen = true;
         }
 
         public async void Robot1Toggle_Click(object sender, RoutedEventArgs e)
@@ -769,7 +720,7 @@ namespace WPF_App.Views
 
         private async Task MonitorSelectorStatus()
         {
-            while (!_cts.IsCancellationRequested)
+            while (!_tabTokenSource.IsCancellationRequested)
             {
                 try
                 {
@@ -791,16 +742,16 @@ namespace WPF_App.Views
                 catch (Exception ex)
                 {
                     ShowMessage($"Selector monitoring error: {ex.Message}", MessageType.Error);
-                    await Task.Delay(5000, _cts.Token); // Longer delay after error
+                    await Task.Delay(5000, _tabTokenSource.Token); // Longer delay after error
                 }
 
-                await Task.Delay(1000, _cts.Token);
+                await Task.Delay(1000, _tabTokenSource.Token);
             }
         }
 
         private async Task HandleInput()
         {
-            while (!_cts.IsCancellationRequested)
+            while (!_tabTokenSource.IsCancellationRequested)
             {
                 try
                 {
@@ -830,10 +781,10 @@ namespace WPF_App.Views
                 catch (Exception ex)
                 {
                     ShowMessage($"Selector monitoring error: {ex.Message}", MessageType.Error);
-                    await Task.Delay(5000, _cts.Token); // Longer delay after error
+                    await Task.Delay(5000, _tabTokenSource.Token); // Longer delay after error
                 }
 
-                await Task.Delay(1000, _cts.Token);
+                await Task.Delay(1000, _tabTokenSource.Token);
             }
         }
 
@@ -933,9 +884,20 @@ namespace WPF_App.Views
 
         public void Dispose()
         {
-            _cts.Cancel();
-            _messageTimer.Stop();
-            _opcUaClient?.Dispose();
+            //_tabTokenSource .Cancel();
+            //_messageTimer.Stop();
+            //_opcUaClient?.Dispose();
+
+            if (_isDisposed) return;
+
+            _isDisposed = true;
+            _tabTokenSource?.Cancel();
+            _disposalTokenSource.Cancel();
+
+            _opcUaClient.Dispose();
+            _initializationLock.Dispose();
+            _tabTokenSource?.Dispose();
+            _messageTimer?.Stop();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

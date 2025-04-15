@@ -37,6 +37,7 @@ namespace WPF_App.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly OpcUaClientService _opcUaClient;
+        private bool _isLoading;
         private object _currentView;
         public object CurrentView
         {
@@ -45,6 +46,17 @@ namespace WPF_App.ViewModels
             {
                 _currentView = value;
                 OnPropertyChanged(nameof(CurrentView));
+            }
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+                CommandManager.InvalidateRequerySuggested();
             }
         }
 
@@ -89,12 +101,12 @@ namespace WPF_App.ViewModels
         {
             CurrentView = new RFIDView();
         }
-        
+
         private void ShowOrderView()
         {
             CurrentView = new OrderView();
         }
-        
+
         private void ShowDeviceView()
         {
             CurrentView = new DeviceView();
