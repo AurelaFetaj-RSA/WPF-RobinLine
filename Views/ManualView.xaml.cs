@@ -253,7 +253,7 @@ namespace WPF_App.Views
                 {
                     await _opcUaClient.WriteNodeAsync("StartOven2Belt", isChecked);
                     Oven2BeltTextBlock.Text = "On";
-                    ShowMessage($"Oven 1 belt is on", MessageType.Info);
+                    ShowMessage($"Oven 2 belt is on", MessageType.Info);
 
                     Thread.Sleep(200);
 
@@ -263,7 +263,7 @@ namespace WPF_App.Views
                 {
                     await _opcUaClient.WriteNodeAsync("StopOven2Belt", true);
                     Oven2BeltTextBlock.Text = "Off";
-                    ShowMessage($"Oven 1 belt is off", MessageType.Info);
+                    ShowMessage($"Oven 2 belt is off", MessageType.Info);
 
                     Thread.Sleep(200);
 
@@ -402,9 +402,9 @@ namespace WPF_App.Views
             try
             {
                 var isAutomaticStatus = await _opcUaClient.ReadNodeAsync("Oven1Mode");
-                var isAutomaticSelector = await _opcUaClient.ReadNodeAsync("InputPLC");
+                var isAutomaticSelector = await _opcUaClient.ReadNodeAsync("InputPLC") as bool[];
 
-                _allowToggle = (isAutomaticStatus is false && isAutomaticSelector is false);
+                _allowToggle = (isAutomaticStatus is false && isAutomaticSelector[2] is false);
 
                 if (!_allowToggle)
                 {
@@ -425,9 +425,9 @@ namespace WPF_App.Views
             try
             {
                 var isAutomaticStatus = await _opcUaClient.ReadNodeAsync("Oven2Mode");
-                var isAutomaticSelector = await _opcUaClient.ReadNodeAsync("InputPLC");
+                var isAutomaticSelector = await _opcUaClient.ReadNodeAsync("InputPLC") as bool[];
 
-                _allowToggle = (isAutomaticStatus is false && isAutomaticSelector is false);
+                _allowToggle = (isAutomaticStatus is false && isAutomaticSelector[2] is false);
 
                 if (!_allowToggle)
                 {

@@ -43,11 +43,6 @@ namespace WPF_App
             DataContext = new MainViewModel();
         }
 
-        public static class ViewLoadGuard
-        {
-            public static readonly SemaphoreSlim TabSwitchLock = new SemaphoreSlim(1, 1);
-        }
-
         private void StartTimer()
         {
             _timer = new DispatcherTimer();

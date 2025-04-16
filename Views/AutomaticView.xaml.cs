@@ -24,7 +24,7 @@ namespace WPF_App.Views
     {
         private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1, 1);
         private readonly CancellationTokenSource _disposalTokenSource = new CancellationTokenSource();
-        private CancellationTokenSource _tabTokenSource;
+        private readonly CancellationTokenSource _tabTokenSource = new CancellationTokenSource();
         private bool _isDisposed;
         private bool _isTabInitialized;
 
@@ -71,8 +71,6 @@ namespace WPF_App.Views
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
-
-            IsVisibleChanged += OnIsVisibleChanged;
         }
 
         private void ApplyConfiguration()
@@ -185,61 +183,6 @@ namespace WPF_App.Views
             _oven2TempSetpointUpDown = FindName("Oven2TempSetpointUpDown") as IntegerUpDown;
             _oven2FanPercentageUpDown = FindName("Oven2FanPercentageUpDown") as IntegerUpDown;
             _oven2LampsPercentageUpDown = FindName("Oven2LampsPercentageUpDown") as IntegerUpDown;
-        }
-
-        private async void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if ((bool)e.NewValue)
-                await InitializeTabAsync();
-            else
-                await CleanupTabAsync();
-        }
-
-        private async Task InitializeTabAsync()
-        {
-            if (_isDisposed || _isTabInitialized)
-                return;
-
-            try
-            {
-                await _initializationLock.WaitAsync(_disposalTokenSource.Token);
-
-                if (!_opcUaClient.IsConnected)
-                {
-                    await _opcUaClient.InitializeAsync();
-                    await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
-                }
-
-                _opcUaClient.ValueUpdated += OnOpcValueChanged;
-                _tabTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_disposalTokenSource.Token);
-                _isTabInitialized = true;
-            }
-            catch (Exception ex)
-            {
-                ShowMessage($"Initialization error: {ex.Message}", MessageType.Error);
-            }
-            finally
-            {
-                _initializationLock.Release();
-            }
-        }
-
-        private async Task CleanupTabAsync()
-        {
-            try
-            {
-                await _initializationLock.WaitAsync(_disposalTokenSource.Token);
-
-                _tabTokenSource?.Cancel();
-                _opcUaClient.ValueUpdated -= OnOpcValueChanged;
-                _messageTimer?.Stop();
-                _isTabInitialized = false;
-            }
-            catch { }
-            finally
-            {
-                _initializationLock.Release();
-            }
         }
 
         private void OnOpcValueChanged(string nodeName, object value)
@@ -884,20 +827,9 @@ namespace WPF_App.Views
 
         public void Dispose()
         {
-            //_tabTokenSource .Cancel();
-            //_messageTimer.Stop();
-            //_opcUaClient?.Dispose();
-
-            if (_isDisposed) return;
-
-            _isDisposed = true;
-            _tabTokenSource?.Cancel();
-            _disposalTokenSource.Cancel();
-
-            _opcUaClient.Dispose();
-            _initializationLock.Dispose();
-            _tabTokenSource?.Dispose();
-            _messageTimer?.Stop();
+            _tabTokenSource.Cancel();
+            _messageTimer.Stop();
+            _opcUaClient?.Dispose();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

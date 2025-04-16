@@ -174,9 +174,6 @@ namespace WPF_App.Views
         {
             try
             {
-                //if (DataContext is MainViewModel vm)
-                //    vm.IsLoading = true;
-
                 await _opcUaClient.InitializeAsync();
                 await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
                 //await _opcUaClient.ConnectAsync("opc.tcp://192.31.30.40:48010");
@@ -191,11 +188,6 @@ namespace WPF_App.Views
             {
                 //ShowMessage($"Initialization failed: {ex.Message}", MessageType.Error);
                 ShowMessage($"Initialization failed", MessageType.Error);
-            }
-            finally
-            {
-                //if (DataContext is MainViewModel vm)
-                //    vm.IsLoading = false;
             }
         }
 
