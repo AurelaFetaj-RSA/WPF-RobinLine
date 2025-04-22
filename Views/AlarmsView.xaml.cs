@@ -20,15 +20,6 @@ namespace WPF_App.Views
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
         private Dictionary<Border, int> squareBitMapping;
 
-        //private bool _robot1Alarm;
-        //private bool _oven1Alarm;
-        //private bool _robot2Alarm;
-        //private bool _oven2Alarm;
-        //private bool _inputBeltAlarm;
-        //private bool _centralBeltAlarm;
-        //private bool _robot1BeltAlarm;
-        //private bool _robot2BeltAlarm;
-
         private bool _robot1ConnectedAlarm;
         private bool _oven1ConnectedAlarm;
         private bool _robot2ConnectedAlarm;

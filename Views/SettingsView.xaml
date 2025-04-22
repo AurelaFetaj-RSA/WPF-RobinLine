@@ -2,122 +2,184 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-             Height="300" Width="500">
-    <Grid>
-        <TextBlock Text="{DynamicResource SettingsTitle}" 
-                   FontSize="24" 
-                   Foreground="White" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"/>
+             Height="600" Width="600">
 
-        <Image Source="/Images/Flag/icons8-grat-britain-96.png" 
-               Height="30"
-               HorizontalAlignment="Center"
-               Margin="200,200,0,0"/>
-
-        <!--<Image Source="/Images/Icons/icons8-error-96.png" 
-               Height="30"
-               HorizontalAlignment="Center"
-               Margin="200,200,0,0"/>-->
-
-        <!-- Language Button -->
-        <Button x:Name="LanguageButton"
+    <Viewbox Stretch="Uniform">
+        <Grid>
+            <Border CornerRadius="10"
                 Background="Transparent"
-                BorderThickness="0"
-                Padding="5"
-                Height="35"
-                Width="35"
-                Margin="200,200,0,0"
-                Click="LanguageButton_Click">
-            <Button.RenderTransform>
-                <TranslateTransform X="160" Y="90"/>
-            </Button.RenderTransform>
-            <Viewbox>
-                <fa:IconImage Icon="Globe" Foreground="White"/>
-            </Viewbox>
-        </Button>
+                Width="500"
+                Height="300"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="0,0,0,0">
+                <Border.RenderTransform>
+                    <TranslateTransform Y="-15"/>
+                    <!-- Moves Up -->
+                </Border.RenderTransform>
 
+                <Grid>
+                    <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"
+                                          Opacity="0.6"/>
+                        </Border.Effect>
 
-        <!-- Popup for Language Selection -->
-        <Popup x:Name="LanguagePopup"
-               PlacementTarget="{Binding ElementName=LanguageButton}"
-               Placement="Top"
-               StaysOpen="False"
-               AllowsTransparency="True">
-            <Border Background="White" 
-                    BorderBrush="Gray" 
-                    BorderThickness="1" 
-                    CornerRadius="5"
-                    Padding="10"
-                    Width="150">
-                <StackPanel>
-                    <!-- English Button -->
-                    <Button Click="SetLanguage"
-                            Tag="en-US"
-                            HorizontalAlignment="Stretch"
-                            Padding="5"
-                            Background="Transparent"
-                            BorderThickness="0">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-great-britain-96.png" Width="24" Height="16" Margin="5"/>
-                            <TextBlock Text="{DynamicResource English}" VerticalAlignment="Center"/>
-                        </StackPanel>
+                        <!-- Blue line at the top -->
+                        <Grid>
+                            <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                            <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <TextBlock x:Name="OpcUaServer"
+                                   Text="{DynamicResource OpcUaServer}"
+                                   Margin="-15,10,0,0" 
+                                   Foreground="{DynamicResource titleColor7}"
+                                   FontWeight="Bold" 
+                                   FontSize="11" 
+                                   VerticalAlignment="Center"/>
+                        <TextBox x:Name="OpcUaServerAddressTextBox"
+                                 Width="200"
+                                 Margin="5,10,0,0"
+                                 VerticalAlignment="Center"/>
+
+                        <Button x:Name="ConnectButton"
+                                Content="Connect"
+                                Margin="10,10,0,0"
+                                Padding="8,2"
+                                VerticalAlignment="Center"
+                                Click="ConnectButton_Click"/>
+                    </StackPanel>
+
+                    <!-- Language Button -->
+                    <Button x:Name="LanguageButton"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="5"
+                        Height="35"
+                        Width="35"
+                        Margin="70,50,0,0"
+                        Click="LanguageButton_Click">
+                        <Button.RenderTransform>
+                            <TranslateTransform X="160" Y="90"/>
+                        </Button.RenderTransform>
+                        <Viewbox>
+                            <fa:IconImage Icon="Globe" Foreground="Black"/>
+                        </Viewbox>
                     </Button>
 
-                    <!-- French Button -->
-                    <Button Click="SetLanguage"
-                            Tag="fr-FR"
-                            HorizontalAlignment="Stretch"
-                            Padding="5"
-                            Background="Transparent"
-                            BorderThickness="0">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-france-96.png" Width="24" Height="16" Margin="5"/>
-                            <TextBlock Text="{DynamicResource French}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
 
-                    <!-- Spanish Button -->
-                    <Button Click="SetLanguage"
-                            Tag="es-ES"
-                            HorizontalAlignment="Stretch"
-                            Padding="5"
-                            Background="Transparent"
-                            BorderThickness="0">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-spain-flag-96.png" Width="24" Height="16" Margin="5"/>
-                            <TextBlock Text="{DynamicResource Spanish}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
+                    <!-- Popup for Language Selection -->
+                    <Popup x:Name="LanguagePopup"
+                       PlacementTarget="{Binding ElementName=LanguageButton}"
+                       Placement="Top"
+                       StaysOpen="False"
+                       AllowsTransparency="True">
+                        <Border Background="White" 
+                            BorderBrush="Gray" 
+                            BorderThickness="1" 
+                            CornerRadius="5"
+                            Padding="10"
+                            Width="150">
+                            <StackPanel>
+                                <!-- English Button -->
+                                <Button Click="SetLanguage"
+                                    Tag="en-US"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="5"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Flag/icons8-great-britain-96.png" Width="24" Height="16" Margin="5"/>
+                                        <TextBlock Text="{DynamicResource English}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
 
-                    <!-- Italian Button -->
-                    <Button Click="SetLanguage"
-                            Tag="it-IT"
-                            HorizontalAlignment="Stretch"
-                            Padding="5"
-                            Background="Transparent"
-                            BorderThickness="0">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-italy-96 (1).png" Width="24" Height="16" Margin="5"/>
-                            <TextBlock Text="{DynamicResource Italian}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
+                                <!-- French Button -->
+                                <Button Click="SetLanguage"
+                                    Tag="fr-FR"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="5"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Flag/icons8-france-96.png" Width="24" Height="16" Margin="5"/>
+                                        <TextBlock Text="{DynamicResource French}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
 
-                    <!-- Italian Button -->
-                    <Button Click="SetLanguage"
-                            Tag="ch-CH"
-                            HorizontalAlignment="Stretch"
-                            Padding="5"
-                            Background="Transparent"
-                            BorderThickness="0">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-china-96.png" Width="24" Height="16" Margin="5"/>
-                            <TextBlock Text="{DynamicResource Chinese}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                                <!-- Spanish Button -->
+                                <Button Click="SetLanguage"
+                                    Tag="es-ES"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="5"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Flag/icons8-spain-flag-96.png" Width="24" Height="16" Margin="5"/>
+                                        <TextBlock Text="{DynamicResource Spanish}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- Italian Button -->
+                                <Button Click="SetLanguage"
+                                    Tag="it-IT"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="5"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Flag/icons8-italy-96 (1).png" Width="24" Height="16" Margin="5"/>
+                                        <TextBlock Text="{DynamicResource Italian}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- Italian Button -->
+                                <Button Click="SetLanguage"
+                                    Tag="ch-CH"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="5"
+                                    Background="Transparent"
+                                    BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Flag/icons8-china-96.png" Width="24" Height="16" Margin="5"/>
+                                        <TextBlock Text="{DynamicResource Chinese}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- Turkish Button -->
+                                <Button Click="SetLanguage"
+                                        Tag="tr-TR"
+                                        HorizontalAlignment="Stretch"
+                                        Padding="5"
+                                        Background="Transparent"
+                                        BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Flag/icons8-turkey-96.png" Width="24" Height="16" Margin="5"/>
+                                        <TextBlock Text="{DynamicResource Turkish}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                    <!--<TextBlock Text="{DynamicResource subTitle}" Foreground="White" HorizontalAlignment="Center" Margin="0,171,0,0" VerticalAlignment="Top"/>-->
+
+                </Grid>
             </Border>
-        </Popup>
-        <TextBlock Text="{DynamicResource subTitle}" Foreground="White" HorizontalAlignment="Center" Margin="0,171,0,0" VerticalAlignment="Top"/>
-    </Grid>
+        </Grid>
+    </Viewbox>
 </UserControl>

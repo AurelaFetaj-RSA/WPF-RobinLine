@@ -5,6 +5,11 @@ using System;
 
 namespace WPF_App.Services
 {
+    public class OpcUaConfigService
+    {
+        public string ServerAddress { get; set; } = "opc.tcp://127.0.0.1:4840"; // Default
+    }
+
     public class OpcUaClientService : IDisposable
     {
         private ApplicationConfiguration _config;
@@ -29,34 +34,6 @@ namespace WPF_App.Services
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
-
-        //public async Task InitializeAsync()
-        //{
-        //    try
-        //    {
-        //        _config = new ApplicationConfiguration()
-        //        {
-        //            ApplicationName = "WPF-RobinLine",
-        //            ApplicationType = ApplicationType.Client,
-        //            SecurityConfiguration = new SecurityConfiguration
-        //            {
-        //                AutoAcceptUntrustedCertificates = true,
-        //                RejectSHA1SignedCertificates = false,
-        //                MinimumCertificateKeySize = 1024
-        //            },
-        //            TransportQuotas = new TransportQuotas { OperationTimeout = 15000 },
-        //            ClientConfiguration = new ClientConfiguration { DefaultSessionTimeout = 60000 }
-        //        };
-
-        //        await _config.Validate(ApplicationType.Client);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ConnectionStatusChanged?.Invoke($"Initialization failed: {ex.Message}");
-        //        throw;
-        //    }
-        //}
-
         public async Task InitializeAsync()
         {
             try

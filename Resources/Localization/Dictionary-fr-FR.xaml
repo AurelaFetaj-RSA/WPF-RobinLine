@@ -2,22 +2,26 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:System="clr-namespace:System;assembly=System.Runtime">
 
-    <System:String x:Key="SettingsTitle">Paramètres</System:String>
-    <System:String x:Key="subTitle">Bienvenue sur la page des paramètres</System:String>
+    <!--<System:String x:Key="SettingsTitle">Paramètres</System:String>
+    <System:String x:Key="subTitle">Bienvenue sur la page des paramètres</System:String>-->
     <System:String x:Key="firstMenuItem">Automatique</System:String>
     <System:String x:Key="secondMenuItem">Manuel</System:String>
     <System:String x:Key="thirdMenuItem">RFID</System:String>
-    <System:String x:Key="fourthMenuItem">Commissions</System:String>
+    <System:String x:Key="fourthMenuItem">Commandes</System:String>
     <System:String x:Key="fifthMenuItem">Appareils</System:String>
     <System:String x:Key="sixthMenuItem">Paramètres</System:String>
-    <System:String x:Key="seventhMenuItem">Diagnostic</System:String>
+    <System:String x:Key="seventhMenuItem">Alarmes et Événements</System:String>
     <System:String x:Key="eighthMenuItem">Masquer</System:String>
-    <System:String x:Key="ninthMenuItem">Masquer</System:String>
+    <System:String x:Key="ninthMenuItem">Quitter</System:String>
+
     <System:String x:Key="English">Anglais</System:String>
     <System:String x:Key="French">Français</System:String>
     <System:String x:Key="Spanish">Espagnol</System:String>
     <System:String x:Key="Italian">Italien</System:String>
     <System:String x:Key="Chinese">Chinoise</System:String>
+    <System:String x:Key="Turkish">Turc</System:String>
+
+    <System:String x:Key="OpcUaServer">Adresse du serveur OPC UA: </System:String>
 
     <System:String x:Key="Robot1Ready">Prêt</System:String>
 </ResourceDictionary>

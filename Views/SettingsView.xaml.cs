@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using WPF_App.Services;
 
 namespace WPF_App.Views
 {
@@ -9,6 +11,8 @@ namespace WPF_App.Views
     /// </summary>
     public partial class SettingsView : UserControl
     {
+        private readonly OpcUaClientService _opcUaClient = new OpcUaClientService();
+
         public SettingsView()
         {
             InitializeComponent();
@@ -61,6 +65,41 @@ namespace WPF_App.Views
             {
                 // Show error message in case of failure
                 MessageBox.Show($"Error loading language: {ex.Message}");
+            }
+        }
+
+        private async void ConnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            string serverAddress = OpcUaServerAddressTextBox.Text.Trim();
+
+            if (string.IsNullOrEmpty(serverAddress))
+            {
+                MessageBox.Show("Please enter an OPC UA server address.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                // Disable the button during connection attempt
+                ConnectButton.IsEnabled = false;
+                ConnectButton.Content = "Connecting...";
+
+                var config = App.ServiceProvider.GetService<OpcUaConfigService>();
+                config.ServerAddress = serverAddress;
+
+                await _opcUaClient.InitializeAsync();
+                await _opcUaClient.ConnectAsync(config.ServerAddress);
+                MessageBox.Show("Connected successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Connection failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                // Re-enable the button
+                ConnectButton.IsEnabled = true;
+                ConnectButton.Content = "Connect";
             }
         }
 

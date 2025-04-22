@@ -85,12 +85,128 @@
                                     Background="#2a3645" />
                         </StackPanel>
 
+                        <!--<Grid Margin="-5,25,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1BeltSquare" Width="10" Height="10" Background="Gray" 
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Belt" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1TankLvlLowSquare" Width="10" Height="10" Background="Gray" 
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Tank Low" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1TankLvlEmptySquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Tank Empty" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1AirPressureSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Air Pressure" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1AutomaticSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Automatic" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                        </Grid>-->
+
+                        <Grid Margin="-8,55,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Column 0 -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,15,4">
+                                <Border x:Name="Robot1BeltSquare" Width="10" Height="10" Background="Gray" 
+                CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Belt" 
+                   Foreground="{DynamicResource titleColor7}"
+                   FontWeight="Bold" 
+                   FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,4">
+                                <Border x:Name="Robot1TankLvlLowSquare" Width="10" Height="10" Background="Gray" 
+                CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Tank Low" 
+                   Foreground="{DynamicResource titleColor7}"
+                   FontWeight="Bold" 
+                   FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="0,0,15,4">
+                                <Border x:Name="Robot1TankLvlEmptySquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Tank Empty" 
+                   Foreground="{DynamicResource titleColor7}"
+                   FontWeight="Bold" 
+                   FontSize="9"/>
+                            </StackPanel>
+
+                            <!-- Column 1 -->
+                            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1AirPressureSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Air Pressure" 
+                   Foreground="{DynamicResource titleColor7}"
+                   FontWeight="Bold" 
+                   FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1AutomaticSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Automatic" 
+                   Foreground="{DynamicResource titleColor7}"
+                   FontWeight="Bold" 
+                   FontSize="9"/>
+                            </StackPanel>
+                        </Grid>
+
                         <Border Width="25" Height="25"
                                 CornerRadius="15"
                                 Background="#f1f2f6"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Margin="120, 100, 0, 0">
+                                Margin="120, 105, 0, 0">
                             <fa:IconImage x:Name="ReadyLamp"
                                           Icon="Lightbulb"
                                           Width="20"
@@ -102,7 +218,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0">
                             <TextBlock x:Name="ReadyRobot1TextBlock"
                                        Text="Ready"
-                                       Margin="110,120,0,0" 
+                                       Margin="110,125,0,0" 
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -119,7 +235,7 @@
                                       BorderThickness="0"
                                       Click="Robot1Toggle_Click">
                             <ToggleButton.RenderTransform>
-                                <TranslateTransform Y="-20"/>
+                                <TranslateTransform Y="-15"/>
                             </ToggleButton.RenderTransform>
                             <ToggleButton.Template>
                                 <ControlTemplate TargetType="ToggleButton">
@@ -169,7 +285,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Robot1AvailabilityTextBlock"
                                        Text="Inclusion" 
-                                       Margin="-20,110,0,0" 
+                                       Margin="-20,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -235,12 +351,71 @@
                                     Background="{DynamicResource titleColor7}" />
                         </StackPanel>
 
+                        <Grid Margin="8,55,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Column 0 -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,15,4">
+                                <Border x:Name="Robot2BeltSquare" Width="10" Height="10" Background="Gray" 
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Belt" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,4">
+                                <Border x:Name="Robot2TankLvlLowSquare" Width="10" Height="10" Background="Gray" 
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Tank Low" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="0,0,15,4">
+                                <Border x:Name="Robot2TankLvlEmptySquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Tank Empty" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <!-- Column 1 -->
+                            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot2AirPressureSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Air Pressure" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot2AutomaticSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Automatic" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+                        </Grid>
+
                         <Border Width="25" Height="25"
                                 CornerRadius="15"
                                 Background="#f1f2f6"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Margin="140, 100, 0, 0">
+                                Margin="140, 105, 0, 0">
                             <fa:IconImage x:Name="ReadyLamp2"
                                           Icon="Lightbulb"
                                           Width="20"
@@ -252,7 +427,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="ReadyRobot2TextBlock"
                                        Text="Ready" 
-                                       Margin="115,110,0,0" 
+                                       Margin="115,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -262,6 +437,7 @@
                                 </TextBlock.RenderTransform>
                             </TextBlock>
                         </StackPanel>
+                        
                         <ToggleButton x:Name="RobotToggle2"
                                       Width="35" Height="17" 
                                       HorizontalAlignment="Left"
@@ -272,7 +448,7 @@
                                       BorderThickness="0"
                                       Click="Robot2Toggle_Click">
                             <ToggleButton.RenderTransform>
-                                <TranslateTransform Y="-20"/>
+                                <TranslateTransform Y="-15"/>
                             </ToggleButton.RenderTransform>
                             <ToggleButton.Template>
                                 <ControlTemplate TargetType="ToggleButton">
@@ -322,7 +498,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Robot2AvailabilityTextBlock"
                                        Text="Inclusion" 
-                                       Margin="0,110,0,0" 
+                                       Margin="0,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
                                        FontSize="11" 
@@ -334,7 +510,7 @@
                 <Border CornerRadius="10"
                         Background="Transparent"
                         Width="250"
-                        Height="100"
+                        Height="110"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Margin="-70,265,0,0">
@@ -384,9 +560,41 @@
                                        VerticalAlignment="Top"
                                        Padding="5, 0"/>
                             <Border Height="1.5"
-                                    Width="180"
+                                    Width="220"
                                     Background="{DynamicResource titleColor7}" />
                         </StackPanel>
+
+                        <Grid Margin="10,23,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Column 0 -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,15,4">
+                                <Border x:Name="InputBeltSquare" Width="10" Height="10" Background="Gray" 
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Input Belt" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+
+                            <!-- Column 1 -->
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="CentralBeltSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Central Belt" 
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="9"/>
+                            </StackPanel>
+                        </Grid>
 
                         <Border x:Name= "RedLight"
                                 Width="18" Height="18"
@@ -394,7 +602,7 @@
                                 Background="Darkgreen"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Margin="220, 15, 0, 0">
+                                Margin="220, 25, 0, 0">
                         </Border>
                         <Border x:Name="OrangeLight"
                                 Width="18" Height="18"
@@ -402,7 +610,7 @@
                                 Background="DarkGreen"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Margin="220, 40, 0, 0">
+                                Margin="220, 50, 0, 0">
                         </Border>
                         <Border x:Name="GreenLight"
                                 Width="18" Height="18"
@@ -410,13 +618,13 @@
                                 Background="DarkGreen"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Margin="220, 65, 0, 0">
+                                Margin="220, 75, 0, 0">
                         </Border>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Selector" 
                                        Text="Selector in Automatic"
-                                       Margin="0,58,0,0" 
+                                       Margin="0,68,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -425,7 +633,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Line" 
                                        Text="Line Started"
-                                       Margin="0,40,0,0" 
+                                       Margin="0,50,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -434,7 +642,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Emergency" 
                                        Text="Emergency ok"
-                                       Margin="0,20,0,0" 
+                                       Margin="0,30,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -1017,7 +1225,7 @@
                 <Border CornerRadius="10"
                         Background="Transparent"
                         Width="375"
-                        Height="125"
+                        Height="135"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Margin="220,180,0,0">
@@ -1061,7 +1269,7 @@
                                        VerticalAlignment="Top"
                                        Padding="5, 0"/>
                             <Border Height="1.5"
-                                    Width="250"
+                                    Width="340"
                                     Background="{DynamicResource titleColor7}" />
                         </StackPanel>
 
@@ -1069,7 +1277,7 @@
                                   SelectionChanged="BeltSpeedComboBox_SelectionChanged"
                                   Width="120"
                                   Height="20"
-                                  Margin="-100,40,0,0"
+                                  Margin="-100,30,0,0"
                                   SelectedIndex="1"
                                   FontSize="12"
                                   FontWeight="Bold">

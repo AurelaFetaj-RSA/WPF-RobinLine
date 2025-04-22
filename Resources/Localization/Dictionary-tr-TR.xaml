@@ -1,0 +1,25 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+
+    <System:String x:Key="firstMenuItem">Otomatik</System:String>
+    <System:String x:Key="secondMenuItem">Manuel</System:String>
+    <System:String x:Key="thirdMenuItem">RFID</System:String>
+    <System:String x:Key="fourthMenuItem">Siparişler</System:String>
+    <System:String x:Key="fifthMenuItem">Cihazlar</System:String>
+    <System:String x:Key="sixthMenuItem">Ayarlar</System:String>
+    <System:String x:Key="seventhMenuItem">Alarmlar ve Olaylar</System:String>
+    <System:String x:Key="eighthMenuItem">Gizle</System:String>
+    <System:String x:Key="ninthMenuItem">Çıkış</System:String>
+
+    <System:String x:Key="English">İngilizce</System:String>
+    <System:String x:Key="French">Fransızca</System:String>
+    <System:String x:Key="Spanish">İspanyolca</System:String>
+    <System:String x:Key="Italian">İtalyanca</System:String>
+    <System:String x:Key="Chinese">Çince</System:String>
+    <System:String x:Key="Turkish">Türkçe</System:String>
+
+    <System:String x:Key="OpcUaServer">OPC UA Sunucu Adresi: </System:String>
+
+    <System:String x:Key="Robot1Ready">Ready</System:String>
+</ResourceDictionary>

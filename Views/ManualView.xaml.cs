@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,10 +17,11 @@ namespace WPF_App.Views
     /// </summary>
     public partial class ManualView : UserControl
     {
-        private readonly OpcUaClientService _opcUaClient = new OpcUaClientService();
+        private readonly OpcUaClientService _opcUaClient;
         private DispatcherTimer _messageTimer = new DispatcherTimer();
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
         private bool _allowToggle = true;
+        private readonly OpcUaConfigService _config;
 
         public ManualView()
         {
@@ -31,6 +33,9 @@ namespace WPF_App.Views
             _opcUaClient = new OpcUaClientService();
             _messageTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
 
+            _config = App.ServiceProvider.GetService<OpcUaConfigService>();
+            _opcUaClient = App.ServiceProvider.GetService<OpcUaClientService>();
+
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -40,7 +45,8 @@ namespace WPF_App.Views
             try
             {
                 await _opcUaClient.InitializeAsync();
-                await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
+                await _opcUaClient.ConnectAsync(_config.ServerAddress); // Use the shared address
+                //await _opcUaClient.ConnectAsync("opc.tcp://172.31.40.130:48010");
                 //await _opcUaClient.ConnectAsync("opc.tcp://192.31.30.40:48010");
                 await _opcUaClient.SubscribeToNodesAsync();
 

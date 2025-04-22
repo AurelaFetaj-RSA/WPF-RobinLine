@@ -22,31 +22,16 @@ namespace WPF_App.Views
     /// </summary>
     public partial class AutomaticView : UserControl, INotifyPropertyChanged
     {
-        private readonly SemaphoreSlim _initializationLock = new SemaphoreSlim(1, 1);
-        private readonly CancellationTokenSource _disposalTokenSource = new CancellationTokenSource();
         private readonly CancellationTokenSource _tabTokenSource = new CancellationTokenSource();
-        private bool _isDisposed;
-        private bool _isTabInitialized;
-
-        //private readonly CancellationTokenSource _cts = new CancellationTokenSource();
         private RobinConfiguration _currentConfig = new();
+        private Dictionary<Border, int> squareBitMapping = new Dictionary<Border, int>();
 
-        private string _popupAction;
-        private bool _ovenStatus;
         private readonly OpcUaClientService _opcUaClient = new OpcUaClientService();
         private DispatcherTimer _messageTimer = new DispatcherTimer();
-        //private bool _previousReadyState = false;
         private int _previousState = -1;
-        //private int _previousTemperature = int.MinValue;
         private bool _lastOven1TemperatureStatus = false;
         private bool _lastOven2TemperatureStatus = false;
         private bool _lastOvenReadyStatus = false;
-
-        private DispatcherTimer _updateLightsTimer;
-        private bool[] _lightsArray = new bool[12];
-        private bool[] _previousLightsArray = new bool[21];
-
-        private bool[] _previousOutputs;
 
         private IntegerUpDown? _oven1TempSetpointUpDown;
         private IntegerUpDown? _oven1FanPercentageUpDown;
@@ -55,10 +40,98 @@ namespace WPF_App.Views
         private IntegerUpDown? _oven2FanPercentageUpDown;
         private IntegerUpDown? _oven2LampsPercentageUpDown;
 
+        private bool _inputBeltAlarm;
+        private bool _centralBeltAlarm;
+        private bool _robot1BeltAlarm;
+        private bool _robot2BeltAlarm;
+        private bool _robot1TankLvlLowAlarm;
+        private bool _robot1TankLvlEmptyAlarm;
+        private bool _robot2TankLvlLowAlarm;
+        private bool _robot2TankLvlEmptyAlarm;
+        private bool _robot1AirPressureAlarm;
+        private bool _robot2AirPressureAlarm;
+        private bool _robot1AutomaticAlarm;
+        private bool _robot2AutomaticAlarm;
+
+        public bool Robot1BeltAlarm
+        {
+            get => _robot1BeltAlarm;
+            set { _robot1BeltAlarm = value; OnPropertyChanged(nameof(Robot1BeltAlarm)); }
+        }
+
+        public bool Robot1TankLvlLowAlarm
+        {
+            get => _robot1TankLvlLowAlarm;
+            set { _robot1TankLvlLowAlarm = value; OnPropertyChanged(nameof(Robot1TankLvlLowAlarm)); }
+        }
+
+        public bool Robot1TankLvlEmptyAlarm
+        {
+            get => _robot1TankLvlEmptyAlarm;
+            set { _robot1TankLvlEmptyAlarm = value; OnPropertyChanged(nameof(Robot1TankLvlEmptyAlarm)); }
+        }
+
+        public bool Robot1AirPressureAlarm
+        {
+            get => _robot1AirPressureAlarm;
+            set { _robot1AirPressureAlarm = value; OnPropertyChanged(nameof(Robot1AirPressureAlarm)); }
+        }
+
+        public bool Robot1AutomaticAlarm
+        {
+            get => _robot1AutomaticAlarm;
+            set { _robot1AutomaticAlarm = value; OnPropertyChanged(nameof(Robot1AutomaticAlarm)); }
+        }
+
+        public bool Robot2BeltAlarm
+        {
+            get => _robot2BeltAlarm;
+            set { _robot2BeltAlarm = value; OnPropertyChanged(nameof(Robot2BeltAlarm)); }
+        }
+
+        public bool Robot2TankLvlLowAlarm
+        {
+            get => _robot2TankLvlLowAlarm;
+            set { _robot2TankLvlLowAlarm = value; OnPropertyChanged(nameof(Robot2TankLvlLowAlarm)); }
+        }
+
+        public bool Robot2TankLvlEmptyAlarm
+        {
+            get => _robot2TankLvlEmptyAlarm;
+            set { _robot2TankLvlEmptyAlarm = value; OnPropertyChanged(nameof(Robot2TankLvlEmptyAlarm)); }
+        }
+
+        public bool Robot2AirPressureAlarm
+        {
+            get => _robot2AirPressureAlarm;
+            set { _robot2AirPressureAlarm = value; OnPropertyChanged(nameof(Robot2AirPressureAlarm)); }
+        }
+
+        public bool Robot2AutomaticAlarm
+        {
+            get => _robot2AutomaticAlarm;
+            set { _robot2AutomaticAlarm = value; OnPropertyChanged(nameof(Robot2AutomaticAlarm)); }
+        } 
+        
+        public bool InputBeltAlarm
+        {
+            get => _inputBeltAlarm;
+            set { _inputBeltAlarm = value; OnPropertyChanged(nameof(InputBeltAlarm)); }
+        } 
+        
+        public bool CentralBeltAlarm
+        {
+            get => _centralBeltAlarm;
+            set { _centralBeltAlarm = value; OnPropertyChanged(nameof(CentralBeltAlarm)); }
+        }
+
         public AutomaticView()
         {
             InitializeComponent();
             DataContext = this;
+
+            InitializeSquareBitMapping();
+            //HandleAlarms();
 
             // Initialize with configuration
             var config = new RobinLineOpcConfiguration();
@@ -71,6 +144,27 @@ namespace WPF_App.Views
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+        }
+
+        private void InitializeSquareBitMapping()
+        {
+            squareBitMapping = new Dictionary<Border, int>
+            {
+                { InputBeltSquare, 4 },          // A5
+                { CentralBeltSquare, 5 },        // A6
+                { Robot1BeltSquare, 6 },         // A7
+                { Robot2BeltSquare, 7 },         // A8
+                { Robot1TankLvlLowSquare, 8 },   // A9
+                { Robot1TankLvlEmptySquare, 9 }, // A10
+                { Robot2TankLvlLowSquare, 11 },  // A12
+                { Robot2TankLvlEmptySquare, 12 },// A13
+                { Robot1AirPressureSquare, 15 }, // A16
+                
+                // Word 2 (bits 16-31) - Position 2 in array
+                { Robot2AirPressureSquare, 16 }, // A17
+                { Robot1AutomaticSquare, 17 },   // A18
+                { Robot2AutomaticSquare, 18 },   // A19
+            };
         }
 
         private void ApplyConfiguration()
@@ -242,6 +336,9 @@ namespace WPF_App.Views
                             break;
                         case "Restart":
                             HandleRestartRequest((bool)value); ;
+                            break;
+                        case "GeneralAlarms":
+                            HandleAlarms((ushort[])value);
                             break;
                     }
                 }
@@ -728,6 +825,92 @@ namespace WPF_App.Views
                 }
 
                 await Task.Delay(1000, _tabTokenSource.Token);
+            }
+        }
+
+        //private void HandleAlarms(ushort[] alarmsArray)
+        private void HandleAlarms(ushort[] alarmsArray)
+        {
+            try
+            {
+                if (_opcUaClient == null) return;
+
+                //int[] testArray = { 0, 24576, 0, 8, 8 }; // Test data
+                //int[] testArray = { 0, 512, 2, 0, 0 }; // Test data
+                //int[] testArray = { 0, 32768, 16, 4, 16 }; // Test data
+
+                if (alarmsArray is ushort[] ushortArray)
+                {
+                    var testArray = ushortArray.Select(x => (int)x).ToArray();
+
+                    if (testArray?.Length >= 5)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            //DebugOutputTextBlock.Text = "Alarm Status:\n";
+
+                            // Process each position in the array
+                            for (int i = 1; i < testArray.Length; i++) // Skip position 0
+                            {
+                                int wordValue = testArray[i];
+                                string binary16 = Convert.ToString(wordValue, 2).PadLeft(16, '0');
+                                //DebugOutputTextBlock.Text += $"Position {i}: {binary16} ({wordValue})\n";
+                            }
+
+                            // Position 1 (A1-A16)
+                            int word1 = testArray[1];
+                            string binaryWord1 = Convert.ToString(word1, 2).PadLeft(16, '0');
+                            UpdateSquaresFromBits(binaryWord1, 0); // Bits 0-15
+
+                            // Position 2 (A17-A32)
+                            int word2 = testArray[2];
+                            string binaryWord2 = Convert.ToString(word2, 2).PadLeft(16, '0');
+                            UpdateSquaresFromBits(binaryWord2, 16); // Bits 16-31
+
+                            // Position 3 (A33-A48)
+                            int word3 = testArray[3];
+                            string binaryWord3 = Convert.ToString(word3, 2).PadLeft(16, '0');
+                            UpdateSquaresFromBits(binaryWord3, 32); // Bits 32-47
+
+                            // Position 4 (A49-A64)
+                            int word4 = testArray[4];
+                            string binaryWord4 = Convert.ToString(word4, 2).PadLeft(16, '0');
+                            UpdateSquaresFromBits(binaryWord4, 48); // Bits 48-63
+                        });
+                    }
+                }
+                //else if (alarmsArray is int[] intArray)
+                //{
+                //    var testArray = intArray; // Already correct type
+                //}
+            }
+            catch (Exception ex)
+            {
+                ShowMessage($"Monitoring error: {ex.Message}", MessageType.Error);
+                //await Task.Delay(5000, _cts.Token);
+            }
+        }
+
+        private void UpdateSquaresFromBits(string binaryWord, int bitOffset)
+        {
+            foreach (var entry in squareBitMapping)
+            {
+                Border square = entry.Key;
+                int bitPosition = entry.Value;
+
+                // Check if this bit is in the current word
+                if (bitPosition >= bitOffset && bitPosition < bitOffset + 16)
+                {
+                    int relativeBitPos = bitPosition - bitOffset;
+                    char bit = binaryWord[15 - relativeBitPos]; // MSB is index 0
+
+                    Color blueColor = (Color)ColorConverter.ConvertFromString("#3f80cb");
+                    SolidColorBrush blueBrush = new SolidColorBrush(blueColor);
+
+                    square.Background = (bit == '1')
+                        ? new SolidColorBrush(Colors.Red)
+                        : blueBrush;
+                }
             }
         }
 

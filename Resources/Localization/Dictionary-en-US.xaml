@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
 
-    <System:String x:Key="SettingsTitle">Settings View</System:String>
-    <System:String x:Key="subTitle">Welcome to the settings page</System:String>
+    <!--<System:String x:Key="SettingsTitle">Settings View</System:String>
+    <System:String x:Key="subTitle">Welcome to the settings page</System:String>-->
     <System:String x:Key="firstMenuItem">Automatic</System:String>
     <System:String x:Key="secondMenuItem">Manual</System:String>
     <System:String x:Key="thirdMenuItem">RFID</System:String>
@@ -13,11 +13,15 @@
     <System:String x:Key="seventhMenuItem">Alarms And Events</System:String>
     <System:String x:Key="eighthMenuItem">Hide</System:String>
     <System:String x:Key="ninthMenuItem">Exit</System:String>
+    
     <System:String x:Key="English">English</System:String>
     <System:String x:Key="French">French</System:String>
     <System:String x:Key="Spanish">Spanish</System:String>
     <System:String x:Key="Italian">Italian</System:String>
     <System:String x:Key="Chinese">Chinese</System:String>
+    <System:String x:Key="Turkish">Turkish</System:String>
+
+    <System:String x:Key="OpcUaServer">OPC UA Server Address: </System:String>
 
     <System:String x:Key="Robot1Ready">Ready</System:String>
 </ResourceDictionary>
