@@ -5,7 +5,7 @@
              xmlns:views="clr-namespace:WPF_App.Views"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:controls="http://schemas.xceed.com/wpf/xaml/toolkit"
-             Width="1200" Height="1200">
+             Width="600" Height="600">
 
     <UserControl.Resources>
         <Storyboard x:Key="RedLightBlinkStoryboard">
@@ -55,7 +55,8 @@
 
                             <!-- Blue line at the top -->
                             <Grid>
-                                <Rectangle Height="2"
+                                <Rectangle x:Name="Robot1TopLine"
+                                           Height="2"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Top"
                                            Fill="#4471ce"
@@ -321,7 +322,8 @@
 
                             <!-- Blue line at the top -->
                             <Grid>
-                                <Rectangle Height="2"
+                                <Rectangle x:Name="Robot2TopLine"
+                                           Height="2"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Top"
                                            Fill="#3f73d1"
@@ -679,13 +681,14 @@
 
                             <!-- Blue line at the top -->
                             <Grid>
-                                <Rectangle Height="2"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Top"
-                               Fill="#4471ce"
-                               RadiusX="3"
-                               RadiusY="3"
-                               Margin="0,-3,0,10"/>
+                                <Rectangle x:Name="Oven1TopLine"
+                                           Height="2"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Top"
+                                           Fill="#4471ce"
+                                           RadiusX="3"
+                                           RadiusY="3"
+                                           Margin="0,-3,0,10"/>
                                 <Rectangle RadiusX="6"
                                RadiusY="6"
                                Fill="#f2f3f5"/>
@@ -964,7 +967,8 @@
 
                             <!-- Blue line at the top -->
                             <Grid>
-                                <Rectangle Height="2"
+                                <Rectangle x:Name="Oven2TopLine"
+                                           Height="2"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Top"
                                            Fill="#4471ce"

@@ -337,9 +337,9 @@ namespace WPF_App.Views
                         case "Restart":
                             HandleRestartRequest((bool)value); ;
                             break;
-                        case "GeneralAlarms":
-                            HandleAlarms((ushort[])value);
-                            break;
+                        //case "GeneralAlarms":
+                        //    HandleAlarms((ushort[])value);
+                        //    break;
                     }
                 }
                 catch (Exception ex)
@@ -838,6 +838,7 @@ namespace WPF_App.Views
                 //int[] testArray = { 0, 24576, 0, 8, 8 }; // Test data
                 //int[] testArray = { 0, 512, 2, 0, 0 }; // Test data
                 //int[] testArray = { 0, 32768, 16, 4, 16 }; // Test data
+                //int[] testArray = { 0, 15, 16, 4, 16 }; // Test data
 
                 if (alarmsArray is ushort[] ushortArray)
                 {
@@ -862,6 +863,29 @@ namespace WPF_App.Views
                             string binaryWord1 = Convert.ToString(word1, 2).PadLeft(16, '0');
                             UpdateSquaresFromBits(binaryWord1, 0); // Bits 0-15
 
+                            char a1Bit = binaryWord1[15];
+                            Robot1TopLine.Fill = a1Bit == '1'
+                                ? new SolidColorBrush(Colors.Black)
+                                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4471ce"));
+
+                            // A2
+                            char a2Bit = binaryWord1[14];
+                            Oven1TopLine.Fill = a2Bit == '1'
+                                ? new SolidColorBrush(Colors.Black)
+                                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4471ce"));
+
+                            // A3
+                            char a3Bit = binaryWord1[13];
+                            Robot2TopLine.Fill = a3Bit == '1'
+                                ? new SolidColorBrush(Colors.Black)
+                                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4471ce"));
+
+                            // A4
+                            char a4Bit = binaryWord1[12];
+                            Oven2TopLine.Fill = a4Bit == '1'
+                                ? new SolidColorBrush(Colors.Black)
+                                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4471ce"));
+
                             // Position 2 (A17-A32)
                             int word2 = testArray[2];
                             string binaryWord2 = Convert.ToString(word2, 2).PadLeft(16, '0');
@@ -877,12 +901,12 @@ namespace WPF_App.Views
                             string binaryWord4 = Convert.ToString(word4, 2).PadLeft(16, '0');
                             UpdateSquaresFromBits(binaryWord4, 48); // Bits 48-63
                         });
-                    }
+                    //}
                 }
                 //else if (alarmsArray is int[] intArray)
                 //{
                 //    var testArray = intArray; // Already correct type
-                //}
+                }
             }
             catch (Exception ex)
             {

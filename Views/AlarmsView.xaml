@@ -6,7 +6,7 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:controls="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:WPF_App.Views"
-             Height="1100" Width="1100">
+             Height="600" Width="600">
 
     <Viewbox Stretch="Uniform">
         <Grid>
