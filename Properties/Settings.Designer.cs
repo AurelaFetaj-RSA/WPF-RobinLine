@@ -31,5 +31,29 @@ namespace WPF_RobinLine.Properties {
                 return ((string)(this["DbLocalPath"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool R1Simulation {
+            get {
+                return ((bool)(this["R1Simulation"]));
+            }
+            set {
+                this["R1Simulation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool R2Simulation {
+            get {
+                return ((bool)(this["R2Simulation"]));
+            }
+            set {
+                this["R2Simulation"] = value;
+            }
+        }
     }
 }

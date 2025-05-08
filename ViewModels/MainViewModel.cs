@@ -7,32 +7,6 @@ using WPF_App.Views;
 
 namespace WPF_App.ViewModels
 {
-    //public class MainViewModel : ViewModelBase
-    //{
-    //    private ViewModelBase _currentViewModel;
-
-    //    public ViewModelBase CurrentViewModel
-    //    {
-    //        get => _currentViewModel;
-    //        set
-    //        {
-    //            _currentViewModel = value;
-    //            OnPropertyChanged(nameof(CurrentViewModel));
-    //        }
-    //    }
-
-    //    public ICommand ShowAutomaticViewCommand { get; }
-    //    //public ICommand ShowRicetteViewCommand { get; }
-
-    //    public MainViewModel()
-    //    {
-    //        ShowAutomaticViewCommand = new RelayCommand(_ => CurrentViewModel = new AutomaticViewModel());
-    //        //ShowRicetteViewCommand = new RelayCommand(_ => CurrentViewModel = new RicetteViewModel());
-
-    //        // Set default view
-    //        CurrentViewModel = new AutomaticViewModel();
-    //    }
-    //}
 
     public class MainViewModel : INotifyPropertyChanged
     {
@@ -57,12 +31,14 @@ namespace WPF_App.ViewModels
                 _isLoading = value;
                 OnPropertyChanged(nameof(IsLoading));
                 CommandManager.InvalidateRequerySuggested();
+                OnPropertyChanged(nameof(CanSwitchTabs));
             }
         }
+        public bool CanSwitchTabs => !IsLoading;
 
         public ICommand ShowAutomaticViewCommand { get; }
         public ICommand ShowManualViewCommand { get; }
-        public ICommand ShowRFIDViewCommand { get; }
+        public ICommand ShowProductivityViewCommand { get; }
         public ICommand ShowRecpieViewCommand { get; }
         public ICommand ShowDeviceViewCommand { get; }
         public ICommand ShowSettingsViewCommand { get; }
@@ -76,55 +52,143 @@ namespace WPF_App.ViewModels
 
             CurrentView = new AutomaticView();
 
-            ShowAutomaticViewCommand = new RelayCommand(ShowAutomaticView);
-            ShowManualViewCommand = new RelayCommand(ShowManualView);
-            ShowRFIDViewCommand = new RelayCommand(ShowRFIDView);
-            ShowRecpieViewCommand = new RelayCommand(ShowRecipeView);
-            ShowDeviceViewCommand = new RelayCommand(ShowDeviceView);
-            ShowSettingsViewCommand = new RelayCommand(ShowSettingsView);
-            ShowAlarmsViewCommand = new RelayCommand(ShowAlarmsView);
-            ShowHideViewCommand = new RelayCommand(ShowHideView);
+            ShowAutomaticViewCommand = new RelayCommand(ShowAutomaticView, () => CanSwitchTabs);
+            ShowManualViewCommand = new RelayCommand(ShowManualView, () => CanSwitchTabs);
+            ShowProductivityViewCommand = new RelayCommand(ShowProductivityView, () => CanSwitchTabs);
+            ShowRecpieViewCommand = new RelayCommand(ShowRecipeView, () => CanSwitchTabs);
+            ShowDeviceViewCommand = new RelayCommand(ShowDeviceView, () => CanSwitchTabs);
+            ShowSettingsViewCommand = new RelayCommand(ShowSettingsView, () => CanSwitchTabs);
+            ShowAlarmsViewCommand = new RelayCommand(ShowAlarmsView, () => CanSwitchTabs);
+            ShowHideViewCommand = new RelayCommand(ShowHideView, () => CanSwitchTabs);
             // Initialize other commands
         }
 
-        private void ShowAutomaticView()
+        private async void ShowAutomaticView()
         {
-            CurrentView = new AutomaticView();
+            //CurrentView = new AutomaticView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new AutomaticView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
-        private void ShowManualView()
+        private async void ShowManualView()
         {
-            CurrentView = new ManualView();
+            //CurrentView = new ManualView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new ManualView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
-        private void ShowRFIDView()
+        private async void ShowProductivityView()
         {
-            CurrentView = new RFIDView();
+            //CurrentView = new ProductivityView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new ProductivityView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
-        private void ShowRecipeView()
+        private async void ShowRecipeView()
         {
-            CurrentView = new RecipeView();
+            //CurrentView = new RecipeView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new RecipeView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
-        private void ShowDeviceView()
+        private async void ShowDeviceView()
         {
-            CurrentView = new DeviceView();
+            //CurrentView = new DeviceView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new DeviceView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
-        private void ShowSettingsView()
+        private async void ShowSettingsView()
         {
-            CurrentView = new SettingsView();
+            //CurrentView = new SettingsView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new SettingsView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
-        private void ShowAlarmsView()
+        private async void ShowAlarmsView()
         {
-            CurrentView = new AlarmsView();
+            //CurrentView = new AlarmsView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new AlarmsView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
-        private void ShowHideView()
+        private async void ShowHideView()
         {
-            CurrentView = new HideView();
+            //CurrentView = new HideView();
+            try
+            {
+                IsLoading = true;
+                // Simulate loading (replace with your actual loading logic)
+                await Task.Delay(200);
+                CurrentView = new HideView();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         // Implement other methods to show different views

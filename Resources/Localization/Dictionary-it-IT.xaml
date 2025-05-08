@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=System.Runtime">
+    <SolidColorBrush x:Key="titleColor7" Color="#2a3645" />
 
     <!--<System:String x:Key="SettingsTitle">Impostazioni Visualizza</System:String>
     <System:String x:Key="subTitle">Benvenuti alla pagina delle impostazioni</System:String>-->
@@ -20,6 +21,78 @@
     <System:String x:Key="Italian">Italiano</System:String>
     <System:String x:Key="Chinese">Cinese</System:String>
     <System:String x:Key="Turkish">Turco</System:String>
+
+    <!--automatic-->
+    <System:String x:Key="Robot1">Robot 1</System:String>
+    <System:String x:Key="Robot2">Robot 2</System:String>
+    <System:String x:Key="Belt">Cintura</System:String>
+    <System:String x:Key="TankLow">Serbatoio basso</System:String>
+    <System:String x:Key="TankEmpty">Serbatoio vuoto</System:String>
+    <System:String x:Key="AirPressure">Pressione dell'aria</System:String>
+    <System:String x:Key="Automatic">Automatico</System:String>
+    <System:String x:Key="Ready">Pronto</System:String>
+    <System:String x:Key="Inclusion">Inclusione</System:String>
+    <System:String x:Key="Included">Incluso</System:String>
+    <System:String x:Key="Excluded">Escluso</System:String>
+
+    <System:String x:Key="Oven1">Forno 1</System:String>
+    <System:String x:Key="Oven2">Forno 2</System:String>
+    <System:String x:Key="LampsPercentage">Percentuale Lampade</System:String>
+    <System:String x:Key="FanPercentage">Percentuale Ventola</System:String>
+    <System:String x:Key="TemperatureSetpoint">Setpoint Temperatura</System:String>
+    <System:String x:Key="Temperature">Temperatura:</System:String>
+    <System:String x:Key="Reached">Raggiunta</System:String>
+    <System:String x:Key="State">Stato</System:String>
+    <System:String x:Key="Manual">Manuale</System:String>
+    <System:String x:Key="OvenModeSwitchedTo">Modalità forno cambiata in</System:String>
+    <System:String x:Key="GeneralStatus">Stato Generale</System:String>
+    <System:String x:Key="InputBelt">Nastro di Ingresso</System:String>
+    <System:String x:Key="CentralBelt">Nastro Centrale</System:String>
+    <System:String x:Key="SelectorInAutomatic">Selettore in Automatico</System:String>
+    <System:String x:Key="LineStarted">Linea Avviata</System:String>
+    <System:String x:Key="EmergencyOk">Emergenza ok</System:String>
+    <System:String x:Key="GeneralControl">Controllo Generale</System:String>
+    <System:String x:Key="BeltSpeed">Velocità del Nastro</System:String>
+    <System:String x:Key="SlowSpeed">Lenta</System:String>
+    <System:String x:Key="MediumSpeed">Media</System:String>
+    <System:String x:Key="HighSpeed">Alta</System:String>
+    <System:String x:Key="UpdateBuffer">Aggiorna Buffer</System:String>
+    <System:String x:Key="ResetBuffer">Reimposta Buffer</System:String>
+
+    <!--messages-->
+    <System:String x:Key="InitializationFailed">Inizializzazione fallita</System:String>
+    <System:String x:Key="ErrorProcessingUpdate">Errore durante l'elaborazione dell'aggiornamento per</System:String>
+    <System:String x:Key="HandshakeError">Errore di handshake:</System:String>
+    <System:String x:Key="SystemParametersSentAfterRestart">Parametri di sistema inviati dopo la richiesta di riavvio</System:String>
+    <System:String x:Key="FailedToHandleRestart">Impossibile gestire il riavvio:</System:String>
+    <System:String x:Key="FailedToSendParameters">Impossibile inviare alcuni parametri:</System:String>
+    <System:String x:Key="NotReached">Non raggiunto</System:String>
+    <System:String x:Key="FailedToToggleRobot">Impossibile cambiare stato del robot:</System:String>
+    <System:String x:Key="Oven">Forno</System:String>
+    <System:String x:Key="NotReady">Non pronto</System:String>
+    <System:String x:Key="OvenMode">Modalità forno</System:String>
+    <System:String x:Key="FailedToToggleOven">Impossibile cambiare stato del forno</System:String>
+    <System:String x:Key="FailedToUpdateLamps">Impossibile aggiornare le lampade</System:String>
+    <System:String x:Key="InvalidValueForLampsPercentage">Tipo di valore non valido per la percentuale delle lampade del forno</System:String>
+    <System:String x:Key="FailedToUpdateFans">Impossibile aggiornare le ventole</System:String>
+    <System:String x:Key="InvalidValueTypeOvenFansPercentage">Tipo di valore non valido per la percentuale delle ventole del forno</System:String>
+    <System:String x:Key="FailedToUpdateTemperature">Impossibile aggiornare la temperatura</System:String>
+    <System:String x:Key="InvalidValueTypeOvenTemperature">Tipo di valore non valido per la temperatura del forno</System:String>
+    <System:String x:Key="Oven2Included">Forno 2 incluso</System:String>
+    <System:String x:Key="Oven2Excluded">Forno 2 escluso</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenLamps">Tipo di valore non valido per la percentuale delle lampade del forno</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenFansPercentage">Tipo di valore non valido per la percentuale delle ventole del forno</System:String>
+    <System:String x:Key="FailedToUpdateTemperature2">Impossibile aggiornare la temperatura:</System:String>
+    <System:String x:Key="InvalidOvenTemperatureValue">Tipo di valore non valido per la temperatura del forno</System:String>
+    <System:String x:Key="EmergencyModeActivated">Modalità di emergenza attivata!</System:String>
+    <System:String x:Key="AutomaticModeEnabled">Modalità automatica abilitata</System:String>
+    <System:String x:Key="ManualModeEnabled">Modalità manuale abilitata</System:String>
+    <System:String x:Key="CycleRunning">Ciclo in corso</System:String>
+    <System:String x:Key="AlarmTriggered">Allarme attivato</System:String>
+    <System:String x:Key="SelectorMonitoringError">Errore di monitoraggio del selettore:</System:String>
+    <System:String x:Key="BeltSpeedSetMessage">Velocità del nastro impostata su:</System:String>
+    <System:String x:Key="FailedToSetBeltSpeedMessage">Impossibile impostare la velocità del nastro:</System:String>
+
 
     <System:String x:Key="OpcUaServer">Indirizzo del server OPC UA: </System:String>
 

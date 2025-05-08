@@ -85,26 +85,28 @@
 
                     <!-- Popup for Language Selection -->
                     <Popup x:Name="LanguagePopup"
-                       PlacementTarget="{Binding ElementName=LanguageButton}"
-                       Placement="Top"
-                       StaysOpen="False"
-                       AllowsTransparency="True">
+                           PlacementTarget="{Binding ElementName=LanguageButton}"
+                           Placement="Top"
+                           StaysOpen="False"
+                           AllowsTransparency="True">
                         <Border Background="White" 
-                            BorderBrush="Gray" 
-                            BorderThickness="1" 
-                            CornerRadius="5"
-                            Padding="10"
-                            Width="150">
+                                BorderBrush="Gray" 
+                                BorderThickness="1" 
+                                CornerRadius="5"
+                                Padding="10"
+                                Width="150">
                             <StackPanel>
                                 <!-- English Button -->
                                 <Button Click="SetLanguage"
-                                    Tag="en-US"
-                                    HorizontalAlignment="Stretch"
-                                    Padding="5"
-                                    Background="Transparent"
-                                    BorderThickness="0">
+                                        Tag="en-US"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        Padding="8,4"
+                                        Background="Transparent"
+                                        BorderThickness="0">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Images/Flag/icons8-great-britain-96.png" Width="24" Height="16" Margin="5"/>
+                                        <!--<Image Source="/Images/Flag/icons8-great-britain-96.png" Width="24" Height="16" Margin="5"/>-->
+                                        <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-great-britain-96.png" Width="30" Height="20" Margin="0,0,8,0"/>
                                         <TextBlock Text="{DynamicResource English}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
@@ -113,11 +115,13 @@
                                 <Button Click="SetLanguage"
                                     Tag="fr-FR"
                                     HorizontalAlignment="Stretch"
-                                    Padding="5"
+                                    HorizontalContentAlignment="Left"
+                                    Padding="8,4"
                                     Background="Transparent"
                                     BorderThickness="0">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Images/Flag/icons8-france-96.png" Width="24" Height="16" Margin="5"/>
+                                        <!--<Image Source="/Images/Flag/icons8-france-96.png" Width="24" Height="16" Margin="5"/>-->
+                                        <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-france-96.png" Width="30" Height="20" Margin="0,0,8,0"/>
                                         <TextBlock Text="{DynamicResource French}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
@@ -126,11 +130,13 @@
                                 <Button Click="SetLanguage"
                                     Tag="es-ES"
                                     HorizontalAlignment="Stretch"
-                                    Padding="5"
+                                    HorizontalContentAlignment="Left"
+                                    Padding="8,4"
                                     Background="Transparent"
                                     BorderThickness="0">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Images/Flag/icons8-spain-flag-96.png" Width="24" Height="16" Margin="5"/>
+                                        <!--<Image Source="/Images/Flag/icons8-spain-flag-96.png" Width="24" Height="16" Margin="5"/>-->
+                                        <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-spain-flag-96.png" Width="30" Height="20" Margin="0,0,8,0"/>
                                         <TextBlock Text="{DynamicResource Spanish}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
@@ -139,24 +145,28 @@
                                 <Button Click="SetLanguage"
                                     Tag="it-IT"
                                     HorizontalAlignment="Stretch"
-                                    Padding="5"
+                                    HorizontalContentAlignment="Left"
+                                    Padding="8,4"
                                     Background="Transparent"
                                     BorderThickness="0">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Images/Flag/icons8-italy-96 (1).png" Width="24" Height="16" Margin="5"/>
+                                        <!--<Image Source="/Images/Flag/icons8-italy-96 (1).png" Width="24" Height="16" Margin="5"/>-->
+                                        <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-italy-96 (1).png" Width="30" Height="20" Margin="0,0,8,0"/>
                                         <TextBlock Text="{DynamicResource Italian}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
 
                                 <!-- Italian Button -->
                                 <Button Click="SetLanguage"
-                                    Tag="ch-CH"
-                                    HorizontalAlignment="Stretch"
-                                    Padding="5"
-                                    Background="Transparent"
-                                    BorderThickness="0">
+                                        Tag="ch-CH"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        Padding="8,4"
+                                        Background="Transparent"
+                                        BorderThickness="0">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Images/Flag/icons8-china-96.png" Width="24" Height="16" Margin="5"/>
+                                        <!--<Image Source="/Images/Flag/icons8-china-96.png" Width="24" Height="16" Margin="5"/>-->
+                                        <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-china-96.png" Width="30" Height="20" Margin="0,0,8,0"/>
                                         <TextBlock Text="{DynamicResource Chinese}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
@@ -165,11 +175,13 @@
                                 <Button Click="SetLanguage"
                                         Tag="tr-TR"
                                         HorizontalAlignment="Stretch"
-                                        Padding="5"
+                                        HorizontalContentAlignment="Left"
+                                        Padding="8,4"
                                         Background="Transparent"
                                         BorderThickness="0">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Images/Flag/icons8-turkey-96.png" Width="24" Height="16" Margin="5"/>
+                                        <!--<Image Source="/Images/Flag/icons8-turkey-96.png" Width="24" Height="16" Margin="5"/>-->
+                                        <Image Source="C:\Users\Lela\source\repos\WPF-RobinLine\WPF-RobinLine\Images\Flag\icons8-turkey-96.png" Width="30" Height="20" Margin="0,0,8,0"/>
                                         <TextBlock Text="{DynamicResource Turkish}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>

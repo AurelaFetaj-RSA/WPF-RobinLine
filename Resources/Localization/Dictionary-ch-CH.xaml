@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=System.Runtime">
+    <SolidColorBrush x:Key="titleColor7" Color="#2a3645" />
 
     <!--<System:String x:Key="SettingsTitle">设置视图</System:String>
     <System:String x:Key="subTitle">欢迎来到设置页</System:String>-->
@@ -20,6 +21,79 @@
     <System:String x:Key="Italian">意大利语</System:String>
     <System:String x:Key="Chinese">中文</System:String>
     <System:String x:Key="Turkish">土耳其语</System:String>
+
+    <!--automatic-->
+    <System:String x:Key="Robot1">机器人1</System:String>
+    <System:String x:Key="Robot2">机器人2</System:String>
+    <System:String x:Key="Belt">腰带</System:String>
+    <System:String x:Key="TankLow">油量低</System:String>
+    <System:String x:Key="TankEmpty">油箱空</System:String>
+    <System:String x:Key="AirPressure">气压</System:String>
+    <System:String x:Key="Automatic">自动</System:String>
+    <System:String x:Key="Ready">准备就绪</System:String>
+    <System:String x:Key="Inclusion">包含</System:String>
+    <System:String x:Key="Included">已包含</System:String>
+    <System:String x:Key="Excluded">未包含</System:String>
+
+    <System:String x:Key="Oven1">烤箱 1</System:String>
+    <System:String x:Key="Oven2">烤箱 2</System:String>
+    <System:String x:Key="LampsPercentage">灯光百分比</System:String>
+    <System:String x:Key="FanPercentage">风扇百分比</System:String>
+    <System:String x:Key="TemperatureSetpoint">设定温度</System:String>
+    <System:String x:Key="Temperature">温度：</System:String>
+    <System:String x:Key="Reached">已达</System:String>
+    <System:String x:Key="State">状态</System:String>
+    <System:String x:Key="Manual">手动</System:String>
+    <System:String x:Key="OvenModeSwitchedTo">烤箱模式已切换为</System:String>
+    <System:String x:Key="GeneralStatus">总体状态</System:String>
+    <System:String x:Key="InputBelt">输入传送带</System:String>
+    <System:String x:Key="CentralBelt">中央传送带</System:String>
+    <System:String x:Key="SelectorInAutomatic">选择器自动模式</System:String>
+    <System:String x:Key="LineStarted">产线已启动</System:String>
+    <System:String x:Key="EmergencyOk">紧急状态正常</System:String>
+    <System:String x:Key="GeneralControl">总控制</System:String>
+    <System:String x:Key="BeltSpeed">传送带速度</System:String>
+    <System:String x:Key="SlowSpeed">低</System:String>
+    <System:String x:Key="MediumSpeed">中</System:String>
+    <System:String x:Key="HighSpeed">高</System:String>
+    <System:String x:Key="UpdateBuffer">更新缓冲区</System:String>
+    <System:String x:Key="ResetBuffer">重置缓冲区</System:String>
+
+    <!--messages-->
+    <System:String x:Key="InitializationFailed">初始化失败</System:String>
+    <System:String x:Key="ErrorProcessingUpdate">处理更新时出错</System:String>
+    <System:String x:Key="HandshakeError">握手错误：</System:String>
+    <System:String x:Key="SystemParametersSentAfterRestart">重新启动请求后发送系统参数</System:String>
+    <System:String x:Key="FailedToHandleRestart">处理重启失败：</System:String>
+    <System:String x:Key="FailedToSendParameters">无法发送一些参数：</System:String>
+    <System:String x:Key="NotReached">未达到</System:String>
+    <System:String x:Key="FailedToToggleRobot">无法切换机器人状态：</System:String>
+    <System:String x:Key="Oven">烤箱</System:String>
+    <System:String x:Key="NotReady">未准备好</System:String>
+    <System:String x:Key="OvenMode">烤箱模式</System:String>
+    <System:String x:Key="FailedToToggleOven">无法切换烤箱状态</System:String>
+    <System:String x:Key="FailedToUpdateLamps">无法更新灯泡</System:String>
+    <System:String x:Key="InvalidValueForLampsPercentage">烤箱灯泡百分比的无效值类型</System:String>
+    <System:String x:Key="FailedToUpdateFans">无法更新风扇</System:String>
+    <System:String x:Key="InvalidValueTypeOvenFansPercentage">烤箱风扇百分比的无效值类型</System:String>
+    <System:String x:Key="FailedToUpdateTemperature">无法更新温度</System:String>
+    <System:String x:Key="InvalidValueTypeOvenTemperature">烤箱温度的无效值类型</System:String>
+    <System:String x:Key="Oven2Included">烤箱2包含</System:String>
+    <System:String x:Key="Oven2Excluded">烤箱2排除</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenLamps">烤箱灯泡百分比的无效值类型</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenFansPercentage">烤箱风扇百分比的无效值类型</System:String>
+    <System:String x:Key="FailedToUpdateTemperature2">无法更新温度：</System:String>
+    <System:String x:Key="InvalidOvenTemperatureValue">烤箱温度的无效值类型</System:String>
+    <System:String x:Key="EmergencyModeActivated">紧急模式已激活！</System:String>
+    <System:String x:Key="AutomaticModeEnabled">自动模式已启用</System:String>
+    <System:String x:Key="ManualModeEnabled">手动模式已启用</System:String>
+    <System:String x:Key="CycleRunning">循环运行中</System:String>
+    <System:String x:Key="AlarmTriggered">警报已触发</System:String>
+    <System:String x:Key="SelectorMonitoringError">选择器监控错误：</System:String>
+    <System:String x:Key="BeltSpeedSetMessage">传送带速度已设置为：</System:String>
+    <System:String x:Key="FailedToSetBeltSpeedMessage">无法设置传送带速度：</System:String>
+
+
 
     <System:String x:Key="OpcUaServer">OPC UA 服务器地址：</System:String>
 

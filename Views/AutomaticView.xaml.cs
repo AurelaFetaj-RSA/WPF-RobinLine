@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using WPF_App.Services;
 using WPF_RobinLine.Configurations;
+using WPF_RobinLine.Services;
 using Xceed.Wpf.Toolkit;
 using static WPF_App.MainWindow;
 
@@ -52,6 +53,10 @@ namespace WPF_App.Views
         private bool _robot2AirPressureAlarm;
         private bool _robot1AutomaticAlarm;
         private bool _robot2AutomaticAlarm;
+
+        private TcpClientHelper _r1Client;
+        private TcpClientHelper _r2Client;
+        private readonly DatabaseService _dbService;
 
         public bool Robot1BeltAlarm
         {
@@ -129,10 +134,15 @@ namespace WPF_App.Views
         {
             InitializeComponent();
             DataContext = this;
+            string dbPath = WPF_RobinLine.Properties.Settings.Default.DbLocalPath;
+            _dbService = new DatabaseService(
+                $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={dbPath}"
+            );
 
             InitializeSquareBitMapping();
             //HandleAlarms();
-
+            LoadModelNames();
+            InitializeConnectionsAsync();
             // Initialize with configuration
             var config = new RobinLineOpcConfiguration();
             _opcUaClient = new OpcUaClientService();
@@ -144,6 +154,35 @@ namespace WPF_App.Views
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+        }
+
+        public async Task InitializeConnectionsAsync()
+        {
+            // Initialize R1 connection (async)
+            //_r1Client = new TcpClientHelper("172.31.10.146", 9999);
+            _r1Client = new TcpClientHelper("127.0.0.1", 52000);
+            _r1Client.ConnectionStatusChanged += (sender, isConnected) =>
+            {
+                Console.WriteLine($"R1 Connection: {(isConnected ? "Connected" : "Disconnected")}");
+            };
+            _r1Client.MessageReceived += (sender, message) =>
+            {
+                Console.WriteLine($"R1 Message: {message}");
+            };
+            await _r1Client.ConnectAsync();
+
+            // Initialize R2 connection (async)
+            //_r2Client = new TcpClientHelper("172.31.10.156", 9999);
+            _r2Client = new TcpClientHelper("127.0.0.1", 52000);
+            _r2Client.ConnectionStatusChanged += (sender, isConnected) =>
+            {
+                Console.WriteLine($"R2 Connection: {(isConnected ? "Connected" : "Disconnected")}");
+            };
+            _r2Client.MessageReceived += (sender, message) =>
+            {
+                Console.WriteLine($"R2 Message: {message}");
+            };
+            await _r2Client.ConnectAsync();
         }
 
         private void InitializeSquareBitMapping()
@@ -264,7 +303,8 @@ namespace WPF_App.Views
             catch (Exception ex)
             {
                 //ShowMessage($"Initialization failed: {ex.Message}", MessageType.Error);
-                ShowMessage($"Initialization failed", MessageType.Error);
+                ShowMessage((string)FindResource("InitializationFailed"), MessageType.Error);
+                //ShowMessage($"Initialization failed", MessageType.Error);
             }
         }
 
@@ -344,7 +384,10 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Error processing update for {nodeName}: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Error processing update for {nodeName}: {ex.Message}", MessageType.Error);
+                    string errorPrefix = (string)FindResource("ErrorProcessingUpdate");
+                    ShowMessage($"{errorPrefix} {nodeName}: {ex.Message}", MessageType.Error);
+
                 }
             });
         }
@@ -359,7 +402,9 @@ namespace WPF_App.Views
             }
             catch (Exception ex)
             {
-                ShowMessage($"Handshake error: {ex.Message}", MessageType.Error);
+                //ShowMessage($"Handshake error: {ex.Message}", MessageType.Error);
+                string handshakeError = (string)FindResource("HandshakeError");
+                ShowMessage($"{handshakeError} {ex.Message}", MessageType.Error);
                 throw; // Re-throw if you want the outer handler to know about the failure
             }
         }
@@ -374,12 +419,15 @@ namespace WPF_App.Views
                 await SendAllParametersToPLC();
                 await Task.Delay(100); //small delay to ensure PLC processes the values
                 await _opcUaClient.WriteNodeAsync("Restart", false);
-                ShowMessage("System parameters sent after restart request", MessageType.Success);
+                //ShowMessage("System parameters sent after restart request", MessageType.Success);
+                string systemParametersSentMessage = (string)FindResource("SystemParametersSentAfterRestart");
+                ShowMessage(systemParametersSentMessage, MessageType.Success);
             }
             catch (Exception ex)
             {
-                ShowMessage($"Failed to handle restart: {ex.Message}", MessageType.Error);
-                // Consider whether to rethrow the exception here
+                //ShowMessage($"Failed to handle restart: {ex.Message}", MessageType.Error);
+                string failedToHandleRestartMessage = (string)FindResource("FailedToHandleRestart");
+                ShowMessage($"{failedToHandleRestartMessage} {ex.Message}", MessageType.Error);
             }
         }
 
@@ -407,7 +455,9 @@ namespace WPF_App.Views
             }
             catch (Exception ex)
             {
-                ShowMessage($"Failed to send some parameters: {ex.Message}", MessageType.Error);
+                //ShowMessage($"Failed to send some parameters: {ex.Message}", MessageType.Error);
+                string failedToSendParametersMessage = (string)FindResource("FailedToSendParameters");
+                ShowMessage($"{failedToSendParametersMessage} {ex.Message}", MessageType.Error);
                 throw;
             }
         }
@@ -427,7 +477,13 @@ namespace WPF_App.Views
                 // Only show message if status changed (avoid spamming)
                 if (isReached != lastStatus)
                 {
-                    ShowMessage($"Temperature {(isReached ? "reached" : "not reached")}",
+                    //ShowMessage($"Temperature {(isReached ? "reached" : "not reached")}",
+                    //    isReached ? MessageType.Success : MessageType.Warning);
+                    string temperature = (string)FindResource("Temperature");
+                    string reached = (string)FindResource("Reached");
+                    string notReached = (string)FindResource("NotReached");
+
+                    ShowMessage($"{temperature} {(isReached ? reached : notReached)}",
                         isReached ? MessageType.Success : MessageType.Warning);
                 }
 
@@ -441,13 +497,29 @@ namespace WPF_App.Views
             {
                 bool isChecked = (bool)Robot1Toggle.IsChecked;
                 await _opcUaClient.WriteNodeAsync("Robot1Inclusion", isChecked);
-                Robot1AvailabilityTextBlock.Text = isChecked ? "Included" : "Excluded";
-                ShowMessage($"Robot 1 {(isChecked ? "included" : "excluded")}", MessageType.Info);
+
+                var includedText = TryFindResource("Included")?.ToString() ?? "Included";
+                var excludedText = TryFindResource("Excluded")?.ToString() ?? "Excluded";
+
+                Robot1AvailabilityTextBlock.Text = isChecked ? includedText : excludedText;
+                //ShowMessage($"Robot 1 {(isChecked ? includedText : excludedText)}", MessageType.Info);
+                string robot1 = (string)FindResource("Robot1");
+                //string includedText = (string)FindResource("Included");
+                //string excludedText = (string)FindResource("Excluded");
+
+                ShowMessage($"{robot1} {(isChecked ? includedText : excludedText)}", MessageType.Info);
+
+                //Robot1AvailabilityTextBlock.Text = isChecked ? "Included" : "Excluded";
+                //ShowMessage($"Robot 1 {(isChecked ? "included" : "excluded")}", MessageType.Info);
                 SaveCurrentConfiguration();
             }
             catch (Exception ex)
             {
-                ShowMessage($"Failed to toggle robot: {ex.Message}", MessageType.Error);
+                //ShowMessage($"Failed to toggle robot: {ex.Message}", MessageType.Error);
+                string failedToToggleRobot = (string)FindResource("FailedToToggleRobot");
+
+                ShowMessage($"{failedToToggleRobot} {ex.Message}", MessageType.Error);
+
             }
         }
 
@@ -457,13 +529,25 @@ namespace WPF_App.Views
             {
                 bool isChecked = (bool)RobotToggle2.IsChecked;
                 await _opcUaClient.WriteNodeAsync("Robot2Inclusion", isChecked);
-                Robot2AvailabilityTextBlock.Text = isChecked ? "Included" : "Excluded";
-                ShowMessage($"Robot 1 {(isChecked ? "included" : "excluded")}", MessageType.Info);
+
+                var includedText = TryFindResource("Included")?.ToString() ?? "Included";
+                var excludedText = TryFindResource("Excluded")?.ToString() ?? "Excluded";
+
+                Robot2AvailabilityTextBlock.Text = isChecked ? includedText : excludedText;
+                //ShowMessage($"Robot 2 {(isChecked ? includedText : excludedText)}", MessageType.Info);
+                //ShowMessage($"Robot 2 {(isChecked ? includedText : excludedText)}", MessageType.Info);
+                string robot2 = (string)FindResource("Robot2");
+                ShowMessage($"{robot2} {(isChecked ? includedText : excludedText)}", MessageType.Info);
+                //Robot2AvailabilityTextBlock.Text = isChecked ? "Included" : "Excluded";
+                //ShowMessage($"Robot 1 {(isChecked ? "included" : "excluded")}", MessageType.Info);
                 SaveCurrentConfiguration();
             }
             catch (Exception ex)
             {
-                ShowMessage($"Failed to toggle robot: {ex.Message}", MessageType.Error);
+                //ShowMessage($"Failed to toggle robot: {ex.Message}", MessageType.Error);
+                string failedToToggleRobot = (string)FindResource("FailedToToggleRobot");
+                ShowMessage($"{failedToToggleRobot} {ex.Message}", MessageType.Error);
+
             }
         }
 
@@ -475,7 +559,14 @@ namespace WPF_App.Views
                     (Color)ColorConverter.ConvertFromString("#02a29a") : Colors.Red);
                 textBlock.Text = isReady ? "Ready" : "Not Ready";
 
-                ShowMessage($"Oven {(isReady ? "ready" : "not ready")}",
+                //ShowMessage($"Oven {(isReady ? "ready" : "not ready")}",
+                //    isReady ? MessageType.Success : MessageType.Warning);
+
+                string oven = (string)FindResource("Oven");
+                string ready = (string)FindResource("Ready");
+                string notReady = (string)FindResource("NotReady");
+
+                ShowMessage($"{oven} {(isReady ? ready : notReady)}",
                     isReady ? MessageType.Success : MessageType.Warning);
 
                 _lastOvenReadyStatus = isReady;
@@ -484,24 +575,40 @@ namespace WPF_App.Views
 
         private void UpdateModeStatus(bool isAutomatic, Ellipse ellipse, TextBlock textBlock)
         {
+            var automaticText = TryFindResource("Automatic")?.ToString() ?? "Automatic";
+            var manualText = TryFindResource("Manual")?.ToString() ?? "Manual";
+            var ovenModeMessage = TryFindResource("OvenModeSwitchedTo")?.ToString() ?? "Oven mode switched to";
+
             if (isAutomatic)
             {
                 // Automatic Mode (Blue) 
                 ellipse.Fill = new SolidColorBrush(Colors.Blue);
-                textBlock.Text = "Automatic";
+                //textBlock.Text = "Automatic";
+                textBlock.Text = automaticText;
             }
             else
             {
                 // Manual Mode (Orange)
                 ellipse.Fill = new SolidColorBrush(Colors.Orange);
-                textBlock.Text = "Manual";
+                //textBlock.Text = "Manual";
+                textBlock.Text = manualText;
             }
 
             // Only show message if status changed (optional optimization)
             if (isAutomatic != _lastOvenReadyStatus)
             {
-                ShowMessage($"Oven mode switched to {(isAutomatic ? "automatic" : "manual")}",
+                //ShowMessage($"Oven mode switched to {(isAutomatic ? "automatic" : "manual")}",
+                //    isAutomatic ? MessageType.Info : MessageType.Warning);
+                //_lastOvenReadyStatus = isAutomatic;
+
+                string modeText = isAutomatic ? automaticText : manualText;
+                //ShowMessage($"{ovenModeMessage} {modeText}",
+                //    isAutomatic ? MessageType.Info : MessageType.Warning);
+                ovenModeMessage = (string)FindResource("OvenMode");
+                modeText = (string)FindResource(isAutomatic ? "Automatic" : "Manual");
+                ShowMessage($"{ovenModeMessage} {modeText}",
                     isAutomatic ? MessageType.Info : MessageType.Warning);
+
                 _lastOvenReadyStatus = isAutomatic;
             }
         }
@@ -513,12 +620,18 @@ namespace WPF_App.Views
                 bool isChecked = (bool)Oven1Toggle.IsChecked;
                 await _opcUaClient.WriteNodeAsync("Oven1Inclusion", isChecked);
                 AvailabilityTextBlock.Text = isChecked ? "Included" : "Excluded";
-                ShowMessage($"Oven 1 {(isChecked ? "included" : "excluded")}", MessageType.Info);
+                //ShowMessage($"Oven 1 {(isChecked ? "included" : "excluded")}", MessageType.Info);
+                string ovenMessage = (string)FindResource("Oven1");
+                string statusText = (string)FindResource(isChecked ? "Included" : "Excluded");
+                ShowMessage($"{ovenMessage} {statusText}", MessageType.Info);
                 SaveCurrentConfiguration();
             }
             catch (Exception ex)
             {
-                ShowMessage($"Failed to toggle oven: {ex.Message}", MessageType.Error);
+                //ShowMessage($"Failed to toggle oven: {ex.Message}", MessageType.Error);
+                string errorMessage = (string)FindResource("FailedToToggleOven");
+                ShowMessage($"{errorMessage}: {ex.Message}", MessageType.Error);
+
             }
         }
 
@@ -537,12 +650,18 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Failed to update lamps: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Failed to update lamps: {ex.Message}", MessageType.Error);
+                    string errorMessage = (string)FindResource("FailedToUpdateLamps");
+                    ShowMessage($"{errorMessage}: {ex.Message}", MessageType.Error);
+
                 }
             }
             else if (e.NewValue != null)
             {
-                ShowMessage("Invalid value type for oven lamps percentage", MessageType.Error);
+                //ShowMessage("Invalid value type for oven lamps percentage", MessageType.Error);
+                string errorMessage = (string)FindResource("InvalidValueForLampsPercentage");
+                ShowMessage($"{errorMessage}", MessageType.Error);
+
             }
         }
 
@@ -560,12 +679,18 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Failed to update fans: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Failed to update fans: {ex.Message}", MessageType.Error);
+                    string errorMessage = (string)FindResource("FailedToUpdateFans");
+                    ShowMessage($"{errorMessage}: {ex.Message}", MessageType.Error);
+
                 }
             }
             else if (e.NewValue != null)
             {
-                ShowMessage("Invalid value type for oven fans percentage", MessageType.Error);
+                //ShowMessage("Invalid value type for oven fans percentage", MessageType.Error);
+                string errorMessage = (string)FindResource("InvalidValueTypeOvenFansPercentage");
+                ShowMessage($"{errorMessage}", MessageType.Error);
+
             }
         }
 
@@ -583,12 +708,18 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Failed to update temperature: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Failed to update temperature: {ex.Message}", MessageType.Error);
+                    string errorMessage = (string)FindResource("FailedToUpdateTemperature");
+                    ShowMessage($"{errorMessage}: {ex.Message}", MessageType.Error);
+
                 }
             }
             else if (e.NewValue != null)
             {
-                ShowMessage("Invalid value type for oven temperature", MessageType.Error);
+                //ShowMessage("Invalid value type for oven temperature", MessageType.Error);
+                string errorMessage = (string)FindResource("InvalidValueTypeOvenTemperature");
+                ShowMessage(errorMessage, MessageType.Error);
+
             }
         }
 
@@ -599,12 +730,17 @@ namespace WPF_App.Views
                 bool isChecked = (bool)Oven2Toggle.IsChecked;
                 await _opcUaClient.WriteNodeAsync("Oven2Inclusion", isChecked);
                 Availability2TextBlock.Text = isChecked ? "Included" : "Excluded";
-                ShowMessage($"Oven 2 {(isChecked ? "included" : "excluded")}", MessageType.Info);
+                //ShowMessage($"Oven 2 {(isChecked ? "included" : "excluded")}", MessageType.Info);
+                string ovenStatus = (bool)isChecked ? (string)FindResource("Oven2Included") : (string)FindResource("Oven2Excluded");
+                ShowMessage(ovenStatus, MessageType.Info);
+
                 SaveCurrentConfiguration();
             }
             catch (Exception ex)
             {
-                ShowMessage($"Failed to toggle oven: {ex.Message}", MessageType.Error);
+                //ShowMessage($"Failed to toggle oven: {ex.Message}", MessageType.Error);
+                string errorMessage = $"{(string)FindResource("FailedToToggleOven")} {ex.Message}";
+                ShowMessage(errorMessage, MessageType.Error);
             }
         }
 
@@ -622,12 +758,18 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Failed to update lamps: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Failed to update lamps: {ex.Message}", MessageType.Error);
+                    string errorMessage = $"{(string)FindResource("FailedToUpdateLamps")} {ex.Message}";
+                    ShowMessage(errorMessage, MessageType.Error);
+
                 }
             }
             else if (e.NewValue != null)
             {
-                ShowMessage("Invalid value type for oven lamps percentage", MessageType.Error);
+                //ShowMessage("Invalid value type for oven lamps percentage", MessageType.Error);
+                string errorMessage = (string)FindResource("InvalidValueTypeForOvenLamps");
+                ShowMessage(errorMessage, MessageType.Error);
+
             }
         }
 
@@ -645,12 +787,18 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Failed to update fans: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Failed to update fans: {ex.Message}", MessageType.Error);
+                    string errorMessage = string.Format((string)FindResource("FailedToUpdateFans"), ex.Message);
+                    ShowMessage(errorMessage, MessageType.Error);
+
                 }
             }
             else if (e.NewValue != null)
             {
-                ShowMessage("Invalid value type for oven fans percentage", MessageType.Error);
+                //ShowMessage("Invalid value type for oven fans percentage", MessageType.Error);
+                string errorMessage = (string)FindResource("InvalidValueTypeForOvenFansPercentage");
+                ShowMessage(errorMessage, MessageType.Error);
+
             }
         }
 
@@ -668,12 +816,18 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Failed to update temperature: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Failed to update temperature: {ex.Message}", MessageType.Error);
+                    string errorMessage = (string)FindResource("FailedToUpdateTemperature2");
+                    ShowMessage($"{errorMessage} {ex.Message}", MessageType.Error);
+
                 }
             }
             else if (e.NewValue != null)
             {
-                ShowMessage("Invalid value type for oven temperature", MessageType.Error);
+                //ShowMessage("Invalid value type for oven temperature", MessageType.Error);
+                string errorMessage = (string)FindResource("InvalidOvenTemperatureValue");
+                ShowMessage(errorMessage, MessageType.Error);
+
             }
         }
 
@@ -696,27 +850,32 @@ namespace WPF_App.Views
                     case 0:
                         StateText.Text = "Emergency";
                         StateIcon.Fill = new SolidColorBrush(Colors.Red);
-                        ShowMessage("Emergency mode activated!", MessageType.Error);
+                        //ShowMessage("Emergency mode activated!", MessageType.Error);
+                        ShowMessage((string)FindResource("EmergencyModeActivated"), MessageType.Error);
                         break;
                     case 1:
                         StateText.Text = "Automatic";
                         StateIcon.Fill = new SolidColorBrush(Colors.Blue);
-                        ShowMessage("Automatic mode enabled", MessageType.Info);
+                        //ShowMessage("Automatic mode enabled", MessageType.Info);
+                        ShowMessage((string)FindResource("AutomaticModeEnabled"), MessageType.Info);
                         break;
                     case 2:
                         StateText.Text = "Manual";
                         StateIcon.Fill = new SolidColorBrush(Colors.Orange);
-                        ShowMessage("Manual mode enabled", MessageType.Warning);
+                        //ShowMessage("Manual mode enabled", MessageType.Warning);
+                        ShowMessage((string)FindResource("ManualModeEnabled"), MessageType.Warning);
                         break;
                     case 3:
                         StateText.Text = "Cycle";
                         StateIcon.Fill = new SolidColorBrush(Colors.Green);
-                        ShowMessage("Cycle running", MessageType.Success);
+                        //ShowMessage("Cycle running", MessageType.Success);
+                        ShowMessage((string)FindResource("CycleRunning"), MessageType.Success);
                         break;
                     case 4:
                         StateText.Text = "Alarm";
                         StateIcon.Fill = new SolidColorBrush(Colors.DarkOrange);
-                        ShowMessage("Alarm triggered", MessageType.Error);
+                        //ShowMessage("Alarm triggered", MessageType.Error);
+                        ShowMessage((string)FindResource("AlarmTriggered"), MessageType.Error);
                         break;
                 }
                 _previousState = status;
@@ -781,7 +940,8 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Selector monitoring error: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Selector monitoring error: {ex.Message}", MessageType.Error);
+                    ShowMessage(string.Format((string)FindResource("SelectorMonitoringError"), ex.Message), MessageType.Error);
                     await Task.Delay(5000, _tabTokenSource.Token); // Longer delay after error
                 }
 
@@ -820,7 +980,8 @@ namespace WPF_App.Views
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage($"Selector monitoring error: {ex.Message}", MessageType.Error);
+                    //ShowMessage($"Selector monitoring error: {ex.Message}", MessageType.Error);
+                    ShowMessage(string.Format((string)FindResource("SelectorMonitoringError"), ex.Message), MessageType.Error);
                     await Task.Delay(5000, _tabTokenSource.Token); // Longer delay after error
                 }
 
@@ -951,13 +1112,74 @@ namespace WPF_App.Views
                 {
                     // Write to OPC UA node
                     await _opcUaClient.WriteNodeAsync("BeltSpeed", speedValue);
-                    ShowMessage($"Belt speed set to: {selectedItem.Content} (Value: {speedValue})", MessageType.Success);
+                    //ShowMessage($"Belt speed set to: {selectedItem.Content} (Value: {speedValue})", MessageType.Success);
+                    ShowMessage(string.Format((string)FindResource("BeltSpeedSetMessage"), selectedItem.Content, speedValue), MessageType.Success);
                     SaveCurrentConfiguration();
                 }
                 catch (Exception ex)
                 {
                     ShowMessage($"Failed to set belt speed: {ex.Message}", MessageType.Error);
+                    ShowMessage(string.Format((string)FindResource("FailedToSetBeltSpeedMessage"), ex.Message), MessageType.Error);
                 }
+            }
+        }
+
+        private void LoadModelNames()
+        {
+            try
+            {
+                var modelNames = _dbService.GetAllModelNames();
+
+                // Bind to your ComboBox
+                ModelNamesComboBox.ItemsSource = modelNames;
+
+                // Optional: Add empty/default item
+                modelNames.Insert(0, "Select Model");
+                ModelNamesComboBox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Error loading models: {ex.Message}");
+            }
+        }
+
+        private async void ButtonResetRotary_Click(object sender, RoutedEventArgs e)
+        {
+            var result = System.Windows.MessageBox.Show("Are you sure to reset ROBOTS buffer programs?", "Confirm", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes) return;
+
+            if (!WPF_RobinLine.Properties.Settings.Default.R1Simulation)
+                await _r1Client.SendCommandAsync("ROTARY_EMPTY;");
+
+            if (!WPF_RobinLine.Properties.Settings.Default.R2Simulation)
+                await _r2Client.SendCommandAsync("ROTARY_EMPTY;");
+        }
+
+        private async void ButtonUpdateRotary_Click(object sender, RoutedEventArgs e)
+        {
+            var modelName = ModelNamesComboBox.Text;
+            var result = System.Windows.MessageBox.Show($"Are you sure to LOAD ROBOTS buffer programs of model {modelName}?",
+                              "Confirm",
+                              MessageBoxButton.YesNo,
+                              MessageBoxImage.Information);
+            //var result = System.Windows.MessageBox.Show("Reset ROBOTS buffer programs?", "Confirm", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes) return;
+
+            var command = $"ROTARY_LOAD,{modelName},00;";
+            try
+            {
+                if (!WPF_RobinLine.Properties.Settings.Default.R1Simulation)
+                await _r1Client.SendCommandAsync(command);
+
+            if (!WPF_RobinLine.Properties.Settings.Default.R2Simulation)
+                await _r2Client.SendCommandAsync(command);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Error sending command to robots: {ex.Message}",
+                                               "Error",
+                                               MessageBoxButton.OK,
+                                               MessageBoxImage.Error);
             }
         }
 
@@ -1034,6 +1256,8 @@ namespace WPF_App.Views
 
         public void Dispose()
         {
+            _r1Client?.Disconnect();
+            _r2Client?.Disconnect();
             _tabTokenSource.Cancel();
             _messageTimer.Stop();
             _opcUaClient?.Dispose();

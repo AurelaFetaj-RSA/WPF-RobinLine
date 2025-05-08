@@ -5,7 +5,7 @@
              xmlns:views="clr-namespace:WPF_App.Views"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:controls="http://schemas.xceed.com/wpf/xaml/toolkit"
-             Width="600" Height="600">
+             Width="700" Height="700">
 
     <UserControl.Resources>
         <Storyboard x:Key="RedLightBlinkStoryboard">
@@ -32,7 +32,7 @@
 
                 <Border CornerRadius="10"
                         Background="Transparent"
-                        Width="170"
+                        Width="200"
                         Height="155"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
@@ -74,7 +74,7 @@
                                     VerticalAlignment="Top" 
                                     Margin="-10, -5, 0, 0">
                             <TextBlock x:Name="Robot1"
-                                       Text="Robot 1"
+                                       Text="{DynamicResource Robot1}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontSize="15"
                                        FontWeight="Bold"
@@ -82,7 +82,7 @@
                                        VerticalAlignment="Top"
                                        Padding="5, 0"/>
                             <Border Height="1.5"
-                                    Width="145"
+                                    Width="170"
                                     Background="#2a3645" />
                         </StackPanel>
 
@@ -145,7 +145,7 @@
 
                         <Grid Margin="-8,55,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="110"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -155,50 +155,50 @@
                             </Grid.RowDefinitions>
 
                             <!-- Column 0 -->
-                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,15,4">
-                                <Border x:Name="Robot1BeltSquare" Width="10" Height="10" Background="Gray" 
-                CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Belt" 
-                   Foreground="{DynamicResource titleColor7}"
-                   FontWeight="Bold" 
-                   FontSize="9"/>
+                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
+                                <Border x:Name="Robot1AirPressureSquare" Width="10" Height="10" Background="Gray" 
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="{DynamicResource AirPressure}"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,4">
+                            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
                                 <Border x:Name="Robot1TankLvlLowSquare" Width="10" Height="10" Background="Gray" 
-                CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Tank Low" 
-                   Foreground="{DynamicResource titleColor7}"
-                   FontWeight="Bold" 
-                   FontSize="9"/>
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource TankLow}" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="0,0,15,4">
                                 <Border x:Name="Robot1TankLvlEmptySquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
-                VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Tank Empty" 
-                   Foreground="{DynamicResource titleColor7}"
-                   FontWeight="Bold" 
-                   FontSize="9"/>
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="{DynamicResource TankEmpty}" 
+                                                Foreground="{DynamicResource titleColor7}"
+                                                FontWeight="Bold" 
+                                                FontSize="9"/>
                             </StackPanel>
 
                             <!-- Column 1 -->
                             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
-                                <Border x:Name="Robot1AirPressureSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
-                VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Air Pressure" 
-                   Foreground="{DynamicResource titleColor7}"
-                   FontWeight="Bold" 
-                   FontSize="9"/>
+                                <Border x:Name="Robot1BeltSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="-10,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource  Belt}"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,4">
                                 <Border x:Name="Robot1AutomaticSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
-                VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Automatic" 
-                   Foreground="{DynamicResource titleColor7}"
-                   FontWeight="Bold" 
-                   FontSize="9"/>
+                                        VerticalAlignment="Center" Margin="-10,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource Automatic}" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
                             </StackPanel>
                         </Grid>
 
@@ -207,7 +207,7 @@
                                 Background="#f1f2f6"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Margin="120, 105, 0, 0">
+                                Margin="140, 105, 0, 0">
                             <fa:IconImage x:Name="ReadyLamp"
                                           Icon="Lightbulb"
                                           Width="20"
@@ -216,10 +216,10 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                         </Border>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
+                                    HorizontalAlignment="Center" Margin="100,125,0,0">
                             <TextBlock x:Name="ReadyRobot1TextBlock"
-                                       Text="Ready"
-                                       Margin="110,125,0,0" 
+                                       Text="{DynamicResource Ready}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -285,7 +285,7 @@
                         </ToggleButton>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Robot1AvailabilityTextBlock"
-                                       Text="Inclusion" 
+                                       Text="{DynamicResource Inclusion}" 
                                        Margin="-20,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
@@ -298,7 +298,7 @@
 
                 <Border CornerRadius="10"
                         Background="Transparent"
-                        Width="170"
+                        Width="200"
                         Height="155"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
@@ -341,7 +341,7 @@
                                     VerticalAlignment="Top" 
                                     Margin="10, -5, 0, 0">
 
-                            <TextBlock Text="Robot 2"
+                            <TextBlock Text="{DynamicResource Robot2}" 
                                        Foreground="{DynamicResource titleColor7}"
                                        FontSize="15"
                                        FontWeight="Bold"
@@ -349,13 +349,13 @@
                                        VerticalAlignment="Top"
                                        Padding="5, 0"/>
                             <Border Height="1.5"
-                                    Width="145"
+                                    Width="170"
                                     Background="{DynamicResource titleColor7}" />
                         </StackPanel>
 
                         <Grid Margin="8,55,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="110"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -366,18 +366,18 @@
 
                             <!-- Column 0 -->
                             <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,15,4">
-                                <Border x:Name="Robot2BeltSquare" Width="10" Height="10" Background="Gray" 
+                                <Border x:Name="Robot2AirPressureSquare" Width="10" Height="10" Background="Gray" 
                                         CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Belt" 
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="9"/>
+                                    <TextBlock Text="{DynamicResource AirPressure}"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,0,15,4">
                                 <Border x:Name="Robot2TankLvlLowSquare" Width="10" Height="10" Background="Gray" 
                                         CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Tank Low" 
+                                <TextBlock Text="{DynamicResource TankLow}" 
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
                                            FontSize="9"/>
@@ -386,7 +386,7 @@
                             <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="0,0,15,4">
                                 <Border x:Name="Robot2TankLvlEmptySquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Tank Empty" 
+                                <TextBlock Text="{DynamicResource TankEmpty}" 
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
                                            FontSize="9"/>
@@ -394,18 +394,18 @@
 
                             <!-- Column 1 -->
                             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
-                                <Border x:Name="Robot2AirPressureSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
-                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Air Pressure" 
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="9"/>
+                                <Border x:Name="Robot2BeltSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="-10,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource  Belt}"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,4">
                                 <Border x:Name="Robot2AutomaticSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
-                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Automatic" 
+                                        VerticalAlignment="Center" Margin="-10,0,8,0"/>
+                                <TextBlock Text="{DynamicResource Automatic}" 
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
                                            FontSize="9"/>
@@ -417,7 +417,7 @@
                                 Background="#f1f2f6"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                Margin="140, 105, 0, 0">
+                                Margin="160, 105, 0, 0">
                             <fa:IconImage x:Name="ReadyLamp2"
                                           Icon="Lightbulb"
                                           Width="20"
@@ -426,10 +426,10 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                         </Border>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="ReadyRobot2TextBlock"
-                                       Text="Ready" 
-                                       Margin="115,115,0,0" 
+                                       Text="{DynamicResource Ready}" 
+                                       Margin="130,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -438,8 +438,18 @@
                                     <TranslateTransform X="5"/>
                                 </TextBlock.RenderTransform>
                             </TextBlock>
+                        </StackPanel>-->
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
+                                    HorizontalAlignment="Center" Margin="140,125,0,0">
+                            <TextBlock x:Name="ReadyRobot2TextBlock"
+                                       Text="{DynamicResource Ready}"
+                                       Foreground="{DynamicResource titleColor7}"
+                                       FontWeight="Bold" 
+                                       FontSize="12" 
+                                       VerticalAlignment="Center"/>
                         </StackPanel>
-                        
+
                         <ToggleButton x:Name="RobotToggle2"
                                       Width="35" Height="17" 
                                       HorizontalAlignment="Left"
@@ -499,158 +509,13 @@
                         </ToggleButton>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Robot2AvailabilityTextBlock"
-                                       Text="Inclusion" 
+                                       Text="{DynamicResource Inclusion}" 
                                        Margin="0,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
-                                       FontSize="11" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-                <Border CornerRadius="10"
-                        Background="Transparent"
-                        Width="250"
-                        Height="110"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Margin="-70,265,0,0">
-                    <Border.RenderTransform>
-                        <TransformGroup>
-                            <!--<TranslateTransform X="60" />-->
-                            <!--<TranslateTransform Y="-45" />-->
-                        </TransformGroup>
-                    </Border.RenderTransform>
-
-                    <Grid>
-                        <Border Background="#f1f2f6"
-                                CornerRadius="0,0,3,3"
-                                Margin="-1,-11,1,11">
-                            <Border.Effect>
-                                <DropShadowEffect Color="Black"
-                                                  BlurRadius="5"
-                                                  ShadowDepth="1"
-                                                  Opacity="0.6"/>
-                            </Border.Effect>
-
-                            <!-- Blue line at the top -->
-                            <Grid>
-                                <Rectangle Height="2"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Top"
-                                           Fill="#3f73d1"
-                                           RadiusX="3"
-                                           RadiusY="3"
-                                           Margin="0,-3,0,10"/>
-                                <Rectangle RadiusX="6"
-                                           RadiusY="6"
-                                           Fill="#f2f3f5"/>
-                            </Grid>
-                        </Border>
-
-                        <!-- TextBlock Positioned at Top-Left -->
-                        <StackPanel HorizontalAlignment="Left" 
-                                    VerticalAlignment="Top" 
-                                    Margin="10, -5, 0, 0">
-
-                            <TextBlock Text="General Status"
-                                       Foreground="{DynamicResource titleColor7}"
-                                       FontSize="15"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Top"
-                                       Padding="5, 0"/>
-                            <Border Height="1.5"
-                                    Width="220"
-                                    Background="{DynamicResource titleColor7}" />
-                        </StackPanel>
-
-                        <Grid Margin="10,23,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <!-- Column 0 -->
-                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,0,15,4">
-                                <Border x:Name="InputBeltSquare" Width="10" Height="10" Background="Gray" 
-                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Input Belt" 
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="9"/>
-                            </StackPanel>
-
-                            <!-- Column 1 -->
-                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
-                                <Border x:Name="CentralBeltSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
-                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <TextBlock Text="Central Belt" 
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="9"/>
-                            </StackPanel>
-                        </Grid>
-
-                        <Border x:Name= "RedLight"
-                                Width="18" Height="18"
-                                CornerRadius="15"
-                                Background="Darkgreen"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Margin="220, 25, 0, 0">
-                        </Border>
-                        <Border x:Name="OrangeLight"
-                                Width="18" Height="18"
-                                CornerRadius="15"
-                                Background="DarkGreen"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Margin="220, 50, 0, 0">
-                        </Border>
-                        <Border x:Name="GreenLight"
-                                Width="18" Height="18"
-                                CornerRadius="15"
-                                Background="DarkGreen"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Margin="220, 75, 0, 0">
-                        </Border>
-
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock x:Name="Selector" 
-                                       Text="Selector in Automatic"
-                                       Margin="0,68,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
-                                       FontWeight="Bold" 
                                        FontSize="12" 
                                        VerticalAlignment="Center"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock x:Name="Line" 
-                                       Text="Line Started"
-                                       Margin="0,50,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock x:Name="Emergency" 
-                                       Text="Emergency ok"
-                                       Margin="0,30,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
                     </Grid>
                 </Border>
 
@@ -660,7 +525,7 @@
                         Height="155"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="140,0,0,0">
+                        Margin="170,0,0,0">
                     <Border.RenderTransform>
                         <TransformGroup>
                             <!--<TranslateTransform X="60" />-->
@@ -690,8 +555,8 @@
                                            RadiusY="3"
                                            Margin="0,-3,0,10"/>
                                 <Rectangle RadiusX="6"
-                               RadiusY="6"
-                               Fill="#f2f3f5"/>
+                                           RadiusY="6"
+                                           Fill="#f2f3f5"/>
                             </Grid>
                         </Border>
 
@@ -699,102 +564,112 @@
                         <StackPanel HorizontalAlignment="Left" 
                                     VerticalAlignment="Top" 
                                     Margin="-5, -5, 0, 0">
-                            <TextBlock Text="Oven 1"
+                            <TextBlock Text="{DynamicResource Oven1}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontSize="15"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
                                        Padding="5, 0"/>
-                            <Border Height="1.5"
-                                    Width="420"
-                                    Background="{DynamicResource titleColor7}" />
+                            <Border Height="1.5" 
+                                    Width="420" 
+                                    Background="{DynamicResource titleColor7}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Lamps Percentage" 
-                                       Margin="-16,15,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
+
+                        <Grid VerticalAlignment="Top" Margin="0,25,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <!-- Label (Lamps %, Temp Setpoint) -->
+                                <ColumnDefinition Width="50"/>
+                                <!-- Numeric control -->
+                                <ColumnDefinition Width="170"/>
+                                <!-- Label (Fan %, Temperature) -->
+                                <ColumnDefinition Width="50"/>
+                                <!-- Numeric control -->
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <!-- First row (Lamps/Fan %) -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Second row (Temp Setpoint/Temperature) -->
+                            </Grid.RowDefinitions>
+
+                            <!-- Row 0: Lamps Percentage & Fan Percentage -->
+                            <TextBlock Text="{DynamicResource LampsPercentage}"
+                                       Grid.Column="0" Grid.Row="0"
+                                       Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
 
-                            <!--IntegerUpDown with arrows for increment and decrement-->
                             <controls:IntegerUpDown x:Name="Oven1LampsPercentageUpDown"
-                                                    Width="50" 
-                                                    Height="25" 
-                                                    Margin="60,15,0,0" 
-                                                    FontSize="15" 
-                                                    FontWeight="Bold" 
+                                                    Grid.Column="1" Grid.Row="0"
+                                                    Height="25"
+                                                    FontSize="15"
+                                                    FontWeight="Bold"
                                                     VerticalAlignment="Center"
-                                                    Increment="1" 
+                                                    Increment="1"
                                                     Value="0"
-                                                    Minimum="0" 
+                                                    Minimum="0"
                                                     Maximum="100"
                                                     ValueChanged="Oven1LampsPercentageUpDown_ValueChanged"/>
 
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Fan Percentage" 
-                                       Margin="220,15,0,0" 
+                            <TextBlock Text="{DynamicResource FanPercentage}"
+                                       Grid.Column="2" Grid.Row="0"
+                                       Margin="20,0,0,0"
                                        Foreground="{DynamicResource titleColor7}"
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontWeight="Bold"
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
 
-                            <!--IntegerUpDown with arrows for increment and decrement-->
                             <controls:IntegerUpDown x:Name="Oven1FanPercentageUpDown"
-                                                    Width="50" 
+                                                    Grid.Column="3" Grid.Row="0"
                                                     Height="25"
-                                                    Margin="60,15,0,0" 
-                                                    FontSize="15" 
-                                                    FontWeight="Bold" 
-                                                    VerticalAlignment="Center" 
-                                                    Increment="1" 
+                                                    FontSize="15"
+                                                    FontWeight="Bold"
+                                                    VerticalAlignment="Center"
+                                                    Increment="1"
                                                     Value="0"
-                                                    Minimum="0" 
+                                                    Minimum="0"
                                                     Maximum="100"
                                                     ValueChanged="Oven1FanPercentageUpDown_ValueChanged"/>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Temperature setpoint" 
-                                       Margin="-16,40,0,0" 
+                            
+                            <!-- Row 1: Temperature Setpoint & Temperature -->
+                            <TextBlock Text="{DynamicResource TemperatureSetpoint}"
+                                       Grid.Column="0" Grid.Row="2"
                                        Foreground="{DynamicResource titleColor7}"
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontWeight="Bold"
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
-
-                            <!--IntegerUpDown with arrows for increment and decrement-->
+                            
                             <controls:IntegerUpDown x:Name="Oven1TempSetpointUpDown"
-                                                    Width="50" 
-                                                    Height="25" 
-                                                    Margin="40,45,0,0" 
-                                                    FontSize="15" 
-                                                    FontWeight="Bold" 
-                                                    VerticalAlignment="Center" 
-                                                    Increment="1" 
+                                                    Grid.Column="1" Grid.Row="2"
+                                                    Height="25"
+                                                    FontSize="15"
+                                                    FontWeight="Bold"
+                                                    VerticalAlignment="Center"
+                                                    Increment="1"
                                                     Value="0"
-                                                    Minimum="0" 
+                                                    Minimum="0"
                                                     Maximum="100"
                                                     ValueChanged="Oven1TempSetpointUpDown_ValueChanged"/>
-                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Temperature: " 
-                                       Margin="220,45,0,0" 
+                            <TextBlock Text="{DynamicResource Temperature}"
+                                       Grid.Column="2" Grid.Row="2"
+                                       Margin="20,0,0,0"  
                                        Foreground="{DynamicResource titleColor7}"
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontWeight="Bold"
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
 
-                            <TextBlock Name="TemperatureTextBlock" 
-                                       Margin="5,45,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
-                                       FontWeight="Bold" 
-                                       FontSize="15" 
+                            <TextBlock x:Name="TemperatureTextBlock"
+                                       Grid.Column="3" Grid.Row="2"
+                                       Foreground="{DynamicResource titleColor7}"
+                                       FontWeight="Bold"
+                                       FontSize="15"
                                        VerticalAlignment="Center"/>
-                        </StackPanel>
+                        </Grid>
 
                         <Border Name="StatusBorder"
                                 Width="22"
@@ -812,10 +687,10 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                         </Border>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Name="ReachedTextBlock"
-                                       Text="Reached" 
-                                       Margin="250,115,0,0" 
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
+                                    HorizontalAlignment="Center" Margin="115,125,0,0">
+                            <TextBlock x:Name="ReachedTextBlock"
+                                       Text="{DynamicResource Reached}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -838,13 +713,13 @@
 
                                 <!-- State Text below the icon -->
                                 <TextBlock x:Name="OvenStateText" 
-                                           Text="State" 
+                                           Text="{DynamicResource State}"
                                            Foreground="{DynamicResource titleColor7}" 
                                            FontSize="12" 
                                            FontWeight="Bold" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Center" 
-                                           Margin="0,0,0,0"/>
+                                           Margin="5,0,0,0"/>
                             </StackPanel>
 
                         </Border>
@@ -863,10 +738,10 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                         </Border>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
+                                    HorizontalAlignment="Center" Margin="235,125,0,0">
                             <TextBlock x:Name="ReadyOven1TextBlock"
-                                       Text="Ready" 
-                                       Margin="318,115,0,0" 
+                                       Text="{DynamicResource Ready}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -932,7 +807,7 @@
                         </ToggleButton>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="AvailabilityTextBlock" 
-                                       Text="Inclusion"
+                                       Text="{DynamicResource Inclusion}"
                                        Margin="-15,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
@@ -948,7 +823,7 @@
                         Height="155"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="140,40,0,0">
+                        Margin="170,40,0,0">
                     <Border.RenderTransform>
                         <TranslateTransform Y="50"/>
                         <!-- Moves Up -->
@@ -984,7 +859,7 @@
                         <StackPanel HorizontalAlignment="Left" 
                                     VerticalAlignment="Top" 
                                     Margin="-5, -5, 0, 0">
-                            <TextBlock Text="Oven 2"
+                            <TextBlock Text="{DynamicResource Oven2}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontSize="15"
                                        FontWeight="Bold"
@@ -995,90 +870,101 @@
                                     Width="420"
                                     Background="{DynamicResource titleColor7}" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Lamps Percentage" 
-                                       Margin="-16,15,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
+
+                        <Grid VerticalAlignment="Top" Margin="0,25,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <!-- Label (Lamps %, Temp Setpoint) -->
+                                <ColumnDefinition Width="50"/>
+                                <!-- Numeric control -->
+                                <ColumnDefinition Width="170"/>
+                                <!-- Label (Fan %, Temperature) -->
+                                <ColumnDefinition Width="50"/>
+                                <!-- Numeric control -->
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <!-- First row (Lamps/Fan %) -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Second row (Temp Setpoint/Temperature) -->
+                            </Grid.RowDefinitions>
+
+                            <!-- Row 0: Lamps Percentage & Fan Percentage -->
+                            <TextBlock Text="{DynamicResource LampsPercentage}"
+                                       Grid.Column="0" Grid.Row="0"
+                                       Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
 
-                            <!--IntegerUpDown with arrows for increment and decrement-->
                             <controls:IntegerUpDown x:Name="Oven2LampsPercentageUpDown"
-                                                    Width="50" 
+                                                    Grid.Column="1" Grid.Row="0"
                                                     Height="25"
-                                                    Margin="60,15,0,0" 
-                                                    FontSize="15" 
-                                                    FontWeight="Bold" 
-                                                    VerticalAlignment="Center" 
-                                                    Increment="1" 
+                                                    FontSize="15"
+                                                    FontWeight="Bold"
+                                                    VerticalAlignment="Center"
+                                                    Increment="1"
                                                     Value="0"
-                                                    Minimum="0" 
+                                                    Minimum="0"
                                                     Maximum="100"
                                                     ValueChanged="Oven2LampsPercentageUpDown_ValueChanged"/>
-                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Fan Percentage" 
-                                       Margin="220,15,0,0" 
+                            <TextBlock Text="{DynamicResource FanPercentage}"
+                                       Grid.Column="2" Grid.Row="0"
+                                       Margin="20,0,0,0"
                                        Foreground="{DynamicResource titleColor7}"
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontWeight="Bold"
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
 
-                            <!--IntegerUpDown with arrows for increment and decrement-->
                             <controls:IntegerUpDown x:Name="Oven2FanPercentageUpDown"
-                                                    Width="50" 
-                                                    Height="25" 
-                                                    Margin="60,15,0,0" 
-                                                    FontSize="15" 
-                                                    FontWeight="Bold" 
-                                                    VerticalAlignment="Center" 
-                                                    Increment="1" 
+                                                    Grid.Column="3" Grid.Row="0"
+                                                    Height="25"
+                                                    FontSize="15"
+                                                    FontWeight="Bold"
+                                                    VerticalAlignment="Center"
+                                                    Increment="1"
                                                     Value="0"
-                                                    Minimum="0" 
+                                                    Minimum="0"
                                                     Maximum="100"
                                                     ValueChanged="Oven2FanPercentageUpDown_ValueChanged"/>
-                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Temperature setpoint" 
-                                       Margin="-16,40,0,0" 
+                            <!-- Row 1: Temperature Setpoint & Temperature -->
+                            <TextBlock Text="{DynamicResource TemperatureSetpoint}"
+                                       Grid.Column="0" Grid.Row="2"
                                        Foreground="{DynamicResource titleColor7}"
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontWeight="Bold"
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
 
-                            <!--IntegerUpDown with arrows for increment and decrement-->
                             <controls:IntegerUpDown x:Name="Oven2TempSetpointUpDown"
-                                                    Width="50" 
+                                                    Grid.Column="1" Grid.Row="2"
                                                     Height="25"
-                                                    Margin="40,45,0,0" 
-                                                    FontSize="15" 
-                                                    FontWeight="Bold" 
-                                                    VerticalAlignment="Center" 
-                                                    Increment="1" 
+                                                    FontSize="15"
+                                                    FontWeight="Bold"
+                                                    VerticalAlignment="Center"
+                                                    Increment="1"
                                                     Value="0"
-                                                    Minimum="0" 
+                                                    Minimum="0"
                                                     Maximum="100"
                                                     ValueChanged="Oven2TempSetpointUpDown_ValueChanged"/>
-                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Temperature: " 
-                                       Margin="220,48,0,0" 
+                            <TextBlock Text="{DynamicResource Temperature}"
+                                       Grid.Column="2" Grid.Row="2"
+                                       Margin="20,0,0,0"  
                                        Foreground="{DynamicResource titleColor7}"
-                                       FontWeight="Bold" 
-                                       FontSize="12" 
+                                       FontWeight="Bold"
+                                       FontSize="12"
                                        VerticalAlignment="Center"/>
 
-                            <TextBlock Name="Oven2TemperatureTextBlock" 
-                                       Margin="5,46,0,0" 
+                            <TextBlock x:Name="Oven2TemperatureTextBlock"
+                                       Grid.Column="3" Grid.Row="2"
                                        Foreground="{DynamicResource titleColor7}"
-                                       FontWeight="Bold" 
-                                       FontSize="15" 
+                                       FontWeight="Bold"
+                                       FontSize="15"
                                        VerticalAlignment="Center"/>
-                        </StackPanel>
+                        </Grid>
 
                         <Border Width="65" Height="60"
                                 Background="Transparent"
@@ -1096,13 +982,13 @@
 
                                 <!-- State Text below the icon -->
                                 <TextBlock x:Name="Oven2StateText" 
-                                           Text="State" 
+                                           Text="{DynamicResource State}"
                                            Foreground="{DynamicResource titleColor7}"
                                            FontSize="12" 
                                            FontWeight="Bold" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Center" 
-                                           Margin="0,0,0,0"/>
+                                           Margin="5,0,0,0"/>
                             </StackPanel>
 
                         </Border>
@@ -1123,11 +1009,11 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                         </Border>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Name="Oven2ReachedTextBlock"
-                                       Text="Reached" 
-                                       Margin="250,115,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
+                                    HorizontalAlignment="Center" Margin="115,125,0,0">
+                            <TextBlock x:Name="Oven2ReachedTextBlock"
+                                       Text="{DynamicResource Reached}"
+                                       Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
                                        VerticalAlignment="Center"/>
@@ -1147,11 +1033,11 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                         </Border>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
+                                    HorizontalAlignment="Center" Margin="235,125,0,0">
                             <TextBlock x:Name="ReadyOven2TextBlock"
-                                       Text="Ready" 
-                                       Margin="318,115,0,0" 
-                                       Foreground="{DynamicResource titleColor7}" 
+                                       Text="{DynamicResource Ready}"
+                                       Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
                                        VerticalAlignment="Center"/>
@@ -1175,16 +1061,16 @@
                                         <!-- Adjusted Grid size -->
                                         <!-- Background Border -->
                                         <Border x:Name="ToggleBackground"
-                                    Width="35" Height="17" 
-                                    CornerRadius="8"
-                                    Background="Gray"/>
+                                                Width="35" Height="17" 
+                                                CornerRadius="8"
+                                                Background="Gray"/>
 
                                         <!-- Toggle Thumb -->
                                         <Ellipse x:Name="ToggleThumb"
-                                     Width="15" Height="15"  
-                                     Fill="White"
-                                     HorizontalAlignment="Left"
-                                     Margin="2, 0, 0, 0">
+                                                 Width="15" Height="15"  
+                                                 Fill="White"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="2, 0, 0, 0">
                                             <Ellipse.RenderTransform>
                                                 <TranslateTransform x:Name="ThumbTransform"/>
                                             </Ellipse.RenderTransform>
@@ -1216,7 +1102,7 @@
                         </ToggleButton>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                             <TextBlock x:Name="Availability2TextBlock" 
-                                       Text="Inclusion"
+                                       Text="{DynamicResource Inclusion}"
                                        Margin="-15,115,0,0" 
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
@@ -1228,11 +1114,155 @@
 
                 <Border CornerRadius="10"
                         Background="Transparent"
-                        Width="375"
-                        Height="135"
+                        Width="225"
+                        Height="130"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="220,180,0,0">
+                        Margin="-70,265,0,0">
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <!--<TranslateTransform X="60" />-->
+                            <!--<TranslateTransform Y="-45" />-->
+                        </TransformGroup>
+                    </Border.RenderTransform>
+
+                    <Grid>
+                        <Border Background="#f1f2f6"
+                                CornerRadius="0,0,3,3"
+                                Margin="-1,-11,1,11">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black"
+                                                  BlurRadius="5"
+                                                  ShadowDepth="1"
+                                                  Opacity="0.6"/>
+                            </Border.Effect>
+
+                            <!-- Blue line at the top -->
+                            <Grid>
+                                <Rectangle Height="2"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Top"
+                                           Fill="#3f73d1"
+                                           RadiusX="3"
+                                           RadiusY="3"
+                                           Margin="0,-3,0,10"/>
+                                <Rectangle RadiusX="6"
+                                           RadiusY="6"
+                                           Fill="#f2f3f5"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- TextBlock Positioned at Top-Left -->
+                        <StackPanel HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Margin="10, -5, 0, 0">
+
+                            <TextBlock Text="{DynamicResource GeneralStatus}"
+                                       Foreground="{DynamicResource titleColor7}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Padding="5, 0"/>
+                            <Border Height="1.5"
+                                    Width="200"
+                                    Background="{DynamicResource titleColor7}" />
+                        </StackPanel>
+
+                        <Grid Margin="10,23,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Column 0 -->
+                            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,78,15,4">
+                                <Border x:Name="InputBeltSquare" Width="10" Height="10" Background="Gray" 
+                                        CornerRadius="2" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource InputBelt}"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
+                            </StackPanel>
+
+                            <!-- Column 1 -->
+                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Margin="10,78,0,4">
+                                <Border x:Name="CentralBeltSquare" Width="10" Height="10" Background="Gray" CornerRadius="2" 
+                                        VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource CentralBelt}"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="9"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border x:Name= "RedLight"
+                                Width="18" Height="18"
+                                CornerRadius="15"
+                                Background="Darkgreen"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Margin="195, 25, 0, 0">
+                        </Border>
+                        <Border x:Name="OrangeLight"
+                                Width="18" Height="18"
+                                CornerRadius="15"
+                                Background="DarkGreen"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Margin="195, 50, 0, 0">
+                        </Border>
+                        <Border x:Name="GreenLight"
+                                Width="18" Height="18"
+                                CornerRadius="15"
+                                Background="DarkGreen"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Margin="195, 75, 0, 0">
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                            <TextBlock x:Name="Selector" 
+                                       Text="{DynamicResource SelectorInAutomatic}"
+                                       Margin="0,58,0,0" 
+                                       Foreground="{DynamicResource titleColor7}" 
+                                       FontWeight="Bold" 
+                                       FontSize="12" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                            <TextBlock x:Name="Line"
+                                       Text="{DynamicResource LineStarted}"
+                                       Margin="0,40,0,0" 
+                                       Foreground="{DynamicResource titleColor7}" 
+                                       FontWeight="Bold" 
+                                       FontSize="12" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                            <TextBlock x:Name="Emergency" 
+                                       Text="{DynamicResource EmergencyOk}"
+                                       Margin="0,20,0,0" 
+                                       Foreground="{DynamicResource titleColor7}" 
+                                       FontWeight="Bold" 
+                                       FontSize="12" 
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border CornerRadius="10"
+                        Background="Transparent"
+                        Width="435"
+                        Height="155"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="190,180,0,0">
                     <Grid>
 
                         <Border Background="#f1f2f6"
@@ -1265,7 +1295,7 @@
                                     VerticalAlignment="Top" 
                                     Margin="-10, 80, 0, 0">
 
-                            <TextBlock Text="General Control"
+                            <TextBlock Text="{DynamicResource GeneralControl}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontSize="15"
                                        FontWeight="Bold"
@@ -1273,15 +1303,15 @@
                                        VerticalAlignment="Top"
                                        Padding="5, 0"/>
                             <Border Height="1.5"
-                                    Width="340"
+                                    Width="400"
                                     Background="{DynamicResource titleColor7}" />
                         </StackPanel>
 
                         <ComboBox x:Name="BeltSpeedComboBox"
                                   SelectionChanged="BeltSpeedComboBox_SelectionChanged"
-                                  Width="120"
-                                  Height="20"
-                                  Margin="-100,30,0,0"
+                                  Width="90"
+                                  Height="22"
+                                  Margin="-140,10,0,0"
                                   SelectedIndex="1"
                                   FontSize="12"
                                   FontWeight="Bold">
@@ -1289,13 +1319,23 @@
                                 <TranslateTransform Y="42"/>
                                 <!-- Moves Up -->
                             </ComboBox.RenderTransform>
-                            <ComboBoxItem Content="Slow Speed" Tag="1"/>
+                            <!--<ComboBoxItem Content="Slow Speed" Tag="1"/>
                             <ComboBoxItem Content="Medium Speed" Tag="2" IsSelected="True"/>
-                            <ComboBoxItem Content="High Speed" Tag="3"/>
+                            <ComboBoxItem Content="High Speed" Tag="3"/>-->
+
+                            <ComboBoxItem Tag="1">
+                                <TextBlock Text="{DynamicResource SlowSpeed}" />
+                            </ComboBoxItem>
+                            <ComboBoxItem Tag="2" IsSelected="True">
+                                <TextBlock Text="{DynamicResource MediumSpeed}" />
+                            </ComboBoxItem>
+                            <ComboBoxItem Tag="3">
+                                <TextBlock Text="{DynamicResource HighSpeed}" />
+                            </ComboBoxItem>
                         </ComboBox>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
-                            <TextBlock Text="Belt Speed"
+                            <TextBlock Text="{DynamicResource BeltSpeed}"
                                        Margin="-18,50,0,0" 
                                        Foreground="{DynamicResource titleColor7}" 
                                        FontWeight="Bold" 
@@ -1310,114 +1350,10 @@
                             </TextBlock>
                         </StackPanel>
 
-                        <!--SelectionChanged="BeltSpeedComboBox_SelectionChanged"-->
-
-                        <!--<Button Width="50" Height="60"
-                    BorderThickness="0"
-                    HorizontalAlignment="Left"
-                    Cursor="Hand"
-                    VerticalAlignment="Top"
-                    Click="StartStopButton_Click"
-                    Margin="-5,85,0,0">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent">
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                -->
-                        <!-- Icon -->
-                        <!--
-                                <fa:IconImage Icon="{Binding PlayStopIcon}"
-                                              Width="30"
-                                              Height="30"
-                                              Foreground="#3f73d1"/>
-
-                                -->
-                        <!-- Text -->
-                        <!--
-                                <TextBlock Text="{Binding PlayStopText}" 
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontSize="12"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,5,0,0"/>
-                            </StackPanel>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-
-            <Button Width="50" Height="60"
-                    BorderThickness="0"
-                    HorizontalAlignment="Left"
-                    Cursor="Hand"
-                    VerticalAlignment="Top"
-                    Margin="-5,150,0,0"
-                    Click="PauseButton_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent">
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                -->
-                        <!-- Icon -->
-                        <!--
-                                <fa:IconImage Icon="Pause"
-                                              Width="30"
-                                              Height="30"
-                                              Foreground="#3f73d1"/>
-
-                                -->
-                        <!-- Text -->
-                        <!--
-                                <TextBlock Text="Pause" 
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontSize="12"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,5,0,0"/>
-                            </StackPanel>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-
-            <Button Width="50" Height="60"
-                    BorderThickness="0"
-                    HorizontalAlignment="Left"
-                    Cursor="Hand"
-                    VerticalAlignment="Top"
-                    Margin="-5,220,0,0"
-                    Click="ResetButton_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent">
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                -->
-                        <!-- Icon -->
-                        <!--
-                                <fa:IconImage Icon="Sync"
-                                              Width="30"
-                                              Height="30"
-                                              Foreground="#3f73d1"/>
-
-                                -->
-                        <!-- Text -->
-                        <!--
-                                <TextBlock Text="Reset" 
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontSize="12"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           Margin="0,5,0,0"/>
-                            </StackPanel>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>-->
-
                         <Border Width="65" Height="60"
                                 Background="Transparent"
                                 BorderThickness="0"
-                                Margin="280,50,0,0"
+                                Margin="-390,80,0,0"
                                 VerticalAlignment="Top">
                             <Border.RenderTransform>
                                 <TranslateTransform Y="65"/>
@@ -1429,7 +1365,8 @@
                                 <Ellipse x:Name="StateIcon" Width="30" Height="30" Fill="#3f73d1" Margin="0,0,0,0"/>
 
                                 <!-- State Text below the icon -->
-                                <TextBlock x:Name="StateText" Text="State" 
+                                <TextBlock x:Name="StateText" 
+                                           Text="{DynamicResource State}"
                                            Foreground="{DynamicResource titleColor7}"
                                            FontSize="12" 
                                            FontWeight="Bold" 
@@ -1440,91 +1377,36 @@
 
                         </Border>
 
-                        <!--<Popup x:Name="ConfirmPopup" 
-                               IsOpen="False" 
-                               HorizontalAlignment="Left" 
-                               AllowsTransparency="True"
-                               VerticalAlignment="Top"
-                               Placement="Bottom" 
-                               PlacementTarget="{Binding ElementName=StartStopButton}" 
-                               StaysOpen="False" 
-                               HorizontalOffset="-50" 
-                               VerticalOffset="-200">
-                            <Border CornerRadius="15" Background="White" BorderBrush="Red" BorderThickness="0" Padding="10,25,10,10" Width="250" Height="100">
-                                <StackPanel>
-                                    -->
-                        <!-- Confirmation Message -->
-                        <!--
-                                    <TextBlock Text="{Binding ConfirmationMessage}" 
-                                               HorizontalAlignment="Center" 
-                                               FontSize="12" 
-                                               Foreground="#555555" 
-                                               FontWeight="Bold"
-                                               Margin="0,0,0,20"/>
+                        <ComboBox x:Name="ModelNamesComboBox"
+                                  Width="80"
+                                  Height="22"
+                                  FontSize="10"
+                                  Margin="90,0,0,0"
+                                  VerticalAlignment="Center"
+                                  DisplayMemberPath="."
+                                  SelectedValuePath=".">
+                            <ComboBox.RenderTransform>
+                                <TranslateTransform Y="47"/>
+                            </ComboBox.RenderTransform>
+                        </ComboBox>
 
-                                    -->
-                        <!-- Buttons Panel -->
-                        <!--
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        -->
-                        <!-- Yes Button -->
-                        <!--
-                                        <Button Content="Yes" 
-                                                Click="YesButton_Click" 
-                                                Margin="10,0" 
-                                                Width="60" 
-                                                Height="25" 
-                                                FontSize="14" 
-                                                FontWeight="Bold" 
-                                                Background="#4CAF50" 
-                                                Foreground="White" 
-                                                BorderBrush="#388E3C" 
-                                                BorderThickness="1" 
-                                                Cursor="Hand">
-                                            <Button.Template>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border Background="{TemplateBinding Background}" 
-                                                            BorderBrush="{TemplateBinding BorderBrush}" 
-                                                            BorderThickness="1" 
-                                                            CornerRadius="5">
-                                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                                          VerticalAlignment="Center" />
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
+                        <Button Content="{DynamicResource UpdateBuffer}" 
+                                Click="ButtonUpdateRotary_Click" 
+                                Width="110" Height="22"
+                                Margin="287,0,0,0">
+                            <Button.RenderTransform>
+                                <TranslateTransform Y="47"/>
+                            </Button.RenderTransform>
+                        </Button>
 
-                                        -->
-                        <!-- No Button -->
-                        <!--
-                                        <Button Content="No" 
-                                                Click="NoButton_Click" 
-                                                Margin="10,0" 
-                                                Width="60" 
-                                                Height="25" 
-                                                FontSize="14" 
-                                                FontWeight="Bold" 
-                                                Background="#F44336" 
-                                                Foreground="White" 
-                                                BorderBrush="#D32F2F" 
-                                                BorderThickness="1" 
-                                                Cursor="Hand">
-                                            <Button.Template>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border Background="{TemplateBinding Background}" 
-                                                            BorderBrush="{TemplateBinding BorderBrush}" 
-                                                            BorderThickness="1" 
-                                                            CornerRadius="5">
-                                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                                          VerticalAlignment="Center" />
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </Popup>-->
+                        <Button Content="{DynamicResource ResetBuffer}"
+                                Click="ButtonResetRotary_Click" 
+                                Width="110" Height="22"
+                                Margin="287,50,0,0">
+                            <Button.RenderTransform>
+                                <TranslateTransform Y="55"/>
+                            </Button.RenderTransform>
+                        </Button>
                     </Grid>
                 </Border>
 
@@ -1540,7 +1422,7 @@
                     <Border.RenderTransform>
                         <TransformGroup>
                             <TranslateTransform X="180" />
-                            <TranslateTransform Y="130" />
+                            <TranslateTransform Y="150" />
                         </TransformGroup>
                     </Border.RenderTransform>
 

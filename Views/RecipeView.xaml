@@ -4,7 +4,7 @@
              xmlns:viewModel="clr-namespace:WPF_App.ViewModels"
              xmlns:views="clr-namespace:WPF_App.Views" xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              Height="600" Width="600">
-    
+
     <Viewbox Stretch="Uniform">
         <Grid>
             <Border CornerRadius="10"
@@ -63,14 +63,14 @@
                                                            Margin="0,0,0,0"
                                                            Visibility="Collapsed"/>
 
-                                                    <!-- Tab background (changes on selection) -->
-                                                    <Rectangle x:Name="TabBackground"
+                                                <!-- Tab background (changes on selection) -->
+                                                <Rectangle x:Name="TabBackground"
                                                                RadiusX="2"
                                                                RadiusY="2"
                                                                Fill="LightGray"
                                                                Margin="0,4,0,0"/>
 
-                                                        <ContentPresenter ContentSource="Header"
+                                                <ContentPresenter ContentSource="Header"
                                                                           HorizontalAlignment="Center"
                                                                           VerticalAlignment="Center"
                                                                           Margin="10,1"/>
@@ -107,9 +107,20 @@
                                              Margin="20,10,0,0"
                                              VerticalAlignment="Center"/>
 
+                                    <Button x:Name="KeyboardButton"
+                                            Content="⌨" 
+                                            Margin="10,10,0,0"
+                                            Width="30"
+                                            Padding="0"
+                                            VerticalAlignment="Center"
+                                            Click="KeyboardButton_Click"
+                                            ToolTip="Show on-screen keyboard"
+                                            FontSize="14"
+                                            FontWeight="Bold"/>
+
                                     <Button x:Name="AddModelNameButton"
                                             Content="Add"
-                                            Margin="180,10,0,0"
+                                            Margin="160,10,0,0"
                                             Padding="8,2"
                                             VerticalAlignment="Center"
                                             Click="AddModelNameButton_Click"/>
@@ -119,6 +130,26 @@
                                     <TextBlock x:Name="RobotFlag"
                                                Text="Robot working flag" 
                                                Margin="5,55,0,0" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="10" 
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                                    <TextBlock x:Name="Robot1"
+                                               Text="Robot 1" 
+                                               Margin="60,85,0,0" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="10" 
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                                    <TextBlock x:Name="Robot2"
+                                               Text="Robot 2" 
+                                               Margin="60,115,0,0" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontWeight="Bold" 
                                                FontSize="10" 
@@ -135,7 +166,7 @@
                                               BorderThickness="0"
                                               Click="R1CentralLineToggle_Click">
                                     <ToggleButton.RenderTransform>
-                                        <TranslateTransform Y="-185"/>
+                                        <TranslateTransform Y="-156"/>
                                     </ToggleButton.RenderTransform>
                                     <ToggleButton.Template>
                                         <ControlTemplate TargetType="ToggleButton">
@@ -185,7 +216,7 @@
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                                     <TextBlock x:Name="CentralLine"
                                                Text="central line" 
-                                               Margin="160,57,0,0" 
+                                               Margin="160,87,0,0" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontWeight="Bold" 
                                                FontSize="8" 
@@ -202,7 +233,7 @@
                                               BorderThickness="0"
                                               Click="R1ContourLineToggle_Click">
                                     <ToggleButton.RenderTransform>
-                                        <TranslateTransform Y="-185"/>
+                                        <TranslateTransform Y="-156"/>
                                     </ToggleButton.RenderTransform>
                                     <ToggleButton.Template>
                                         <ControlTemplate TargetType="ToggleButton">
@@ -252,7 +283,7 @@
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                                     <TextBlock x:Name="ContourLine"
                                                Text="contour line" 
-                                               Margin="270,57,0,0" 
+                                               Margin="270,87,0,0" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontWeight="Bold" 
                                                FontSize="8" 
@@ -269,7 +300,7 @@
                                               BorderThickness="0"
                                               Click="R1InternalContourLineToggle_Click">
                                     <ToggleButton.RenderTransform>
-                                        <TranslateTransform Y="-185"/>
+                                        <TranslateTransform Y="-156"/>
                                     </ToggleButton.RenderTransform>
                                     <ToggleButton.Template>
                                         <ControlTemplate TargetType="ToggleButton">
@@ -319,7 +350,7 @@
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                                     <TextBlock x:Name="InternalContourLine"
                                                Text="internal contour line" 
-                                               Margin="380,57,0,0" 
+                                               Margin="380,87,0,0" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontWeight="Bold" 
                                                FontSize="8" 
@@ -336,7 +367,7 @@
                                               BorderThickness="0"
                                               Click="R2CentralLineToggle_Click">
                                     <ToggleButton.RenderTransform>
-                                        <TranslateTransform Y="-156"/>
+                                        <TranslateTransform Y="-127"/>
                                     </ToggleButton.RenderTransform>
                                     <ToggleButton.Template>
                                         <ControlTemplate TargetType="ToggleButton">
@@ -385,12 +416,12 @@
                                 </ToggleButton>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                                     <TextBlock x:Name="R2CentralLine"
-                                   Text="central line" 
-                                   Margin="160,87,0,0" 
-                                   Foreground="{DynamicResource titleColor7}"
-                                   FontWeight="Bold" 
-                                   FontSize="8" 
-                                   VerticalAlignment="Center"/>
+                                               Text="central line" 
+                                               Margin="160,117,0,0" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="8" 
+                                               VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <ToggleButton x:Name="R2ContourLineToggle"
@@ -403,7 +434,7 @@
                                               BorderThickness="0"
                                               Click="R2ContourLineToggle_Click">
                                     <ToggleButton.RenderTransform>
-                                        <TranslateTransform Y="-156"/>
+                                        <TranslateTransform Y="-127"/>
                                     </ToggleButton.RenderTransform>
                                     <ToggleButton.Template>
                                         <ControlTemplate TargetType="ToggleButton">
@@ -452,12 +483,12 @@
                                 </ToggleButton>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                                     <TextBlock x:Name="R2ContourLine"
-                                   Text="contour line" 
-                                   Margin="270,87,0,0" 
-                                   Foreground="{DynamicResource titleColor7}"
-                                   FontWeight="Bold" 
-                                   FontSize="8" 
-                                   VerticalAlignment="Center"/>
+                                               Text="contour line" 
+                                               Margin="270,117,0,0" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="8" 
+                                               VerticalAlignment="Center"/>
                                 </StackPanel>
 
                                 <ToggleButton x:Name="R2InternalContourLineToggle"
@@ -470,7 +501,7 @@
                                               BorderThickness="0"
                                               Click="R2InternalContourLineToggle_Click">
                                     <ToggleButton.RenderTransform>
-                                        <TranslateTransform Y="-156"/>
+                                        <TranslateTransform Y="-127"/>
                                     </ToggleButton.RenderTransform>
                                     <ToggleButton.Template>
                                         <ControlTemplate TargetType="ToggleButton">
@@ -519,12 +550,12 @@
                                 </ToggleButton>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                                     <TextBlock x:Name="R2InternalContourLine"
-                                   Text="internal contour line" 
-                                   Margin="380,87,0,0" 
-                                   Foreground="{DynamicResource titleColor7}"
-                                   FontWeight="Bold" 
-                                   FontSize="8" 
-                                   VerticalAlignment="Center"/>
+                                               Text="internal contour line" 
+                                               Margin="380,117,0,0" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="8" 
+                                               VerticalAlignment="Center"/>
                                 </StackPanel>
 
                             </Grid>
@@ -535,7 +566,7 @@
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
                                     <TextBlock x:Name="EditModelName"
                                                Text="Model Name"
-                                               Margin="5,-59,0,0" 
+                                               Margin="5,12,0,0" 
                                                Foreground="{DynamicResource titleColor7}"
                                                FontWeight="Bold" 
                                                FontSize="10" 
@@ -545,32 +576,33 @@
                                              Margin="20,-59,0,0"
                                              VerticalAlignment="Center"/>-->
                                     <ComboBox x:Name="ModelNamesComboBox"
-                                              Width="80"
-                                              Margin="20,-59,0,0"
+                                              Width="90"
+                                              FontSize="10"
+                                              Margin="15,12,0,0"
                                               VerticalAlignment="Center"
                                               DisplayMemberPath="."
                                               SelectedValuePath="."
                                               SelectionChanged="ModelNamesComboBox_SelectionChanged"/>
 
-                                    <Button x:Name="DeleteModelNameButton"
+                                    <!--<Button x:Name="DeleteModelNameButton"
                                             Content="Delete"
                                             Width="60"
                                             Height="20"
-                                            Margin="-260,20,0,0"
+                                            Margin="-260,80,0,0"
                                             Padding="8,2"
                                             VerticalAlignment="Center"
-                                            Click="DeleteModelNameButton_Click"/>
+                                            Click="DeleteModelNameButton_Click"/>-->
 
-                                    <Button x:Name="ViewModelNameButton"
+                                    <!--<Button x:Name="ViewModelNameButton"
                                             Content="View"
                                             Width="60"
                                             Height="20"
                                             Margin="-260,80,0,0"
                                             Padding="8,2"
                                             VerticalAlignment="Center"
-                                            Click="ViewModelNameButton_Click"/>
+                                            Click="ViewModelNameButton_Click"/>-->
 
-                                    <Button x:Name="UpdateModelButton"
+                                    <!--<Button x:Name="UpdateModelButton"
                                             Content="Update"
                                             Width="60"
                                             Height="20"
@@ -578,8 +610,31 @@
                                             Padding="8,2"
                                             VerticalAlignment="Center"
                                             Click="UpdateModelButton_Click"
-                                            Visibility="Collapsed"/>
+                                            Visibility="Collapsed"/>-->
                                     <!-- Initially hidden -->
+                                </StackPanel>
+
+                                <StackPanel  Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                                    <Button x:Name="DeleteModelNameButton"
+                                            Content="Delete"
+                                            Width="60"
+                                            Height="20"
+                                            Margin="5,60,0,0"
+                                            Padding="8,2"
+                                            VerticalAlignment="Center"
+                                            Click="DeleteModelNameButton_Click"/>
+                                </StackPanel>
+
+                                <StackPanel  Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                                    <Button x:Name="UpdateModelButton"
+                                            Content="Update"
+                                            Width="60"
+                                            Height="20"
+                                            Margin="5,90,0,0"
+                                            Padding="8,2"
+                                            VerticalAlignment="Center"
+                                            Click="UpdateModelButton_Click"
+                                            Visibility="Collapsed"/>
                                 </StackPanel>
 
                                 <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">

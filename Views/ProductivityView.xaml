@@ -1,0 +1,258 @@
+﻿<UserControl x:Class="WPF_App.Views.ProductivityView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModel="clr-namespace:WPF_App.ViewModels"
+             xmlns:views="clr-namespace:WPF_App.Views"
+             Height="600" Width="500">
+    
+    <Viewbox Stretch="Uniform">
+        <Grid>
+            <Border CornerRadius="10"
+                Background="Transparent"
+                Width="500"
+                Height="300"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="0,0,0,0">
+                <Border.RenderTransform>
+                    <TranslateTransform Y="-15"/>
+                    <!-- Moves Up -->
+                </Border.RenderTransform>
+
+                <Grid>
+                    <Border Background="#f1f2f6"
+                        CornerRadius="0,0,3,3"
+                        Margin="-19,-11,19,11">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"
+                                          Opacity="0.6"/>
+                        </Border.Effect>
+
+                        <!-- Blue line at the top -->
+                        <Grid>
+                            <Rectangle Height="2"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Fill="#4471ce"
+                                   RadiusX="3"
+                                   RadiusY="3"
+                                   Margin="0,-3,0,10"/>
+                            <Rectangle RadiusX="6"
+                                   RadiusY="6"
+                                   Fill="#f2f3f5"/>
+                        </Grid>
+                    </Border>
+
+                    <TabControl Margin="-21,-17,10,10" Background="Transparent" BorderThickness="0">
+                        <TabControl.Resources>
+                            <Style TargetType="TabItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="TabItem">
+                                            <Grid>
+                                                <!-- Top border line (visible only when selected) -->
+                                                <Rectangle x:Name="TopLine"
+                                                       Height="5"  
+                                                       HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Top"
+                                                       Fill="#f2f3f5"
+                                                       RadiusX="2"
+                                                       RadiusY="2"
+                                                       Margin="0,0,0,0"
+                                                       Visibility="Collapsed"/>
+
+                                                <!-- Tab background (changes on selection) -->
+                                                <Rectangle x:Name="TabBackground"
+                                                           RadiusX="2"
+                                                           RadiusY="2"
+                                                           Fill="LightGray"
+                                                           Margin="0,4,0,0"/>
+
+                                                <ContentPresenter ContentSource="Header"
+                                                                      HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"
+                                                                      Margin="10,1"/>
+                                            </Grid>
+
+                                            <!-- Triggers -->
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="TopLine" Property="Visibility" Value="Visible"/>
+                                                    <Setter TargetName="TabBackground" Property="Fill" Value="#f2f3f5"/>
+                                                    <!-- Changes to white when selected -->
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                            </Style>
+                        </TabControl.Resources>
+                        
+                        <TabItem Header="Productivity">
+                            <Grid Background="Transparent">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                                </StackPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="Testing">
+                            <Grid Margin="10">
+                                <!-- Row Definitions -->
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Column Definitions -->
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="120"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Operator Label -->
+                                <TextBlock x:Name="Operator"
+                                           Text="Operator:"
+                                           Grid.Row="0"
+                                           Grid.Column="0"
+                                           Margin="5,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="Name"
+                                           Text="Name:"
+                                           Grid.Row="1"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <TextBox x:Name="OperatorName"
+                                         Width="100"
+                                         Grid.Row="1"
+                                         Grid.Column="1"
+                                         Margin="10,0,0,0"
+                                         VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="Role"
+                                           Text="Role:"
+                                           Grid.Row="2"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <TextBox x:Name="OperatorRole"
+                                         Width="100"
+                                         Grid.Row="2"
+                                         Grid.Column="1"
+                                         Margin="10,0,0,0"
+                                         VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="HiredDate"
+                                           Text="Hired Date:"
+                                           Grid.Row="3"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <DatePicker x:Name="OperatorHiredDate"
+                                            Width="100"
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            Margin="10,0,0,0"
+                                            VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="IsActive"
+                                           Text="Is active:"
+                                           Grid.Row="4"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <ToggleButton x:Name="OperatorIsActive"
+                                              Width="35" Height="17" 
+                                              Grid.Row="4"
+                                              Grid.Column="1"
+                                              Background="Transparent"
+                                              Cursor="Hand"
+                                              BorderThickness="0"
+                                              Margin="-50,0,0,0"
+                                              Click="OperatorIsActive_Click">
+                                    <!--<ToggleButton.RenderTransform>
+                                        <TranslateTransform Y="-156"/>
+                                    </ToggleButton.RenderTransform>-->
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Grid Width="35" Height="17">
+                                                <!-- Background Border -->
+                                                <Border x:Name="ToggleBackground"
+                                                        Width="35" Height="17" 
+                                                        CornerRadius="8"
+                                                        Background="Gray"/>
+                                                <!-- Toggle Thumb -->
+                                                <Ellipse x:Name="ToggleThumb"
+                                                         Width="15" Height="15"  
+                                                         Fill="White"
+                                                         HorizontalAlignment="Left"
+                                                         Margin="2, 0, 0, 0">
+                                                    <Ellipse.RenderTransform>
+                                                        <TranslateTransform x:Name="ThumbTransform"/>
+                                                    </Ellipse.RenderTransform>
+                                                </Ellipse>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                                        <Setter.Value>
+                                                            <TranslateTransform X="16"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsChecked" Value="False">
+                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
+                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                                        <Setter.Value>
+                                                            <TranslateTransform X="0"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </ToggleButton.Template>
+                                </ToggleButton>
+
+                                <Button x:Name="AddOperator"
+                                        Content="Add Operator"
+                                        Margin="0,0,0,0"
+                                        Grid.Row="5"
+                                        Grid.Column="0"
+                                        Padding="8,2"
+                                        VerticalAlignment="Center"
+                                        Click="AddOperatorButton_Click"/>
+                            </Grid>
+                        </TabItem>
+
+                    </TabControl>
+                </Grid>
+            </Border>
+        </Grid>
+    </Viewbox>
+</UserControl>

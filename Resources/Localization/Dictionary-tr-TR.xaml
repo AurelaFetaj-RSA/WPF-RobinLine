@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=System.Runtime">
+    <SolidColorBrush x:Key="titleColor7" Color="#2a3645" />
 
     <System:String x:Key="firstMenuItem">Otomatik</System:String>
     <System:String x:Key="secondMenuItem">Manuel</System:String>
@@ -18,6 +19,78 @@
     <System:String x:Key="Italian">İtalyanca</System:String>
     <System:String x:Key="Chinese">Çince</System:String>
     <System:String x:Key="Turkish">Türkçe</System:String>
+
+    <!--automatoc-->
+    <System:String x:Key="Robot1">Robot 1</System:String>
+    <System:String x:Key="Robot2">Robot 2</System:String>
+    <System:String x:Key="Belt">Kemer</System:String>
+    <System:String x:Key="TankLow">Depo düşük</System:String>
+    <System:String x:Key="TankEmpty">Depo boş</System:String>
+    <System:String x:Key="AirPressure">Hava basıncı</System:String>
+    <System:String x:Key="Automatic">Otomatik</System:String>
+    <System:String x:Key="Ready">Hazır</System:String>
+    <System:String x:Key="Inclusion">Dahil etme</System:String>
+    <System:String x:Key="Included">Dahil</System:String>
+    <System:String x:Key="Excluded">Hariç</System:String>
+
+    <System:String x:Key="Oven1">Fırın 1</System:String>
+    <System:String x:Key="Oven2">Fırın 2</System:String>
+    <System:String x:Key="LampsPercentage">Lamba Yüzdesi</System:String>
+    <System:String x:Key="FanPercentage">Fan Yüzdesi</System:String>
+    <System:String x:Key="TemperatureSetpoint">Sıcaklık Ayar Noktası</System:String>
+    <System:String x:Key="Temperature">Sıcaklık:</System:String>
+    <System:String x:Key="Reached">Ulaşıldı</System:String>
+    <System:String x:Key="State">Durum</System:String>
+    <System:String x:Key="Manual">Manuel</System:String>
+    <System:String x:Key="OvenModeSwitchedTo">Fırın modu değiştirildi:</System:String>
+    <System:String x:Key="GeneralStatus">Genel Durum</System:String>
+    <System:String x:Key="InputBelt">Giriş Bandı</System:String>
+    <System:String x:Key="CentralBelt">Merkez Bandı</System:String>
+    <System:String x:Key="SelectorInAutomatic">Otomatik Seçici</System:String>
+    <System:String x:Key="LineStarted">Hat Başladı</System:String>
+    <System:String x:Key="EmergencyOk">Acil Durum Tamam</System:String>
+    <System:String x:Key="GeneralControl">Genel Kontrol</System:String>
+    <System:String x:Key="BeltSpeed">Bant Hızı</System:String>
+    <System:String x:Key="SlowSpeed">Yavaş</System:String>
+    <System:String x:Key="MediumSpeed">Orta</System:String>
+    <System:String x:Key="HighSpeed">Yüksek</System:String>
+    <System:String x:Key="UpdateBuffer">Tamponu Güncelle</System:String>
+    <System:String x:Key="ResetBuffer">Tamponu Sıfırla</System:String>
+
+   <!--messages-->
+    <System:String x:Key="InitializationFailed">Başlatma başarısız</System:String>
+    <System:String x:Key="ErrorProcessingUpdate">Güncelleme işlenirken hata oluştu</System:String>
+    <System:String x:Key="HandshakeError">Eller sıkışması hatası:</System:String>
+    <System:String x:Key="SystemParametersSentAfterRestart">Yeniden başlatma isteği sonrası sistem parametreleri gönderildi</System:String>
+    <System:String x:Key="FailedToHandleRestart">Yeniden başlatmayı işleme alırken hata oluştu:</System:String>
+    <System:String x:Key="FailedToSendParameters">Bazı parametreler gönderilemedi:</System:String>
+    <System:String x:Key="NotReached">Ulaşılamadı</System:String>
+    <System:String x:Key="FailedToToggleRobot">Robot durumunu değiştirme başarısız:</System:String>
+    <System:String x:Key="Oven">Fırın</System:String>
+    <System:String x:Key="NotReady">Hazır değil</System:String>
+    <System:String x:Key="OvenMode">Fırın Modu</System:String>
+    <System:String x:Key="FailedToToggleOven">Fırın durumunu değiştirme başarısız</System:String>
+    <System:String x:Key="FailedToUpdateLamps">Lamba güncellenemedi</System:String>
+    <System:String x:Key="InvalidValueForLampsPercentage">Fırın lambası yüzdesi için geçersiz değer tipi</System:String>
+    <System:String x:Key="FailedToUpdateFans">Fanlar güncellenemedi</System:String>
+    <System:String x:Key="InvalidValueTypeOvenFansPercentage">Fırın fan yüzdesi için geçersiz değer tipi</System:String>
+    <System:String x:Key="FailedToUpdateTemperature">Sıcaklık güncellenemedi</System:String>
+    <System:String x:Key="InvalidValueTypeOvenTemperature">Fırın sıcaklığı için geçersiz değer tipi</System:String>
+    <System:String x:Key="Oven2Included">Fırın 2 dahil</System:String>
+    <System:String x:Key="Oven2Excluded">Fırın 2 hariç</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenLamps">Fırın lambası yüzdesi için geçersiz değer tipi</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenFansPercentage">Fırın fan yüzdesi için geçersiz değer tipi</System:String>
+    <System:String x:Key="FailedToUpdateTemperature2">Sıcaklık güncellenemedi:</System:String>
+    <System:String x:Key="InvalidOvenTemperatureValue">Fırın sıcaklığı için geçersiz değer tipi</System:String>
+    <System:String x:Key="EmergencyModeActivated">Acil durum modu etkinleştirildi!</System:String>
+    <System:String x:Key="AutomaticModeEnabled">Otomatik mod etkinleştirildi</System:String>
+    <System:String x:Key="ManualModeEnabled">Manuel mod etkinleştirildi</System:String>
+    <System:String x:Key="CycleRunning">Döngü çalışıyor</System:String>
+    <System:String x:Key="AlarmTriggered">Alarm tetiklendi</System:String>
+    <System:String x:Key="SelectorMonitoringError">Seçici izleme hatası:</System:String>
+    <System:String x:Key="BeltSpeedSetMessage">Bant hızı şu şekilde ayarlandı:</System:String>
+    <System:String x:Key="FailedToSetBeltSpeedMessage">Bant hızı ayarlanamadı:</System:String>
+
 
     <System:String x:Key="OpcUaServer">OPC UA Sunucu Adresi: </System:String>
 

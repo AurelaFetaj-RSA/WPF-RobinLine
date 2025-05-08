@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using WPF_RobinLine.Services;
 
@@ -25,6 +28,7 @@ namespace WPF_App.Views
         private int _editr2internalContourLineToggleState = 0;
         private string selectedModel = "";
         private List<string> _originalFlags = new List<string>();
+        private Process onScreenKeyboardProc;
 
         public RecipeView()
         {
@@ -61,7 +65,7 @@ namespace WPF_App.Views
                 ModelNamesComboBox.ItemsSource = modelNames;
 
                 // Optional: Add empty/default item
-                modelNames.Insert(0, "-- Select Model --");
+                modelNames.Insert(0, "Select Model");
                 ModelNamesComboBox.SelectedIndex = 0;
             }
             catch (Exception ex)
@@ -77,6 +81,95 @@ namespace WPF_App.Views
 
             selectedModel = ModelNamesComboBox.SelectedItem.ToString();
             var modelData = _dbService.GetModelNameRecord(selectedModel);
+
+            // Update UI with current values
+            EditR1CentralLineToggle.IsChecked = modelData[0] == "1";
+            EditR1ContourLineToggle.IsChecked = modelData[1] == "1";
+            EditR1InternalContourLineToggle.IsChecked = modelData[2] == "1";
+            EditR2CentralLineToggle.IsChecked = modelData[3] == "1";
+            EditR2ContourLineToggle.IsChecked = modelData[4] == "1";
+            EditR2InternalContourLineToggle.IsChecked = modelData[5] == "1";
+
+            _originalFlags = modelData;
+
+            // Show update button
+            UpdateModelButton.Visibility = Visibility.Visible;
+            UpdateModelButton.IsEnabled = false;
+        }
+
+        private void ResetAddForm()
+        {
+            ModelNameTextBox.Clear();
+
+            R1CentralLineToggle.IsChecked = false;
+            R1ContourLineToggle.IsChecked = false;
+            R1InternalContourLineToggle.IsChecked = false;
+            R2CentralLineToggle.IsChecked = false;
+            R2ContourLineToggle.IsChecked = false;
+            R2InternalContourLineToggle.IsChecked = false;
+
+            _r1centralLineToggleState = 0;
+            _r1contourLineToggleState = 0;
+            _r1internalContourLineToggleState = 0;
+            _r2centralLineToggleState = 0;
+            _r2contourLineToggleState = 0;
+            _r2internalContourLineToggleState = 0;
+        }
+
+        private void ResetEditForm()
+        {
+            ModelNamesComboBox.SelectedIndex = 0;
+
+            EditR1CentralLineToggle.IsChecked = false;
+            EditR1ContourLineToggle.IsChecked = false;
+            EditR1InternalContourLineToggle.IsChecked = false;
+            EditR2CentralLineToggle.IsChecked = false;
+            EditR2ContourLineToggle.IsChecked = false;
+            EditR2InternalContourLineToggle.IsChecked = false;
+
+            _editr1centralLineToggleState = 0;
+            _editr1contourLineToggleState = 0;
+            _editr1internalContourLineToggleState = 0;
+            _editr2centralLineToggleState = 0;
+            _editr2contourLineToggleState = 0;
+            _editr2internalContourLineToggleState = 0;
+
+            UpdateModelButton.Visibility = Visibility.Collapsed;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool Wow64DisableWow64FsRedirection(ref IntPtr ptr);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool Wow64RevertWow64FsRedirection(IntPtr ptr);
+        private void KeyboardButton_Click(object sender, RoutedEventArgs e)
+        {
+            IntPtr wow64Value = IntPtr.Zero;
+            try
+            {
+                // Disable redirection
+                Wow64DisableWow64FsRedirection(ref wow64Value);
+
+                string oskPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "osk.exe");
+
+                if (!File.Exists(oskPath))
+                {
+                    MessageBox.Show("On-Screen keyboard not found!");
+                    return;
+                }
+
+                Process.Start(new ProcessStartInfo(oskPath) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+            finally
+            {
+                // Restore redirection
+                if (wow64Value != IntPtr.Zero)
+                    Wow64RevertWow64FsRedirection(wow64Value);
+            }
         }
 
         public async void AddModelNameButton_Click(object sender, RoutedEventArgs e)
@@ -92,6 +185,12 @@ namespace WPF_App.Views
                     return;
                 }
 
+                if (modelName.Length != 4)
+                {
+                    MessageBox.Show("Model name must be exactly 4 characters long.");
+                    return;
+                }
+
                 // 2. Prepare the flags list (convert toggle states to strings)
                 var flags = new List<string>
                 {
@@ -104,7 +203,9 @@ namespace WPF_App.Views
                 };
 
                 // 4. Call the database method
-                await Task.Run(() => _dbService.AddModelNameRecord(modelName, flags));
+                _dbService.AddModelNameRecord(modelName, flags);
+
+                ResetAddForm();
 
                 MessageBox.Show("Model saved successfully!");
                 ModelNameTextBox.Clear();
@@ -122,7 +223,7 @@ namespace WPF_App.Views
             {
                 string selectedModel = ModelNamesComboBox.SelectedItem?.ToString();
 
-                if (string.IsNullOrEmpty(selectedModel) || selectedModel == "-- Select Model --")
+                if (string.IsNullOrEmpty(selectedModel) || selectedModel == "Select Model")
                 {
                     MessageBox.Show("Please select a model to delete");
                     return;
@@ -136,7 +237,7 @@ namespace WPF_App.Views
                 if (result == MessageBoxResult.Yes)
                 {
                     // Delete the model
-                    await Task.Run(() => _dbService.DeleteModelNameRecord(selectedModel));
+                    _dbService.DeleteModelNameRecord(selectedModel);
 
                     // Refresh the model list
                     LoadModelNames();
@@ -151,40 +252,40 @@ namespace WPF_App.Views
             }
         }
 
-        public async void ViewModelNameButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                string selectedModel = ModelNamesComboBox.SelectedItem?.ToString();
+        //public async void ViewModelNameButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        string selectedModel = ModelNamesComboBox.SelectedItem?.ToString();
 
-                if (string.IsNullOrEmpty(selectedModel) || selectedModel == "-- Select Model --")
-                {
-                    MessageBox.Show("Please select a model to view");
-                    return;
-                }
+        //        if (string.IsNullOrEmpty(selectedModel) || selectedModel == "-- Select Model --")
+        //        {
+        //            MessageBox.Show("Please select a model to view");
+        //            return;
+        //        }
 
-                // Load model data
-                var modelData = await Task.Run(() => _dbService.GetModelNameRecord(selectedModel));
+        //        // Load model data
+        //        var modelData = await Task.Run(() => _dbService.GetModelNameRecord(selectedModel));
 
-                // Update UI with current values
-                EditR1CentralLineToggle.IsChecked = modelData[0] == "1";
-                EditR1ContourLineToggle.IsChecked = modelData[1] == "1";
-                EditR1InternalContourLineToggle.IsChecked = modelData[2] == "1";
-                EditR2CentralLineToggle.IsChecked = modelData[3] == "1";
-                EditR2ContourLineToggle.IsChecked = modelData[4] == "1";
-                EditR2InternalContourLineToggle.IsChecked = modelData[5] == "1";
+        //        // Update UI with current values
+        //        EditR1CentralLineToggle.IsChecked = modelData[0] == "1";
+        //        EditR1ContourLineToggle.IsChecked = modelData[1] == "1";
+        //        EditR1InternalContourLineToggle.IsChecked = modelData[2] == "1";
+        //        EditR2CentralLineToggle.IsChecked = modelData[3] == "1";
+        //        EditR2ContourLineToggle.IsChecked = modelData[4] == "1";
+        //        EditR2InternalContourLineToggle.IsChecked = modelData[5] == "1";
 
-                _originalFlags = modelData;
+        //        _originalFlags = modelData;
 
-                // Show update button
-                UpdateModelButton.Visibility = Visibility.Visible;
-                UpdateModelButton.IsEnabled = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error viewing model: {ex.Message}");
-            }
-        }
+        //        // Show update button
+        //        UpdateModelButton.Visibility = Visibility.Visible;
+        //        UpdateModelButton.IsEnabled = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Error viewing model: {ex.Message}");
+        //    }
+        //}
 
         private async void UpdateModelButton_Click(object sender, RoutedEventArgs e)
         {
@@ -193,13 +294,27 @@ namespace WPF_App.Views
                 string selectedModel = ModelNamesComboBox.SelectedItem?.ToString();
                 var currentFlags = GetCurrentToggleValues();
 
-                await Task.Run(() => _dbService.UpdateModelNameRecord(selectedModel, currentFlags));
+                var result = MessageBox.Show($"Are you sure you want to update model '{selectedModel}'?",
+                                           "Confirm Update",
+                                           MessageBoxButton.YesNo,
+                                           MessageBoxImage.Warning);
 
-                MessageBox.Show("Model updated successfully");
+                if (result == MessageBoxResult.Yes)
+                {
+                    _dbService.UpdateModelNameRecord(selectedModel, currentFlags);
 
-                // Update original flags to new values
-                _originalFlags = currentFlags;
-                UpdateModelButton.IsEnabled = false;
+                    MessageBox.Show("Model updated successfully");
+
+                    // Update original flags to new values
+                    _originalFlags = currentFlags;
+                    UpdateModelButton.IsEnabled = false;
+
+                    ResetEditForm();
+                }
+                else
+                {
+                    ResetEditForm();
+                }
             }
             catch (Exception ex)
             {
@@ -265,7 +380,7 @@ namespace WPF_App.Views
                 MessageBox.Show($"Error toggling robot 1 contour line: {ex.Message}");
             }
         }
-        
+
         public async void R1InternalContourLineToggle_Click(object sender, RoutedEventArgs e)
         {
             try

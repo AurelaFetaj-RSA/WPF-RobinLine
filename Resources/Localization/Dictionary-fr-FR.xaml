@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+    <SolidColorBrush x:Key="titleColor7" Color="#2a3645" />
 
     <!--<System:String x:Key="SettingsTitle">Paramètres</System:String>
     <System:String x:Key="subTitle">Bienvenue sur la page des paramètres</System:String>-->
@@ -20,6 +21,79 @@
     <System:String x:Key="Italian">Italien</System:String>
     <System:String x:Key="Chinese">Chinoise</System:String>
     <System:String x:Key="Turkish">Turc</System:String>
+
+    <!--automatic-->
+    <System:String x:Key="Robot1">Robot 1</System:String>
+    <System:String x:Key="Robot2">Robot 2</System:String>
+    <System:String x:Key="Belt">Ceinture</System:String>
+    <System:String x:Key="TankLow">Réservoir bas</System:String>
+    <System:String x:Key="TankEmpty">Réservoir vide</System:String>
+    <System:String x:Key="AirPressure">Pression d'air</System:String>
+    <System:String x:Key="Automatic">Automatique</System:String>
+    <System:String x:Key="Ready">Prêt</System:String>
+    <System:String x:Key="Inclusion">Inclusion</System:String>
+    <System:String x:Key="Included">Inclus</System:String>
+    <System:String x:Key="Excluded">Exclu</System:String>
+
+    <System:String x:Key="Oven1">Four 1</System:String>
+    <System:String x:Key="Oven2">Four 2</System:String>
+    <System:String x:Key="LampsPercentage">Pourcentage Lampes</System:String>
+    <System:String x:Key="FanPercentage">Pourcentage Ventilateur</System:String>
+    <System:String x:Key="TemperatureSetpoint">Consigne de Température</System:String>
+    <System:String x:Key="Temperature">Température :</System:String>
+    <System:String x:Key="Reached">Atteinte</System:String>
+    <System:String x:Key="State">État</System:String>
+    <System:String x:Key="Manual">Manuel</System:String>
+    <System:String x:Key="OvenModeSwitchedTo">Mode du four changé en</System:String>
+    <System:String x:Key="GeneralStatus">État Général</System:String>
+    <System:String x:Key="InputBelt">Bande d’Entrée</System:String>
+    <System:String x:Key="CentralBelt">Bande Centrale</System:String>
+    <System:String x:Key="SelectorInAutomatic">Sélecteur en Automatique</System:String>
+    <System:String x:Key="LineStarted">Ligne Démarrée</System:String>
+    <System:String x:Key="EmergencyOk">Urgence ok</System:String>
+    <System:String x:Key="GeneralControl">Contrôle Général</System:String>
+    <System:String x:Key="BeltSpeed">Vitesse de la Bande</System:String>
+    <System:String x:Key="SlowSpeed">Lente</System:String>
+    <System:String x:Key="MediumSpeed">Moyenne</System:String>
+    <System:String x:Key="HighSpeed">Élevée</System:String>
+    <System:String x:Key="UpdateBuffer">Maj. Tampon</System:String>
+    <System:String x:Key="ResetBuffer">Ràz Tampon</System:String>
+
+    <!--messages-->
+    <System:String x:Key="InitializationFailed">Échec de l'initialisation</System:String>
+    <System:String x:Key="ErrorProcessingUpdate">Erreur lors du traitement de la mise à jour pour</System:String>
+    <System:String x:Key="HandshakeError">Erreur de poignée de main :</System:String>
+    <System:String x:Key="SystemParametersSentAfterRestart">Paramètres système envoyés après demande de redémarrage</System:String>
+    <System:String x:Key="FailedToHandleRestart">Échec du traitement du redémarrage :</System:String>
+    <System:String x:Key="FailedToSendParameters">Échec de l'envoi de certains paramètres :</System:String>
+    <System:String x:Key="NotReached">Non atteint</System:String>
+    <System:String x:Key="FailedToToggleRobot">Échec du changement d'état du robot :</System:String>
+    <System:String x:Key="Oven">Four</System:String>
+    <System:String x:Key="NotReady">Non prêt</System:String>
+    <System:String x:Key="OvenMode">Mode four</System:String>
+    <System:String x:Key="FailedToToggleOven">Échec du changement d'état du four</System:String>
+    <System:String x:Key="FailedToUpdateLamps">Échec de la mise à jour des lampes</System:String>
+    <System:String x:Key="InvalidValueForLampsPercentage">Valeur invalide pour le pourcentage des lampes du four</System:String>
+    <System:String x:Key="FailedToUpdateFans">Échec de la mise à jour des ventilateurs</System:String>
+    <System:String x:Key="InvalidValueTypeOvenFansPercentage">Valeur invalide pour le pourcentage des ventilateurs du four</System:String>
+    <System:String x:Key="FailedToUpdateTemperature">Échec de la mise à jour de la température</System:String>
+    <System:String x:Key="InvalidValueTypeOvenTemperature">Valeur invalide pour la température du four</System:String>
+    <System:String x:Key="Oven2Included">Four 2 inclus</System:String>
+    <System:String x:Key="Oven2Excluded">Four 2 exclu</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenLamps">Valeur invalide pour le pourcentage des lampes du four</System:String>
+    <System:String x:Key="InvalidValueTypeForOvenFansPercentage">Valeur invalide pour le pourcentage des ventilateurs du four</System:String>
+    <System:String x:Key="FailedToUpdateTemperature2">Échec de la mise à jour de la température :</System:String>
+    <System:String x:Key="InvalidOvenTemperatureValue">Valeur invalide pour la température du four</System:String>
+    <System:String x:Key="EmergencyModeActivated">Mode d'urgence activé !</System:String>
+    <System:String x:Key="AutomaticModeEnabled">Mode automatique activé</System:String>
+    <System:String x:Key="ManualModeEnabled">Mode manuel activé</System:String>
+    <System:String x:Key="CycleRunning">Cycle en cours</System:String>
+    <System:String x:Key="AlarmTriggered">Alarme déclenchée</System:String>
+    <System:String x:Key="SelectorMonitoringError">Erreur de surveillance du sélecteur :</System:String>
+    <System:String x:Key="BeltSpeedSetMessage">Vitesse de la bande réglée à :</System:String>
+    <System:String x:Key="FailedToSetBeltSpeedMessage">Échec de la définition de la vitesse de la bande :</System:String>
+
+
 
     <System:String x:Key="OpcUaServer">Adresse du serveur OPC UA: </System:String>
 

@@ -19,6 +19,12 @@
 	<ItemGroup>
 		<PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25103.5738" />
 		<PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
 		<PackageReference Include="Opc.UaFx.Advanced" Version="2.31.0" />
 		<PackageReference Include="System.Data.OleDb" Version="9.0.4" />
