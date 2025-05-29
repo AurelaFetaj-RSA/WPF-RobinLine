@@ -37,11 +37,11 @@
 
     <System:String x:Key="Oven1">Oven 1</System:String>
     <System:String x:Key="Oven2">Oven 2</System:String>
-    <System:String x:Key="LampsPercentage">Lamps Percentage</System:String>
-    <System:String x:Key="FanPercentage">Fan Percentage</System:String>
-    <System:String x:Key="TemperatureSetpoint">Temperature setpoint</System:String>
+    <System:String x:Key="LampsPercentage">Lamps Percentage:</System:String>
+    <System:String x:Key="FanPercentage">Fan Percentage:</System:String>
+    <System:String x:Key="TemperatureSetpoint">Maximum temperature:</System:String>
     <System:String x:Key="Temperature">Temperature: </System:String>
-    <System:String x:Key="Reached">Reached</System:String>
+    <System:String x:Key="TemperatureOk">Temperature Ok</System:String>
     <System:String x:Key="State">State</System:String>
     <!--<System:String x:Key="Ready">Ready</System:String>-->
     <!--<System:String x:Key="Inclusion">Inclusion</System:String>-->

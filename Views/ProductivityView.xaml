@@ -3,26 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:WPF_App.ViewModels"
              xmlns:views="clr-namespace:WPF_App.Views"
-             Height="600" Width="500">
-    
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             Loaded="UserControl_Loaded"
+             Height="750" Width="800">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="backgroundColorBrush" Color="#ededed"/>
+        <SolidColorBrush x:Key="fillColorBrush" Color="#683ab7"/>
+    </UserControl.Resources>
+
     <Viewbox Stretch="Uniform">
         <Grid>
             <Border CornerRadius="10"
-                Background="Transparent"
-                Width="500"
-                Height="300"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="0,0,0,0">
+                    Background="Transparent"
+                    Width="520"
+                    Height="360"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="0,0,0,0">
                 <Border.RenderTransform>
                     <TranslateTransform Y="-15"/>
                     <!-- Moves Up -->
                 </Border.RenderTransform>
 
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="31*"/>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="462*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="109*"/>
+                        <RowDefinition Height="41*"/>
+                    </Grid.RowDefinitions>
                     <Border Background="#f1f2f6"
-                        CornerRadius="0,0,3,3"
-                        Margin="-19,-11,19,11">
+                            CornerRadius="0,0,3,3"
+                            Margin="-19,-11,19,11" Grid.RowSpan="2" Grid.ColumnSpan="3">
                         <Border.Effect>
                             <DropShadowEffect Color="Black"
                                           BlurRadius="5"
@@ -45,7 +63,7 @@
                         </Grid>
                     </Border>
 
-                    <TabControl Margin="-21,-17,10,10" Background="Transparent" BorderThickness="0">
+                    <TabControl Margin="-21,-17,10,10" Background="Transparent" BorderThickness="0" Grid.RowSpan="2" Grid.ColumnSpan="3">
                         <TabControl.Resources>
                             <Style TargetType="TabItem">
                                 <Setter Property="Template">
@@ -92,11 +110,491 @@
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                             </Style>
                         </TabControl.Resources>
-                        
+
                         <TabItem Header="Productivity">
                             <Grid Background="Transparent">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                                <StackPanel Orientation="Vertical"
+                                            VerticalAlignment="Top"
+                                            HorizontalAlignment="Left"
+                                            Margin="10">
+
+                                    <Button Content="Load last week's productivity"
+                                            Click="LoadSummary_Click"
+                                            Margin="0,0,0,10"
+                                            Height="22"
+                                            Width="200" 
+                                            HorizontalAlignment="Left"
+                                            Visibility="Collapsed"/>
+
+                                    <Grid HorizontalAlignment="Left">
+                                        <DataGrid x:Name="ProductionSummaryGrid"
+                                                  AutoGenerateColumns="False"
+                                                  IsReadOnly="True"
+                                                  Visibility="Collapsed"
+                                                  Width="400">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Date" Binding="{Binding ProductionDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="*" />
+                                                <DataGridTextColumn Header="Hour" Binding="{Binding ProductionHourRange}" Width="*" />
+                                                <DataGridTextColumn Header="Items Produced" Binding="{Binding ItemsProduced}" Width="60" />
+                                                <DataGridTextColumn Header="Defective Items" Binding="{Binding DefectiveItems}" Width="60" />
+                                                <DataGridTextColumn Header="Shift" Binding="{Binding ShiftName}" Width="*" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Grid>
+
+                                    <Grid x:Name="ProductionColumnGrid">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Chart column -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Buttons column -->
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border BorderBrush="Gray" 
+                                                BorderThickness="0.5" 
+                                                CornerRadius="4" 
+                                                Padding="5"
+                                                Margin="0,0,0,0">
+                                            <!-- Chart in first column -->
+                                            <StackPanel Orientation="Vertical">
+                                                <!-- Custom title -->
+                                                <TextBlock x:Name="ProdChart"
+                                                       Text="Production Chart" 
+                                                       FontSize="9"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Top"
+                                                       Margin="0,0,0,0"/>
+
+                                                <lvc:CartesianChart x:Name="ProductionChart"
+                                                                    Grid.Column="0"
+                                                                    Height="120" 
+                                                                    Width="450" 
+                                                                    LegendLocation="None"
+                                                                    Margin="0,5,20,0">
+
+                                                    <lvc:CartesianChart.Series>
+                                                        <lvc:ColumnSeries x:Name="ProductionSeries"
+                                                                          Title="Items"
+                                                                          Fill="#FF3280FA"
+                                                                          DataLabels="True"
+                                                                          Values="0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"/>
+                                                    </lvc:CartesianChart.Series>
+
+                                                    <lvc:CartesianChart.AxisX>
+                                                        <lvc:Axis FontSize="10"
+                                                                  ShowLabels="True"
+                                                                  Labels="00:00,01:00,02:00,03:00,04:00,05:00,06:00,07:00,08:00,09:00,10:00,11:00,12:00,13:00,14:00,15:00,16:00,17:00,18:00,19:00,20:00,21:00,22:00,23:00"
+                                                                  Separator="{x:Static lvc:DefaultAxes.CleanSeparator}"
+                                                                  DisableAnimations="True">
+                                                        </lvc:Axis>
+                                                    </lvc:CartesianChart.AxisX>
+
+                                                    <lvc:CartesianChart.AxisY>
+                                                        <lvc:Axis MinValue="0"
+                                                                  MaxValue="70"
+                                                                  Margin="10,0,0,0">
+                                                            <lvc:Axis.Separator>
+                                                                <lvc:Separator Stroke="#EEEEEE" Step="10"/>
+                                                            </lvc:Axis.Separator>
+                                                        </lvc:Axis>
+                                                    </lvc:CartesianChart.AxisY>
+                                                </lvc:CartesianChart>
+
+
+                                                <WrapPanel HorizontalAlignment="Left" 
+                                                           Margin="380,20,0,0">
+
+                                                    <Button Content="Items"
+                                                            Width="50"
+                                                            Height="15"
+                                                            Padding="0,0"
+                                                            Margin="-700,-20,0,5"
+                                                            FontSize="9"
+                                                            Background="White"
+                                                            Click="ShowItems">
+                                                        <!--<Button.Resources>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="CornerRadius" Value="6"/>
+                                                            </Style>
+                                                        </Button.Resources>-->
+                                                    </Button>
+
+                                                    <Button Content="Waste"
+                                                            Width="50"
+                                                            Height="15"
+                                                            Padding="0,0"
+                                                            Margin="-580,-20,0,5"
+                                                            FontSize="9"
+                                                            Background="White"
+                                                            Click="ShowWaste">
+                                                        <!--<Button.Resources>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="CornerRadius" Value="6"/>
+                                                            </Style>
+                                                        </Button.Resources>-->
+                                                    </Button>
+
+                                                    <ComboBox x:Name="Model"
+                                                              Width="50"
+                                                              Height="15"
+                                                              Padding="0,0"
+                                                              FontSize="9"
+                                                              Margin="-450,-20,0,5"
+                                                              IsEditable="True"
+                                                              IsReadOnly="True"
+                                                              SelectionChanged="Model_SelectionChanged">
+                                                        <!-- Manually add items -->
+                                                        <sys:String>AAAA</sys:String>
+                                                        <sys:String>ABCD</sys:String>
+                                                        <sys:String>FGHJ</sys:String>
+                                                        <ComboBox.Style>
+                                                            <Style TargetType="ComboBox">
+                                                                <Setter Property="Text" Value="Model"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                                        <Setter Property="Text" Value="Model"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ComboBox.Style>
+                                                    </ComboBox>
+
+                                                    <ComboBox x:Name="SizeChart"
+                                                              Width="50"
+                                                              Height="15"
+                                                              Padding="0,0"
+                                                              FontSize="9"
+                                                              Margin="-320,-20,0,5"
+                                                              IsEditable="True"
+                                                              IsReadOnly="True"
+                                                              SelectionChanged="Size_SelectionChanged">
+                                                        <ComboBox.Style>
+                                                            <Style TargetType="ComboBox">
+                                                                <Setter Property="Text" Value="Size"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                                        <Setter Property="Text" Value="Size"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ComboBox.Style>
+                                                    </ComboBox>
+
+                                                    <ComboBox x:Name="TypeChart"
+                                                              Width="50"
+                                                              Height="15"
+                                                              Padding="0,0"
+                                                              FontSize="9"
+                                                              Margin="-190,-20,0,5"
+                                                              IsEditable="True"
+                                                              IsReadOnly="True"
+                                                              SelectionChanged="Type_SelectionChanged">
+                                                        <!-- Manually add items -->
+                                                        <ComboBoxItem Content="Right" Tag="1"/>
+                                                        <ComboBoxItem Content="Left" Tag="2"/>
+
+                                                        <ComboBox.Style>
+                                                            <Style TargetType="ComboBox">
+                                                                <Setter Property="Text" Value="Type"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                                        <Setter Property="Text" Value="Type"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ComboBox.Style>
+                                                    </ComboBox>
+
+                                                    <ComboBox x:Name="PartTypeChart"
+                                                              Width="60"
+                                                              Height="15"
+                                                              Padding="0,0"
+                                                              FontSize="9"
+                                                              Margin="-50,-20,0,5"
+                                                              IsEditable="True"
+                                                              IsReadOnly="True"
+                                                              SelectionChanged="PartType_SelectionChanged">
+                                                        <!-- Manually add items -->
+                                                        <ComboBoxItem Content="Upper" Tag="1"/>
+                                                        <ComboBoxItem Content="Sole" Tag="2"/>
+
+                                                        <ComboBox.Style>
+                                                            <Style TargetType="ComboBox">
+                                                                <Setter Property="Text" Value="Part type"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                                        <Setter Property="Text" Value="Part type"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ComboBox.Style>
+                                                    </ComboBox>
+
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <Border Grid.Row="1" 
+                                            BorderBrush="Gray" 
+                                            BorderThickness="0.5" 
+                                            CornerRadius="4" 
+                                            Padding="0"
+                                            Width="200"
+                                            Height="90"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,5,0,0">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock x:Name="Filters"
+                                                       Text="Filter:" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="9"
+                                                       HorizontalAlignment="Left"
+                                                       Foreground="{DynamicResource titleColor7}"
+                                                       VerticalAlignment="Top"
+                                                       Margin="10,0,0,0"/>
+
+                                            <StackPanel Orientation="Horizontal" 
+                                                        VerticalAlignment="Center" 
+                                                        Margin="0,-125,0,5">
+                                                <!--<TextBlock x:Name="DateFilter"
+                                                       Text="Filter by Date:"
+                                                       Foreground="{DynamicResource titleColor7}"
+                                                       FontWeight="Bold" 
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>-->
+
+                                                <DatePicker x:Name="PickedDateFilter"
+                                                            Width="80"
+                                                            Height="18"
+                                                            FontSize="8" 
+                                                            Margin="10,0,0,0"
+                                                            VerticalAlignment="Center">
+                                                    <DatePicker.Resources>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Width" Value="18"/>
+                                                            <Setter Property="Height" Value="18"/>
+                                                            <!--<Setter Property="RenderTransform">
+                                                                <Setter.Value>
+                                                                    <ScaleTransform ScaleX="0.7" ScaleY="0.7"/>
+                                                                </Setter.Value>
+                                                            </Setter>-->
+                                                        </Style>
+                                                    </DatePicker.Resources>
+                                                </DatePicker>
+
+                                                <StackPanel.RenderTransform>
+                                                    <TranslateTransform Y="80"/>
+                                                    <!-- Moves Up -->
+                                                </StackPanel.RenderTransform>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" 
+                                                        VerticalAlignment="Center" 
+                                                        Margin="0,28,0,5">
+                                                <!--<TextBlock x:Name="ShiftFilter"
+                                                    Text="Filter by Shift:"
+                                                    Foreground="{DynamicResource titleColor7}"
+                                                    FontWeight="Bold" 
+                                                    FontSize="9" 
+                                                    VerticalAlignment="Center"/>-->
+
+                                                <ComboBox x:Name="ShiftFilterComboBox"
+                                                          Width="80"
+                                                          Height="18"
+                                                          Grid.Row="5"
+                                                          Grid.Column="1"
+                                                          Margin="10,0,0,0"
+                                                          FontSize="8"
+                                                          VerticalAlignment="Center"
+                                                          IsEditable="True"
+                                                          IsReadOnly="True">
+                                                    <ComboBox.Style>
+                                                        <Style TargetType="ComboBox">
+                                                            <Setter Property="Text" Value="Shift"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                                    <Setter Property="Text" Value="Shift"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ComboBox.Style>
+                                                </ComboBox>
+                                                <StackPanel.RenderTransform>
+                                                    <TranslateTransform Y="0"/>
+                                                    <!-- Moves Up -->
+                                                </StackPanel.RenderTransform>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" 
+                                                        VerticalAlignment="Center" 
+                                                        Margin="0,-140,0,5">
+                                                <!--<TextBlock Text="Filter by Dates:"
+                                                   Foreground="{DynamicResource titleColor7}"
+                                                   FontWeight="Bold" 
+                                                   FontSize="9" 
+                                                   VerticalAlignment="Center"/>-->
+
+                                                <DatePicker x:Name="StartDateFilter"
+                                                    Width="80"
+                                                    Height="18"
+                                                    FontSize="8" 
+                                                    Margin="10,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    SelectedDateFormat="Short">
+                                                    <DatePicker.Resources>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Width" Value="16"/>
+                                                            <Setter Property="Height" Value="16"/>
+                                                            <Setter Property="Padding" Value="0"/>
+                                                        </Style>
+                                                    </DatePicker.Resources>
+                                                </DatePicker>
+
+                                                <TextBlock Text="to"
+                                                   Margin="5,0,5,0"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="9"
+                                                   Foreground="{DynamicResource titleColor7}" />
+
+                                                <DatePicker x:Name="EndDateFilter"
+                                                            Width="80"
+                                                            Height="18"
+                                                            FontSize="8"
+                                                            VerticalAlignment="Center"
+                                                            SelectedDateFormat="Short">
+                                                    <DatePicker.Resources>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Width" Value="16"/>
+                                                            <Setter Property="Height" Value="16"/>
+                                                            <Setter Property="Padding" Value="0"/>
+                                                        </Style>
+                                                    </DatePicker.Resources>
+                                                </DatePicker>
+
+                                                <StackPanel.RenderTransform>
+                                                    <TranslateTransform Y="80"/>
+                                                </StackPanel.RenderTransform>
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Grid x:Name="mainGrid">
+                                        <Canvas x:Name="mainCanvas" Margin="250,-90,0,0">
+                                            <!-- Quarter margin -->
+                                            <!-- Background Path (25% size) -->
+                                            <Path x:Name="backgroundPath"
+                                                  Fill="gray" 
+                                                  RenderTransformOrigin="0.5,0.5">
+                                                <Path.Data>
+                                                    <PathGeometry>
+                                                        <PathFigure StartPoint="0,75" IsClosed="False">
+                                                            <!-- Y quartered -->
+                                                            <PathFigure.Segments>
+                                                                <ArcSegment Size="12.5,12.5" Point="150,75" SweepDirection="Clockwise"/>
+                                                                <!-- All dimensions quartered -->
+                                                                <LineSegment Point="143.75,75"/>
+                                                                <!-- 575/4 -->
+                                                                <ArcSegment Size="12.5,12.5" Point="6.25,75" SweepDirection="Counterclockwise"/>
+                                                                <!-- 25/4 -->
+                                                                <LineSegment Point="0,75"/>
+                                                            </PathFigure.Segments>
+                                                        </PathFigure>
+                                                    </PathGeometry>
+                                                </Path.Data>
+                                            </Path>
+
+                                            <!-- Fill Path (25% size) -->
+                                            <Path x:Name="fillPath"
+                                                  Fill="{StaticResource fillColorBrush}"
+                                                  RenderTransformOrigin="0.5,0.5">
+                                                <!-- Center point quartered -->
+                                                <Path.RenderTransform>
+                                                    <RotateTransform x:Name="fillPathRT" Angle="0"/>
+                                                </Path.RenderTransform>
+                                                <Path.Data>
+                                                    <PathGeometry>
+                                                        <PathFigure StartPoint="0,75" IsClosed="False">
+                                                            <PathFigure.Segments>
+                                                                <ArcSegment Size="12.5,12.5" Point="150,75" SweepDirection="Counterclockwise"/>
+                                                                <LineSegment Point="143.75,75"/>
+                                                                <ArcSegment Size="12.5,12.5" Point="6.25,75" SweepDirection="Clockwise"/>
+                                                                <LineSegment Point="0,75"/>
+                                                            </PathFigure.Segments>
+                                                        </PathFigure>
+                                                    </PathGeometry>
+                                                </Path.Data>
+                                            </Path>
+
+                                            <!-- Cover Rectangle (25% size) -->
+                                            <Rectangle x:Name="coverRectangle"
+                                                       Fill="#f2f3f5"
+                                                       Width="152.5" Height="76.25"
+                                                       Canvas.Left="-1.25" Canvas.Top="75"
+                                                       Visibility="Visible"/>
+
+                                                <!-- Needle Line (25% size) -->
+                                                <Line x:Name="needleLine"
+                                                      Stroke="{StaticResource fillColorBrush}"
+                                                      StrokeThickness="2.5" 
+                                                      X1="75" Y1="75" X2="12.5" Y2="75"
+                                                      RenderTransformOrigin="75,75">
+                                                    <Line.RenderTransform>
+                                                        <RotateTransform x:Name="needleRotate" Angle="0"/>
+                                                    </Line.RenderTransform>
+                                                </Line>
+
+                                                <!-- Center Pin (25% size) -->
+                                                <Ellipse Width="5" Height="5"
+                                                         Fill="{StaticResource fillColorBrush}"
+                                                         Canvas.Left="72.5" Canvas.Top="72.5"
+                                                         Visibility="Visible"/>
+
+                                                    <!-- Slider (25% size) -->
+                                                    <Slider x:Name="valueSlider"
+                                                            Value="0" Minimum="0" Maximum="180"
+                                                            Width="112.5" 
+                                                            Margin="-150,15,0,0"
+                                                            Canvas.Left="175" 
+                                                            Canvas.Top="62.5"
+                                                            ValueChanged="valueSlider_ValueChanged"/>
+                                        </Canvas>
+                                    </Grid>
+
                                 </StackPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="Data">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <!-- Takes remaining space -->
+                                </Grid.RowDefinitions>
+
+                                <!-- Button Row -->
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                    <Button x:Name="OperatorData" Content="Operator" Width="70" Height="20" 
+                                            FontSize="9" Margin="0,0,10,0" Click="OperatorData_Click"/>
+                                    <Button x:Name="RoleData" Content="Role" Width="70" Height="20" 
+                                            FontSize="9" Margin="0,0,10,0" Click="RoleData_Click"/>
+                                    <Button x:Name="ShiftData" Content="Shift" Width="70" Height="20" 
+                                            FontSize="9" Margin="0,0,10,0" Click="ShiftData_Click"/>
+                                    <Button x:Name="SizeData" Content="Size" Width="70" Height="20" 
+                                            FontSize="9" Margin="0,0,10,0" Click="SizeData_Click"/>
+                                    <Button x:Name="TargetData" Content="Target" Width="70" Height="20" 
+                                            FontSize="9" Click="TargetData_Click"/>
+                                </StackPanel>
+
+                                <!-- Data Grid Row -->
+                                <DataGrid x:Name="OperatorDataGrid" Grid.Row="1" 
+                                          AutoGenerateColumns="True"
+                                          Margin="0,10,0,0"
+                                          Visibility="Collapsed"/>
                             </Grid>
                         </TabItem>
 
@@ -110,19 +608,69 @@
                                     <RowDefinition Height="30"/>
                                     <RowDefinition Height="20"/>
                                     <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="20"/>
                                 </Grid.RowDefinitions>
 
                                 <!-- Column Definitions -->
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="120"/>
                                 </Grid.ColumnDefinitions>
+
+                                <!-- ! Role Label-->
+                                <TextBlock x:Name="Role"
+                                           Text="Role:"
+                                           Grid.Row="0"
+                                           Grid.Column="0"
+                                           Margin="5,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="RoleName"
+                                           Text="Name:"
+                                           Grid.Row="1"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <TextBox x:Name="RoleNameTxt"
+                                         Width="100"
+                                         Grid.Row="1"
+                                         Grid.Column="1"
+                                         Margin="10,0,0,0"
+                                         VerticalAlignment="Center"/>
+
+                                <Button x:Name="AddRole"
+                                        Content="Add Role"
+                                        Margin="10,0,0,0"
+                                        Width="100"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Padding="8,2"
+                                        VerticalAlignment="Center"
+                                        Click="AddRoleButton_Click">
+                                    <Button.RenderTransform>
+                                        <TranslateTransform Y="5"/>
+                                        <!-- Moves Up -->
+                                    </Button.RenderTransform>
+                                </Button>
 
                                 <!-- Operator Label -->
                                 <TextBlock x:Name="Operator"
                                            Text="Operator:"
                                            Grid.Row="0"
-                                           Grid.Column="0"
+                                           Grid.Column="3"
                                            Margin="5,0,10,0"
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
@@ -132,7 +680,7 @@
                                 <TextBlock x:Name="Name"
                                            Text="Name:"
                                            Grid.Row="1"
-                                           Grid.Column="0"
+                                           Grid.Column="3"
                                            Margin="30,0,10,0"
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
@@ -141,30 +689,43 @@
                                 <TextBox x:Name="OperatorName"
                                          Width="100"
                                          Grid.Row="1"
-                                         Grid.Column="1"
+                                         Grid.Column="4"
                                          Margin="10,0,0,0"
                                          VerticalAlignment="Center"/>
 
-                                <TextBlock x:Name="Role"
+                                <TextBlock x:Name="OperatorRole"
                                            Text="Role:"
                                            Grid.Row="2"
-                                           Grid.Column="0"
+                                           Grid.Column="3"
                                            Margin="30,0,10,0"
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
                                            FontSize="10" 
                                            VerticalAlignment="Center"/>
-                                <TextBox x:Name="OperatorRole"
-                                         Width="100"
-                                         Grid.Row="2"
-                                         Grid.Column="1"
-                                         Margin="10,0,0,0"
-                                         VerticalAlignment="Center"/>
+                                <ComboBox x:Name="OperatorRoleComboBox"
+                                          Width="100"
+                                          Grid.Row="2"
+                                          Grid.Column="4"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"
+                                          IsEditable="True"
+                                          IsReadOnly="True">
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox">
+                                            <Setter Property="Text" Value="-- Select Role --"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                    <Setter Property="Text" Value="-- Select Role --"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
 
                                 <TextBlock x:Name="HiredDate"
                                            Text="Hired Date:"
                                            Grid.Row="3"
-                                           Grid.Column="0"
+                                           Grid.Column="3"
                                            Margin="30,0,10,0"
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
@@ -173,14 +734,14 @@
                                 <DatePicker x:Name="OperatorHiredDate"
                                             Width="100"
                                             Grid.Row="3"
-                                            Grid.Column="1"
+                                            Grid.Column="4"
                                             Margin="10,0,0,0"
                                             VerticalAlignment="Center"/>
 
                                 <TextBlock x:Name="IsActive"
                                            Text="Is active:"
                                            Grid.Row="4"
-                                           Grid.Column="0"
+                                           Grid.Column="3"
                                            Margin="30,0,10,0"
                                            Foreground="{DynamicResource titleColor7}"
                                            FontWeight="Bold" 
@@ -189,7 +750,7 @@
                                 <ToggleButton x:Name="OperatorIsActive"
                                               Width="35" Height="17" 
                                               Grid.Row="4"
-                                              Grid.Column="1"
+                                              Grid.Column="4"
                                               Background="Transparent"
                                               Cursor="Hand"
                                               BorderThickness="0"
@@ -241,15 +802,753 @@
 
                                 <Button x:Name="AddOperator"
                                         Content="Add Operator"
-                                        Margin="0,0,0,0"
+                                        Margin="10,0,0,0"
+                                        Width="100"
                                         Grid.Row="5"
-                                        Grid.Column="0"
+                                        Grid.Column="4"
                                         Padding="8,2"
                                         VerticalAlignment="Center"
-                                        Click="AddOperatorButton_Click"/>
+                                        Click="AddOperatorButton_Click">
+                                    <Button.RenderTransform>
+                                        <TranslateTransform Y="5"/>
+                                        <!-- Moves Up -->
+                                    </Button.RenderTransform>
+                                </Button>
+
+                                <!-- Shift Label -->
+                                <TextBlock x:Name="Shift"
+                                           Text="Shift:"
+                                           Grid.Row="4"
+                                           Grid.Column="0"
+                                           Margin="5,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="ShiftDesc"
+                                           Text="Description:"
+                                           Grid.Row="5"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <TextBox x:Name="ShiftDescTxt"
+                                         Width="100"
+                                         Grid.Row="5"
+                                         Grid.Column="1"
+                                         Margin="10,0,0,0"
+                                         VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="StartTime"
+                                           Text="Start time:"
+                                           Grid.Row="6"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <xctk:TimePicker 
+                                        x:Name="StartTimePicker"
+                                        Grid.Row="6"
+                                        Grid.Column="1"
+                                        Width="100"
+                                        Margin="10,0,0,0"
+                                        Format="Custom"
+                                        FormatString="HH:mm"
+                                        ShowButtonSpinner="False"
+                                        AllowTextInput="True"
+                                        Watermark="HH:mm"/>
+
+                                <TextBlock x:Name="EndTime"
+                                           Text="End time:"
+                                           Grid.Row="7"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <xctk:TimePicker 
+                                        x:Name="EndTimePicker"
+                                        Grid.Row="7"
+                                        Grid.Column="1"
+                                        Width="100"
+                                        Margin="10,0,0,0"
+                                        Format="Custom"
+                                        FormatString="HH:mm"
+                                        ShowButtonSpinner="False"
+                                        AllowTextInput="True"
+                                        Watermark="HH:mm"/>
+
+                                <TextBlock x:Name="TargetProduction"
+                                           Text="Target Production:"
+                                           Grid.Row="8"
+                                           Grid.Column="0"
+                                           Margin="30,0,-18,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <TextBox x:Name="TargetProductionTxt"
+                                         Width="100"
+                                         Grid.Row="8"
+                                         Grid.Column="1"
+                                         Margin="10,0,0,0"
+                                         VerticalAlignment="Center">
+                                    <TextBox.InputScope>
+                                        <InputScope>
+                                            <InputScope.Names>
+                                                <InputScopeName NameValue="Number"/>
+                                            </InputScope.Names>
+                                        </InputScope>
+                                    </TextBox.InputScope>
+                                </TextBox>
+
+                                <TextBlock x:Name="ShiftIsActive"
+                                           Text="Is active:"
+                                           Grid.Row="9"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <ToggleButton x:Name="ShiftIsActiveToggl"
+                                              Width="35" Height="17" 
+                                              Grid.Row="9"
+                                              Grid.Column="1"
+                                              Background="Transparent"
+                                              Cursor="Hand"
+                                              BorderThickness="0"
+                                              Margin="-50,0,0,0"
+                                              Click="OperatorIsActive_Click">
+                                    <!--<ToggleButton.RenderTransform>
+                                            <TranslateTransform Y="-156"/>
+                                            </ToggleButton.RenderTransform>-->
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Grid Width="35" Height="17">
+                                                <!-- Background Border -->
+                                                <Border x:Name="ToggleBackground"
+                                                        Width="35" Height="17" 
+                                                        CornerRadius="8"
+                                                        Background="Gray"/>
+                                                <!-- Toggle Thumb -->
+                                                <Ellipse x:Name="ToggleThumb"
+                                                         Width="15" Height="15"  
+                                                         Fill="White"
+                                                         HorizontalAlignment="Left"
+                                                         Margin="2, 0, 0, 0">
+                                                    <Ellipse.RenderTransform>
+                                                        <TranslateTransform x:Name="ThumbTransform"/>
+                                                    </Ellipse.RenderTransform>
+                                                </Ellipse>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                                        <Setter.Value>
+                                                            <TranslateTransform X="16"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsChecked" Value="False">
+                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
+                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                                        <Setter.Value>
+                                                            <TranslateTransform X="0"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </ToggleButton.Template>
+                                </ToggleButton>
+
+                                <Button x:Name="AddShift"
+                                        Content="Add Shift"
+                                        Margin="10,0,0,0"
+                                        Width="100"
+                                        Grid.Row="10"
+                                        Grid.Column="1"
+                                        Padding="8,2"
+                                        VerticalAlignment="Center"
+                                        Click="AddShiftButton_Click">
+                                    <Button.RenderTransform>
+                                        <TranslateTransform Y="5"/>
+                                    </Button.RenderTransform>
+                                </Button>
+
+                                <!-- Size Label -->
+                                <TextBlock x:Name="ShoeSize"
+                                           Text="Size:"
+                                           Grid.Row="7"
+                                           Grid.Column="3"
+                                           Margin="5,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center"/>
+
+                                <TextBlock x:Name="SizeType"
+                                           Text="Type:"
+                                           Grid.Row="8"
+                                           Grid.Column="3"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <ComboBox x:Name="SizeTypeComboBox"
+                                          Width="100"
+                                          Grid.Row="8"
+                                          Grid.Column="4"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"
+                                          IsEditable="True"
+                                          IsReadOnly="True">
+                                    <!-- Manually add items -->
+                                    <ComboBoxItem Content="EU"/>
+                                    <ComboBoxItem Content="UA"/>
+
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox">
+                                            <Setter Property="Text" Value="-- Select Type --"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                    <Setter Property="Text" Value="-- Select Type --"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+
+                                <TextBlock x:Name="SizeValue"
+                                           Text="Value:"
+                                           Grid.Row="9"
+                                           Grid.Column="3"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                <TextBox x:Name="SizeValueTxt"
+                                         Width="100"
+                                         Grid.Row="9"
+                                         Grid.Column="4"
+                                         Margin="10,0,0,0"
+                                         VerticalAlignment="Center"/>
+
+                                <Button x:Name="AddSize"
+                                        Content="Add Size"
+                                        Margin="10,0,0,0"
+                                        Width="100"
+                                        Grid.Row="10"
+                                        Grid.Column="4"
+                                        Padding="8,2"
+                                        VerticalAlignment="Center"
+                                        Click="AddSizeButton_Click">
+                                    <Button.RenderTransform>
+                                        <TranslateTransform Y="5"/>
+                                    </Button.RenderTransform>
+                                </Button>
                             </Grid>
                         </TabItem>
 
+                        <TabItem Header="Testing">
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <!-- Left half -->
+                                    <ColumnDefinition Width="*" />
+                                    <!-- Right half -->
+                                </Grid.ColumnDefinitions>
+
+                                <!-- LEFT SIDE: Structured layout with rows/columns -->
+                                <Grid Grid.Column="0">
+                                    <!-- Row and Column Definitions as you already have -->
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- ! Item Label-->
+                                    <TextBlock x:Name="Item"
+                                           Text="Item:"
+                                           Grid.Row="0"
+                                           Grid.Column="0"
+                                           Margin="5,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center"/>
+
+                                    <TextBlock x:Name="ModelName"
+                                           Text="Model Name:"
+                                           Grid.Row="1"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                    <!--<TextBox x:Name="ModelNameTxt"
+                                         Width="100"
+                                         Grid.Row="1"
+                                         Grid.Column="1"
+                                         Margin="10,0,0,0"
+                                         VerticalAlignment="Center"/>-->
+                                    <!--<ComboBox x:Name="ModelNamesComboBox"
+                                          Width="100"
+                                          Grid.Row="1"
+                                          Grid.Column="1"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"
+                                          DisplayMemberPath="."
+                                          SelectedValuePath="."/>-->
+                                    <ComboBox x:Name="ModelNamesComboBox"
+                                          Width="100"
+                                          Grid.Row="1"
+                                          Grid.Column="1"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"
+                                          IsEditable="True"
+                                          IsReadOnly="True">
+                                        <!-- Manually add items -->
+                                        <ComboBoxItem Content="AAAA"/>
+                                        <ComboBoxItem Content="ABCD"/>
+                                        <ComboBoxItem Content="FGHJ"/>
+
+                                        <ComboBox.Style>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="Text" Value="-- Select Model --"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="-- Select Model --"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Style>
+                                    </ComboBox>
+
+                                    <TextBlock x:Name="Type"
+                                           Text="Type:"
+                                           Grid.Row="2"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="TypeComboBox"
+                                          Width="100"
+                                          Grid.Row="2"
+                                          Grid.Column="1"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"
+                                          IsEditable="True"
+                                          IsReadOnly="True">
+                                        <!-- Manually add items -->
+                                        <ComboBoxItem Content="Right" Tag="1"/>
+                                        <ComboBoxItem Content="Left" Tag="2"/>
+
+                                        <ComboBox.Style>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="Text" Value="-- Select Type --"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="-- Select Type --"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Style>
+                                    </ComboBox>
+
+                                    <TextBlock x:Name="Size"
+                                           Text="Size:"
+                                           Grid.Row="3"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                    <!--<ComboBox x:Name="ShoeSizeComboBox"
+                                              Width="100"
+                                              Grid.Row="3"
+                                              Grid.Column="1"
+                                              Margin="10,0,0,0"
+                                              VerticalAlignment="Center"
+                                              DisplayMemberPath="."
+                                              SelectedValuePath="."/>-->
+                                    <ComboBox x:Name="ShoeSizeComboBox"
+                                              Width="100"
+                                              Grid.Row="3"
+                                              Grid.Column="1"
+                                              Margin="10,0,0,0"
+                                              VerticalAlignment="Center"
+                                              DisplayMemberPath="."
+                                              SelectedValuePath=".">
+                                        <ComboBox.Style>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="Text" Value="-- Select Size --"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="-- Select Size --"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Style>
+                                    </ComboBox>
+                                    
+                                    <TextBlock x:Name="PartType"
+                                           Text="Part Type:"
+                                           Grid.Row="4"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="PartTypeComboBox"
+                                          Width="100"
+                                          Grid.Row="4"
+                                          Grid.Column="1"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"
+                                          IsEditable="True"
+                                          IsReadOnly="True">
+                                        <!-- Manually add items -->
+                                        <ComboBoxItem Content="Upper" Tag="1"/>
+                                        <ComboBoxItem Content="Sole" Tag="2"/>
+
+                                        <ComboBox.Style>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="Text" Value="-- Select Part type --"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="-- Select Part type --"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Style>
+                                    </ComboBox>
+
+                                    <TextBlock x:Name="ItemOperator"
+                                           Text="Operator:"
+                                           Grid.Row="5"
+                                           Grid.Column="0"
+                                           Margin="30,0,10,0"
+                                           Foreground="{DynamicResource titleColor7}"
+                                           FontWeight="Bold" 
+                                           FontSize="10" 
+                                           VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="OperatorComboBox"
+                                          Width="100"
+                                          Grid.Row="5"
+                                          Grid.Column="1"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center"
+                                          IsEditable="True"
+                                          IsReadOnly="True">
+                                        <ComboBox.Style>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="Text" Value="-- Select Operator --"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="-- Select Operator --"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Style>
+                                    </ComboBox>
+
+                                    <Button x:Name="AddItem"
+                                        Content="Create Item"
+                                        Margin="10,0,0,0"
+                                        Width="100"
+                                        Grid.Row="6"
+                                        Grid.Column="1"
+                                        Padding="8,2"
+                                        VerticalAlignment="Center"
+                                        Click="AddItemButton_Click">
+                                        <Button.RenderTransform>
+                                            <TranslateTransform Y="5"/>
+                                        </Button.RenderTransform>
+                                    </Button>
+
+                                    <!-- Production Label -->
+                                    <Grid x:Name="ProductionPanel" Visibility="Collapsed"
+                                      Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2">
+                                        <!-- Adjust position as needed -->
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="130"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock x:Name="Production"
+                                               Text="Production:"
+                                               Grid.Row="0"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="12" 
+                                               VerticalAlignment="Center"/>
+
+                                        <TextBlock x:Name="ProductionName"
+                                               Text="Currently working on:"
+                                               Grid.Row="1"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold"
+                                               FontSize="10"
+                                               VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="CurrentProdItemText"
+                                             Grid.Row="1"
+                                             Grid.Column="1"
+                                             Width="120"
+                                             Margin="10,0,0,0"
+                                             VerticalAlignment="Center"/>
+
+                                        <Button x:Name="AddProduction"
+                                            Content="Start Production"
+                                            Width="100"
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Margin="10,5,0,0"
+                                            Click="StartProduction_Click"/>
+                                    </Grid>
+                                </Grid>
+
+                                <!-- Result Label -->
+                                <Grid x:Name="CompletionPanel" Visibility="Collapsed"
+                                      Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+                                    <!-- Adjust position as needed -->
+                                    <!--Visibility="Collapsed"-->
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="130"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock x:Name="Result"
+                                               Text="Result:"
+                                               Grid.Row="0"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold" 
+                                               FontSize="12" 
+                                               VerticalAlignment="Center"/>
+
+                                    <TextBlock x:Name="CycleTime"
+                                               Text="Cycle Time:"
+                                               Grid.Row="1"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold"
+                                               FontSize="10"
+                                               VerticalAlignment="Center"/>
+                                    <TextBox x:Name="CycleTimeTxt"
+                                             Grid.Row="1"
+                                             Grid.Column="1"
+                                             Width="100"
+                                             Margin="10,0,0,0"
+                                             VerticalAlignment="Center"/>
+
+                                    <TextBlock x:Name="IsDefective"
+                                               Text="IsDefective:"
+                                               Grid.Row="2"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold"
+                                               FontSize="10"
+                                               VerticalAlignment="Center"/>
+                                    <ToggleButton x:Name="ResultIsDefective"
+                                                  Width="35" Height="17" 
+                                                  Grid.Row="2"
+                                                  Grid.Column="1"
+                                                  Background="Transparent"
+                                                  Cursor="Hand"
+                                                  BorderThickness="0"
+                                                  Margin="-50,0,0,0"
+                                                  Click="OperatorIsActive_Click">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid Width="35" Height="17">
+                                                    <!-- Background Border -->
+                                                    <Border x:Name="ToggleBackground"
+                                                            Width="35" Height="17" 
+                                                            CornerRadius="8"
+                                                            Background="Gray"/>
+                                                    <!-- Toggle Thumb -->
+                                                    <Ellipse x:Name="ToggleThumb"
+                                                             Width="15" Height="15"  
+                                                             Fill="White"
+                                                             HorizontalAlignment="Left"
+                                                             Margin="2, 0, 0, 0">
+                                                        <Ellipse.RenderTransform>
+                                                            <TranslateTransform x:Name="ThumbTransform"/>
+                                                        </Ellipse.RenderTransform>
+                                                    </Ellipse>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
+                                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                                            <Setter.Value>
+                                                                <TranslateTransform X="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="False">
+                                                        <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
+                                                        <Setter Property="RenderTransform" TargetName="ToggleThumb">
+                                                            <Setter.Value>
+                                                                <TranslateTransform X="0"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+
+                                    <Button x:Name="AddResult"
+                                            Content="Add Result"
+                                            Width="100"
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            Margin="10,0,0,0"
+                                            Click="AddResult_Click">
+                                        <Button.RenderTransform>
+                                            <TranslateTransform Y="5"/>
+                                        </Button.RenderTransform>
+                                    </Button>
+                                </Grid>
+
+                                <!-- Failure Label -->
+                                <Grid x:Name="FaliurePanel" Visibility="Collapsed"
+                                      Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+                                    <!-- Adjust position as needed -->
+                                    <!--Visibility="Collapsed"-->
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock x:Name="Failure"
+                                               Text="Failure Details:" 
+                                               Grid.Row="0"
+                                               Grid.Column="0"
+                                               FontWeight="Bold"
+                                               FontSize="12" 
+                                               Foreground="{DynamicResource titleColor7}"
+                                               Margin="5,0,10,0"
+                                               VerticalAlignment="Center"/>
+
+                                    <TextBlock x:Name="FailureName"
+                                               Text="Item:"
+                                               Grid.Row="1"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold"
+                                               FontSize="10"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="CurrentFailureItemText"
+                                             Grid.Row="1"
+                                             Grid.Column="1"
+                                             Width="150"
+                                             Margin="10,0,0,0"
+                                             VerticalAlignment="Center"/>
+
+                                    <TextBlock x:Name="FailureDesc"
+                                               Text="Failure Description:"
+                                               Grid.Row="2"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold"
+                                               FontSize="10"
+                                               VerticalAlignment="Center"/>
+                                    <!--<TextBlock x:Name="CurrentFailureDesc"
+                                             Grid.Row="2"
+                                             Grid.Column="1"
+                                             Width="150"
+                                             Margin="10,0,0,0"
+                                             VerticalAlignment="Center"/>-->
+                                    <TextBlock x:Name="CurrentFailureDesc"
+                                               Grid.Row="2"
+                                               Grid.Column="1"
+                                               Grid.RowSpan="2"
+                                               Width="150"
+                                               Margin="10,0,0,0"
+                                               VerticalAlignment="Top"
+                                               TextWrapping="Wrap"
+                                               Height="Auto"/>
+
+                                    <TextBlock x:Name="FailureSeverity"
+                                               Text="Failure Severity:"
+                                               Grid.Row="4"
+                                               Grid.Column="0"
+                                               Margin="5,0,10,0"
+                                               Foreground="{DynamicResource titleColor7}"
+                                               FontWeight="Bold"
+                                               FontSize="10"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="CurrentFailureSeverity"
+                                             Grid.Row="4"
+                                             Grid.Column="1"
+                                             Width="150"
+                                             Margin="10,0,0,0"
+                                             VerticalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
                     </TabControl>
                 </Grid>
             </Border>

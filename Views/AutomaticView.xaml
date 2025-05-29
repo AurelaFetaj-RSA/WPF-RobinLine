@@ -679,18 +679,19 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Margin="275, 105, 0, 0">
-                            <fa:IconImage Name="StatusIcon"
+                            <!--<fa:IconImage Name="StatusIcon"
                                           Icon="Check"
                                           Width="17"
                                           Height="17"
                                           Foreground="green"
                                           VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"/>
+                                          HorizontalAlignment="Center"/>-->
+                            <Ellipse x:Name="EllipseIcon" Width="25" Height="25" Fill="Green" Margin="-5,-5,0,0"/>
                         </Border>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
-                                    HorizontalAlignment="Center" Margin="115,125,0,0">
+                                    HorizontalAlignment="Center" Margin="90,125,0,0">
                             <TextBlock x:Name="ReachedTextBlock"
-                                       Text="{DynamicResource Reached}"
+                                       Text="{DynamicResource TemperatureOk}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 
@@ -1001,18 +1002,19 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Margin="275, 105, 0, 0">
-                            <fa:IconImage Name="Oven2StatusIcon"
+                            <!--<fa:IconImage Name="Oven2StatusIcon"
                                           Icon="Times"
                                           Width="14"
                                           Height="14"
                                           Foreground="red"
                                           VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"/>
+                                          HorizontalAlignment="Center"/>-->
+                            <Ellipse x:Name="Oven2EllipseIcon" Width="25" Height="25" Fill="Green" Margin="-5,-5,0,0"/>
                         </Border>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top"
-                                    HorizontalAlignment="Center" Margin="115,125,0,0">
+                                    HorizontalAlignment="Center" Margin="90,125,0,0">
                             <TextBlock x:Name="Oven2ReachedTextBlock"
-                                       Text="{DynamicResource Reached}"
+                                       Text="{DynamicResource TemperatureOk}"
                                        Foreground="{DynamicResource titleColor7}"
                                        FontWeight="Bold" 
                                        FontSize="12" 

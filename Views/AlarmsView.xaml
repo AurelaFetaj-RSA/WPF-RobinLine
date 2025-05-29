@@ -146,7 +146,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot1TankLvlLowSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot1TankLvlLowSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A9 - Robot 1 Tank Low" 
                Foreground="{DynamicResource titleColor7}"
@@ -155,7 +155,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot1TankLvlEmptySquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot1TankLvlEmptySquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A10 - Robot 1 Tank Empty" 
                Foreground="{DynamicResource titleColor7}"
@@ -164,7 +164,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="6" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot1ReadySquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot1ReadySquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A14 - Robot 1 Ready" 
                Foreground="{DynamicResource titleColor7}"
@@ -173,7 +173,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="7" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot1AirPressureSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot1AirPressureSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A16 - Robot 1 Airpressure" 
                Foreground="{DynamicResource titleColor7}"
@@ -182,7 +182,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="8" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot1AutomaticSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot1AutomaticSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A18 - Robot 1 in Automatic" 
                Foreground="{DynamicResource titleColor7}"
@@ -191,7 +191,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="9" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven1AutomaticSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven1AutomaticSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A20 - Oven 1 in Automatic" 
                Foreground="{DynamicResource titleColor7}"
@@ -200,7 +200,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="10" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven1MotorBeltSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven1MotorBeltSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A33 - Oven 1 Motor Belt" 
                Foreground="{DynamicResource titleColor7}"
@@ -209,7 +209,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="11" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven1Fan1InverterSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven1Fan1InverterSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A34 - Oven 1 Fan 1 Inverter" 
                Foreground="{DynamicResource titleColor7}"
@@ -218,7 +218,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="12" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven1Fan2InverterSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven1Fan2InverterSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A35 - Oven 1 Fan 2 Inverter" 
                Foreground="{DynamicResource titleColor7}"
@@ -227,7 +227,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="13" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven1LampStopSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven1LampStopSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A36 - Oven 1 Lamps Stopped" 
                Foreground="{DynamicResource titleColor7}"
@@ -281,7 +281,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot2TankLvlLowSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot2TankLvlLowSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A12 - Robot 2 Tank Low" 
                Foreground="{DynamicResource titleColor7}"
@@ -290,7 +290,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot2TankLvlEmptySquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot2TankLvlEmptySquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A13 - Robot 2 Tank Empty" 
                Foreground="{DynamicResource titleColor7}"
@@ -299,7 +299,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="6" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot2ReadySquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot2ReadySquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A15 - Robot 2 Ready" 
                Foreground="{DynamicResource titleColor7}"
@@ -308,7 +308,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="7" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot2AirPressureSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot2AirPressureSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A17 - Robot 2 Airpressure" 
                Foreground="{DynamicResource titleColor7}"
@@ -317,7 +317,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="8" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Robot2AutomaticSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Robot2AutomaticSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A19 - Robot 2 in Automatic" 
                Foreground="{DynamicResource titleColor7}"
@@ -326,7 +326,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="9" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven2AutomaticSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven2AutomaticSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A21 - Oven 2 in Automatic" 
                Foreground="{DynamicResource titleColor7}"
@@ -335,7 +335,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="10" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven2MotorBeltSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven2MotorBeltSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A49 - Oven 2 Motor Belt" 
                Foreground="{DynamicResource titleColor7}"
@@ -344,7 +344,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="11" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven2Fan1InverterSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven2Fan1InverterSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A50 - Oven 2 Fan 1 Inverter" 
                Foreground="{DynamicResource titleColor7}"
@@ -353,7 +353,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="12" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven2Fan2InverterSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven2Fan2InverterSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A51 - Oven 2 Fan 2 Inverter" 
                Foreground="{DynamicResource titleColor7}"
@@ -362,7 +362,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Grid.Row="13" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Border x:Name="Oven2LampStopSquare" Width="12" Height="12" CornerRadius="2" 
+                            <Border x:Name="Oven2LampStopSquare" Width="12" Height="12" Background="Gray" CornerRadius="2" 
             VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="A52 - Oven 2 Lamps Stopped" 
                Foreground="{DynamicResource titleColor7}"

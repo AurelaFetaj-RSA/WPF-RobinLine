@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using Opc.UaFx.Client;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -14,7 +11,6 @@ using WPF_App.Services;
 using WPF_RobinLine.Configurations;
 using WPF_RobinLine.Services;
 using Xceed.Wpf.Toolkit;
-using static WPF_App.MainWindow;
 
 namespace WPF_App.Views
 {
@@ -140,9 +136,8 @@ namespace WPF_App.Views
             );
 
             InitializeSquareBitMapping();
-            //HandleAlarms();
+            TcpServerHelper.StartAsync(9999);
             LoadModelNames();
-            InitializeConnectionsAsync();
             // Initialize with configuration
             var config = new RobinLineOpcConfiguration();
             _opcUaClient = new OpcUaClientService();
@@ -154,35 +149,6 @@ namespace WPF_App.Views
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
-        }
-
-        public async Task InitializeConnectionsAsync()
-        {
-            // Initialize R1 connection (async)
-            //_r1Client = new TcpClientHelper("172.31.10.146", 9999);
-            _r1Client = new TcpClientHelper("127.0.0.1", 52000);
-            _r1Client.ConnectionStatusChanged += (sender, isConnected) =>
-            {
-                Console.WriteLine($"R1 Connection: {(isConnected ? "Connected" : "Disconnected")}");
-            };
-            _r1Client.MessageReceived += (sender, message) =>
-            {
-                Console.WriteLine($"R1 Message: {message}");
-            };
-            await _r1Client.ConnectAsync();
-
-            // Initialize R2 connection (async)
-            //_r2Client = new TcpClientHelper("172.31.10.156", 9999);
-            _r2Client = new TcpClientHelper("127.0.0.1", 52000);
-            _r2Client.ConnectionStatusChanged += (sender, isConnected) =>
-            {
-                Console.WriteLine($"R2 Connection: {(isConnected ? "Connected" : "Disconnected")}");
-            };
-            _r2Client.MessageReceived += (sender, message) =>
-            {
-                Console.WriteLine($"R2 Message: {message}");
-            };
-            await _r2Client.ConnectAsync();
         }
 
         private void InitializeSquareBitMapping()
@@ -339,13 +305,13 @@ namespace WPF_App.Views
                             TemperatureTextBlock.Text = $"{value}°";
                             break;
                         case "Oven1TemperatureReached":
-                            UpdateTemperatureStatus((bool)value, ReachedTextBlock, StatusIcon, true);
+                            UpdateTemperatureStatus((bool)value, ReachedTextBlock, EllipseIcon, true);
                             break;
                         case "Oven2Temperature":
                             Oven2TemperatureTextBlock.Text = $"{value}°";
                             break;
                         case "Oven2TemperatureReached":
-                            UpdateTemperatureStatus((bool)value, Oven2ReachedTextBlock, Oven2StatusIcon, false);
+                            UpdateTemperatureStatus((bool)value, Oven2ReachedTextBlock, Oven2EllipseIcon, false);
                             break;
                         case "Oven1Ready":
                             UpdateReadyStatus((bool)value, LampIcon, ReadyOven1TextBlock);
@@ -462,7 +428,7 @@ namespace WPF_App.Views
             }
         }
 
-        private void UpdateTemperatureStatus(bool isReached, TextBlock textBlock, FontAwesome.Sharp.IconImage icon, bool isOven1)
+        private void UpdateTemperatureStatus(bool isReached, TextBlock textBlock, Ellipse ellipse, bool isOven1)
         {
             ref bool lastStatus = ref (isOven1 ? ref _lastOven1TemperatureStatus : ref _lastOven2TemperatureStatus);
 
@@ -470,9 +436,12 @@ namespace WPF_App.Views
             if (!isReached || isReached != lastStatus)
             {
                 //textBlock.Text = isReached ? "Reached" : "Not Reached";
-                icon.Icon = isReached ? FontAwesome.Sharp.IconChar.Check : FontAwesome.Sharp.IconChar.Times;
-                icon.Foreground = new SolidColorBrush(isReached ?
-                    (Color)ColorConverter.ConvertFromString("#02a29a") : Colors.Red);
+                //icon.Icon = isReached ? FontAwesome.Sharp.IconChar.Check : FontAwesome.Sharp.IconChar.Times;
+                //icon.Foreground = new SolidColorBrush(isReached ?
+                //    (Color)ColorConverter.ConvertFromString("#02a29a") : Colors.Red);
+
+                ellipse.Fill = new SolidColorBrush(isReached ?
+                   (Color)ColorConverter.ConvertFromString("#02a29a") : Colors.Red);
 
                 // Only show message if status changed (avoid spamming)
                 if (isReached != lastStatus)
@@ -989,18 +958,11 @@ namespace WPF_App.Views
             }
         }
 
-        //private void HandleAlarms(ushort[] alarmsArray)
         private void HandleAlarms(ushort[] alarmsArray)
         {
             try
             {
                 if (_opcUaClient == null) return;
-
-                //int[] testArray = { 0, 24576, 0, 8, 8 }; // Test data
-                //int[] testArray = { 0, 512, 2, 0, 0 }; // Test data
-                //int[] testArray = { 0, 32768, 16, 4, 16 }; // Test data
-                //int[] testArray = { 0, 15, 16, 4, 16 }; // Test data
-
                 if (alarmsArray is ushort[] ushortArray)
                 {
                     var testArray = ushortArray.Select(x => (int)x).ToArray();
@@ -1145,41 +1107,66 @@ namespace WPF_App.Views
 
         private async void ButtonResetRotary_Click(object sender, RoutedEventArgs e)
         {
-            var result = System.Windows.MessageBox.Show("Are you sure to reset ROBOTS buffer programs?", "Confirm", MessageBoxButton.YesNo);
-            if (result != MessageBoxResult.Yes) return;
+            var result = System.Windows.MessageBox.Show(
+                "Are you sure to reset ROBOTS buffer programs?", 
+                "Confirmation", 
+                MessageBoxButton.YesNo, 
+                MessageBoxImage.Question);
 
-            if (!WPF_RobinLine.Properties.Settings.Default.R1Simulation)
-                await _r1Client.SendCommandAsync("ROTARY_EMPTY;");
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    if (!WPF_RobinLine.Properties.Settings.Default.R1Simulation)
+                        //server.SendCommandToRobot(System.Net.IPAddress.Parse("192.168.1.49"), "PCSERVERTEST;", 5004);
+                        TcpServerHelper.SendCommandToRobot(System.Net.IPAddress.Parse("172.31.10.146"), "ROTARY_EMPTY;", 9999);
 
-            if (!WPF_RobinLine.Properties.Settings.Default.R2Simulation)
-                await _r2Client.SendCommandAsync("ROTARY_EMPTY;");
+                    // Send to R2
+                    if (!WPF_RobinLine.Properties.Settings.Default.R2Simulation)
+                        //server.SendCommandToRobot(System.Net.IPAddress.Parse("192.168.1.49"), "PCSERVERTEST;", 5004);
+                        TcpServerHelper.SendCommandToRobot(System.Net.IPAddress.Parse("172.31.10.156"), "ROTARY_EMPTY;", 9999);
+                }
+                catch (Exception ex)
+                {
+                    //UpdateStatus($"Error: {ex.Message}");
+                    System.Windows.MessageBox.Show($"Error sending reset command: {ex.Message}", "Error", 
+                                  MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private async void ButtonUpdateRotary_Click(object sender, RoutedEventArgs e)
         {
             var modelName = ModelNamesComboBox.Text;
-            var result = System.Windows.MessageBox.Show($"Are you sure to LOAD ROBOTS buffer programs of model {modelName}?",
-                              "Confirm",
-                              MessageBoxButton.YesNo,
-                              MessageBoxImage.Information);
-            //var result = System.Windows.MessageBox.Show("Reset ROBOTS buffer programs?", "Confirm", MessageBoxButton.YesNo);
-            if (result != MessageBoxResult.Yes) return;
 
-            var command = $"ROTARY_LOAD,{modelName},00;";
-            try
-            {
-                if (!WPF_RobinLine.Properties.Settings.Default.R1Simulation)
-                await _r1Client.SendCommandAsync(command);
+            var result = System.Windows.MessageBox.Show(
+                $"Load model '{modelName}' to all robots?",
+                "Confirm",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
 
-            if (!WPF_RobinLine.Properties.Settings.Default.R2Simulation)
-                await _r2Client.SendCommandAsync(command);
-            }
-            catch (Exception ex)
+            if (result == MessageBoxResult.Yes)
             {
-                System.Windows.MessageBox.Show($"Error sending command to robots: {ex.Message}",
-                                               "Error",
-                                               MessageBoxButton.OK,
-                                               MessageBoxImage.Error);
+                try
+                {
+                    string command = $"ROTARY_LOAD,{modelName},00;";
+
+                    // Send to R1
+                    if (!WPF_RobinLine.Properties.Settings.Default.R1Simulation)
+                        //server.SendCommandToRobot(System.Net.IPAddress.Parse("192.168.1.49"), command, 5004);
+                        TcpServerHelper.SendCommandToRobot(System.Net.IPAddress.Parse("172.31.10.146"), command, 9999);
+
+                    // Send to R2
+                    if (!WPF_RobinLine.Properties.Settings.Default.R2Simulation)
+                        //server.SendCommandToRobot(System.Net.IPAddress.Parse("192.168.1.49"), command, 5004);
+                        TcpServerHelper.SendCommandToRobot(System.Net.IPAddress.Parse("172.31.10.156"), command, 9999);
+                    
+                    System.Windows.MessageBox.Show($"Loaded '{modelName}'!", "Success");
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Error: {ex.Message}", "Error");
+                }
             }
         }
 
