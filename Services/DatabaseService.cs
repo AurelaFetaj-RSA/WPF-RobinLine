@@ -147,7 +147,7 @@ namespace WPF_RobinLine.Services
                         cmd.Parameters.Add(new OleDbParameter { Value = flags[i] });
                     }
 
-                    // Add parameter for the WHERE clause
+                    // Add parameter for the WHERE clause 
                     cmd.Parameters.Add(new OleDbParameter { Value = modelName });
 
                     cmd.ExecuteNonQuery();

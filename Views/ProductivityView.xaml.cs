@@ -1,15 +1,13 @@
 ﻿using DataAccess.Models;
 using LiveCharts;
 using LiveCharts.Wpf;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using WPF_RobinLine.Services;
+using Separator = LiveCharts.Wpf.Separator;
 using Size = DataAccess.Models.Size;
 
 namespace WPF_App.Views
@@ -23,8 +21,11 @@ namespace WPF_App.Views
         private int _currentResultId;
         private string _currentItemModelName;
         private string selectedModel = "";
-        private enum FilterType { None, SingleDate, DateRange }
+        private enum FilterType { None, SingleDate, DateRange, Month }
         private FilterType _currentFilterType = FilterType.None;
+        private readonly Dictionary<Type, Action> _columnConfigurations;
+
+
 
         public ProductivityView()
         {
@@ -43,13 +44,119 @@ namespace WPF_App.Views
             PickedDateFilter.SelectedDateChanged += PickedDateFilter_SelectedDateChanged;
             StartDateFilter.SelectedDateChanged += RangeDateFilter_SelectedDateChanged;
             EndDateFilter.SelectedDateChanged += RangeDateFilter_SelectedDateChanged;
+
+            _columnConfigurations = new Dictionary<Type, Action>
+            {
+                { typeof(Operator), () => ConfigureOperatorColumns() },
+                { typeof(Role), () => ConfigureRoleColumns() }
+                // Add more configurations as needed
+            };
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            ShowItems(null, null); // simulate button click
+
+            ShowItemsWaste(null, null);
+            
         }
 
+        private void ShowItemsWaste(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var context = new ProductivityDbContext())
+                {
+                    DateTime today = DateTime.Today;
+
+                    string sql = $@"
+            SELECT 
+                CONVERT(DATE, p.Timestamp) AS ProductionDate,
+                DATEPART(HOUR, p.Timestamp) AS HourOfDay,
+                FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
+                FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00') + ':00' AS HourRange,
+                COUNT(*) AS ItemsProduced,
+                SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced,
+                0 AS SizeProduced,
+                0 AS ModelsProduced,
+                0 AS TypeProduced,
+                0 AS PartTypeProduced
+            FROM 
+                Production p
+            JOIN 
+                Result r ON p.result_id = r.result_id
+            WHERE 
+                CONVERT(DATE, p.Timestamp) = '{today:yyyy-MM-dd}'
+            GROUP BY 
+                CONVERT(DATE, p.Timestamp),
+                DATEPART(HOUR, p.Timestamp),
+                FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
+                FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00')
+            ORDER BY 
+                ProductionDate,
+                HourOfDay";
+
+                    var summaries = context.HourlyProductions
+                        .FromSqlRaw(sql)
+                        .AsNoTracking()
+                        .ToList();
+
+                    var itemsValues = new ChartValues<int>();
+                    var wasteValues = new ChartValues<int>();
+                    var labels = new List<string>();
+
+                    foreach (var summary in summaries)
+                    {
+                        itemsValues.Add(summary.ItemsProduced);
+                        wasteValues.Add(summary.WasteProduced);
+                        labels.Add(summary.HourRange?.Split('-')[0] ?? summary.HourOfDay.ToString("00") + ":00");
+                    }
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        ProductionChart.Series.Clear();
+
+                        var itemsSeries = new ColumnSeries
+                        {
+                            Title = "Items Produced",
+                            Fill = new SolidColorBrush(Colors.Blue),
+                            Values = itemsValues
+                        };
+
+                        var wasteSeries = new ColumnSeries
+                        {
+                            Title = "Waste Produced",
+                            Fill = new SolidColorBrush(Colors.Green),
+                            Values = wasteValues
+                        };
+
+                        ProductionChart.Series.Add(itemsSeries);
+                        ProductionChart.Series.Add(wasteSeries);
+
+                        //ProductionChart.AxisX[0].Labels = labels;
+                        ProdChart.Text = "Items & Waste (Today)";
+                        ProductionChart.AxisX.Clear();
+
+                        ProductionChart.AxisX.Add(new Axis
+                        {
+                            Title = "Hour",
+                            Labels = labels,
+                            FontSize = 9,
+                            LabelsRotation = 20,
+
+                            Separator = new LiveCharts.Wpf.Separator
+                            {
+                                Step = 2,
+                                IsEnabled = false
+                            }
+                        });
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading production data: {ex.Message}", "Error");
+            }
+        }
 
         public async void OperatorIsActive_Click(object sender, RoutedEventArgs e)
         {
@@ -477,57 +584,270 @@ namespace WPF_App.Views
             }
         }
 
+        //private void ShowItems(object sender, RoutedEventArgs e)
+        //{
+        //    DateTime? selectedDate = PickedDateFilter.SelectedDate;
+        //    DateTime? startDate = StartDateFilter.SelectedDate;
+        //    DateTime? endDate = EndDateFilter.SelectedDate;
+        //    var selectedShift = ShiftFilterComboBox.SelectedValue as int?;
+
+        //    try
+        //    {
+        //        using (var context = new ProductivityDbContext())
+        //        {
+        //            DateTime fromDate;
+        //            DateTime toDate;
+        //            bool isSingleDay;
+
+        //            if (_currentFilterType == FilterType.SingleDate && PickedDateFilter.SelectedDate.HasValue)
+        //            {
+        //                fromDate = toDate = PickedDateFilter.SelectedDate.Value;
+        //                isSingleDay = true;
+        //            }
+        //            else if (_currentFilterType == FilterType.DateRange &&
+        //                    (StartDateFilter.SelectedDate.HasValue || EndDateFilter.SelectedDate.HasValue))
+        //            {
+        //                fromDate = StartDateFilter.SelectedDate ?? DateTime.MinValue;
+        //                toDate = EndDateFilter.SelectedDate ?? DateTime.MaxValue;
+        //                isSingleDay = false;
+        //            }
+        //            else
+        //            {
+        //                // Default to today if no active filters
+        //                fromDate = toDate = DateTime.Today;
+        //                isSingleDay = true;
+        //                _currentFilterType = FilterType.None;
+        //            }
+
+        //            string sql;
+
+        //            if (isSingleDay)
+        //            {
+        //                // Single day - show hourly breakdown
+        //                sql = $@"
+        //                SELECT 
+        //                    CONVERT(DATE, p.Timestamp) AS ProductionDate,
+        //                    DATEPART(HOUR, p.Timestamp) AS HourOfDay,
+        //                    FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
+        //                    FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00') + ':00' AS HourRange,
+        //                    COUNT(*) AS ItemsProduced,
+        //                    0 AS WasteProduced,
+        //                    0 AS SizeProduced,
+        //                    0 AS ModelsProduced,
+        //                    0 AS TypeProduced,
+        //                    0 AS PartTypeProduced
+        //                FROM 
+        //                    Production p
+        //                WHERE 
+        //                    CONVERT(DATE, p.Timestamp) = '{fromDate:yyyy-MM-dd}'";
+
+        //                if (selectedShift != null && selectedShift.Value != 0)
+        //                    sql += $" AND p.shift_Id = {selectedShift.Value}";
+
+        //                sql += @"
+        //                GROUP BY 
+        //                    CONVERT(DATE, p.Timestamp),
+        //                    DATEPART(HOUR, p.Timestamp)
+        //                ORDER BY 
+        //                    ProductionDate,
+        //                    HourOfDay";
+        //            }
+        //            else
+        //            {
+        //                // Multiple days - show daily totals
+        //                sql = $@"
+        //                SELECT 
+        //                    CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+        //                    0 AS HourOfDay,
+        //                    '' AS HourRange,
+        //                    COUNT(*) AS ItemsProduced,
+        //                    0 AS WasteProduced,
+        //                    0 AS SizeProduced,
+        //                    0 AS ModelsProduced,
+        //                    0 AS TypeProduced,
+        //                    0 AS PartTypeProduced
+        //                FROM 
+        //                    Production p
+        //                WHERE 
+        //                    CONVERT(DATE, p.Timestamp) BETWEEN '{fromDate:yyyy-MM-dd}' AND '{toDate:yyyy-MM-dd}'";
+
+        //                if (selectedShift != null && selectedShift.Value != 0)
+        //                    sql += $" AND p.shift_Id = {selectedShift.Value}";
+
+        //                sql += @"
+        //                GROUP BY 
+        //                    CONVERT(DATE, p.Timestamp)
+        //                ORDER BY 
+        //                    ProductionDate";
+        //            }
+
+        //            var summaries = context.HourlyProductions
+        //                .FromSqlRaw(sql)
+        //                .AsNoTracking()
+        //                .ToList();
+
+        //            // Update chart data
+        //            var values = new ChartValues<int>();
+        //            var labels = new List<string>();
+
+        //            foreach (var summary in summaries)
+        //            {
+        //                values.Add(summary.ItemsProduced);
+        //                if (isSingleDay)
+        //                {
+        //                    // Use HourRange label like "08:00"
+        //                    labels.Add(summary.HourRange?.Split('-')[0] ?? summary.HourOfDay.ToString("00") + ":00");
+        //                }
+        //                else
+        //                {
+        //                    // Use date label like "May 19" or whatever format you prefer
+        //                    labels.Add(summary.ProductionDate?.ToString("MMM dd") ?? "");
+        //                }
+        //            }
+
+        //            Dispatcher.Invoke(() =>
+        //            {
+        //                ProductionChart.Series.Clear();
+
+        //                var itemsSeries = new ColumnSeries
+        //                {
+        //                    Title = "Items",
+        //                    Fill = new SolidColorBrush(Colors.Blue),
+        //                    Values = values
+        //                };
+
+        //                ProductionChart.Series.Add(itemsSeries);
+
+        //                // Configure X axis
+        //                ProductionChart.AxisX.Clear();
+        //                ProductionChart.AxisX.Add(new Axis
+        //                {
+        //                    Title = isSingleDay ? "Hour" : "Date",
+        //                    Labels = labels,
+        //                    FontSize = 9,
+        //                    LabelsRotation = 20,
+
+        //                    Separator = new LiveCharts.Wpf.Separator 
+        //                    { 
+        //                        Step = 2, 
+        //                        IsEnabled = false 
+        //                    }
+        //                });
+
+        //                // Configure Y axis conditionally
+        //                ProductionChart.AxisY.Clear();
+
+        //                if (!isSingleDay)
+        //                {
+        //                    // Daily view - use steps of 100
+        //                    ProductionChart.AxisY.Add(new Axis
+        //                    {
+        //                        MinValue = 0,
+        //                        Separator = new LiveCharts.Wpf.Separator
+        //                        {
+        //                            Step = 200,
+        //                            IsEnabled = true
+        //                        },
+        //                        LabelFormatter = value => value.ToString("N0")
+        //                    });
+        //                }
+        //                else
+        //                {
+        //                    ProductionChart.AxisY.Add(new Axis
+        //                    {
+        //                        MinValue = 0,
+        //                        Separator = new LiveCharts.Wpf.Separator
+        //                        {
+        //                            Step = 10,
+        //                            IsEnabled = true
+        //                        },
+        //                        LabelFormatter = value => value.ToString("N0")
+        //                    });
+        //                }
+
+        //                ProdChart.Text = "Items";
+        //            });
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Error loading production data: {ex.Message}", "Error");
+        //    }
+        //}
+
         private void ShowItems(object sender, RoutedEventArgs e)
         {
-            DateTime? selectedDate = PickedDateFilter.SelectedDate;
-            DateTime? startDate = StartDateFilter.SelectedDate;
-            DateTime? endDate = EndDateFilter.SelectedDate;
-            var selectedShift = ShiftFilterComboBox.SelectedValue as int?;
-
             try
             {
+                // First determine which filter is being applied
+                bool isMonthFilterSelected = MonthFilterComboBox.SelectedItem != null;
+                bool isSingleDateSelected = PickedDateFilter.SelectedDate.HasValue;
+                bool isDateRangeSelected = StartDateFilter.SelectedDate.HasValue || EndDateFilter.SelectedDate.HasValue;
+
+                // Clear other filters based on which one is selected
+                if (isMonthFilterSelected)
+                {
+                    // Clear date filters when month is selected
+                    PickedDateFilter.SelectedDate = null;
+                    StartDateFilter.SelectedDate = null;
+                    EndDateFilter.SelectedDate = null;
+                }
+                else if (isSingleDateSelected || isDateRangeSelected)
+                {
+                    // Clear month filter when date filters are selected
+                    MonthFilterComboBox.SelectedItem = null;
+                }
+
+                DateTime? selectedDate = PickedDateFilter.SelectedDate;
+                DateTime? startDate = StartDateFilter.SelectedDate;
+                DateTime? endDate = EndDateFilter.SelectedDate;
+                var selectedShift = ShiftFilterComboBox.SelectedValue as int?;
+
+                // Safer month parsing
+                int? selectedMonth = null;
+                if (MonthFilterComboBox.SelectedItem is ComboBoxItem selectedMonthItem &&
+                    selectedMonthItem.Tag != null &&
+                    int.TryParse(selectedMonthItem.Tag.ToString(), out int month))
+                {
+                    selectedMonth = month;
+                }
+
                 using (var context = new ProductivityDbContext())
                 {
                     DateTime fromDate;
                     DateTime toDate;
                     bool isSingleDay;
+                    bool isMonthFilter = false;
 
-                    // Handle date logic
-                    //if (startDate.HasValue && endDate.HasValue)
-                    //{
-                    //    fromDate = startDate.Value.Date;
-                    //    toDate = endDate.Value.Date;
-                    //}
-                    //else if (startDate.HasValue)
-                    //{
-                    //    fromDate = toDate = startDate.Value.Date;
-                    //}
-                    //else if (endDate.HasValue)
-                    //{
-                    //    fromDate = toDate = endDate.Value.Date;
-                    //}
-                    //else
-                    //{
-                    //    fromDate = toDate = selectedDate ?? DateTime.Today;
-                    //}
-
-                    //bool isSingleDay = fromDate == toDate;
-
-                    if (_currentFilterType == FilterType.SingleDate && PickedDateFilter.SelectedDate.HasValue)
+                    // Determine which filter is active (order matters!)
+                    if (selectedDate.HasValue)
                     {
-                        fromDate = toDate = PickedDateFilter.SelectedDate.Value;
+                        // Single date filter is active
+                        fromDate = toDate = selectedDate.Value;
                         isSingleDay = true;
+                        _currentFilterType = FilterType.SingleDate;
                     }
-                    else if (_currentFilterType == FilterType.DateRange &&
-                            (StartDateFilter.SelectedDate.HasValue || EndDateFilter.SelectedDate.HasValue))
+                    else if (startDate.HasValue || endDate.HasValue)
                     {
-                        fromDate = StartDateFilter.SelectedDate ?? DateTime.MinValue;
-                        toDate = EndDateFilter.SelectedDate ?? DateTime.MaxValue;
+                        // Date range filter is active
+                        fromDate = startDate ?? DateTime.MinValue;
+                        toDate = endDate ?? DateTime.MaxValue;
                         isSingleDay = false;
+                        _currentFilterType = FilterType.DateRange;
+                    }
+                    else if (selectedMonth.HasValue)
+                    {
+                        // Month filter is active
+                        fromDate = new DateTime(DateTime.Now.Year, selectedMonth.Value, 1);
+                        toDate = fromDate.AddMonths(1).AddDays(-1);
+                        isSingleDay = false;
+                        isMonthFilter = true;
+                        _currentFilterType = FilterType.Month;
                     }
                     else
                     {
-                        // Default to today if no active filters
+                        // NO FILTERS SELECTED - DEFAULT TO TODAY
                         fromDate = toDate = DateTime.Today;
                         isSingleDay = true;
                         _currentFilterType = FilterType.None;
@@ -537,157 +857,398 @@ namespace WPF_App.Views
 
                     if (isSingleDay)
                     {
-                        // Single day - show hourly breakdown
                         sql = $@"
-                        SELECT 
-                            CONVERT(DATE, p.Timestamp) AS ProductionDate,
-                            DATEPART(HOUR, p.Timestamp) AS HourOfDay,
-                            FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
-                            FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00') + ':00' AS HourRange,
-                            COUNT(*) AS ItemsProduced,
-                            0 AS WasteProduced,
-                            0 AS SizeProduced,
-                            0 AS ModelsProduced,
-                            0 AS TypeProduced,
-                            0 AS PartTypeProduced
-                        FROM 
-                            Production p
-                        WHERE 
-                            CONVERT(DATE, p.Timestamp) = '{fromDate:yyyy-MM-dd}'";
-
-                        if (selectedShift != null && selectedShift.Value != 0)
-                            sql += $" AND p.shift_Id = {selectedShift.Value}";
-
-                        sql += @"
-                        GROUP BY 
-                            CONVERT(DATE, p.Timestamp),
-                            DATEPART(HOUR, p.Timestamp)
-                        ORDER BY 
-                            ProductionDate,
-                            HourOfDay";
+                SELECT 
+                    CONVERT(DATE, p.Timestamp) AS ProductionDate,
+                    DATEPART(HOUR, p.Timestamp) AS HourOfDay,
+                    FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
+                    FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00') + ':00' AS HourRange,
+                    COUNT(*) AS ItemsProduced,
+                    0 AS WasteProduced,
+                    0 AS SizeProduced,
+                    0 AS ModelsProduced,
+                    0 AS TypeProduced,
+                    0 AS PartTypeProduced
+                FROM 
+                    Production p
+                WHERE 
+                    CONVERT(DATE, p.Timestamp) = '{fromDate:yyyy-MM-dd}'";
+                    }
+                    else if (isMonthFilter)
+                    {
+                        sql = $@"
+                SELECT 
+                    CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+                    0 AS HourOfDay,
+                    '' AS HourRange,
+                    COUNT(*) AS ItemsProduced,
+                    0 AS WasteProduced,
+                    0 AS SizeProduced,
+                    0 AS ModelsProduced,
+                    0 AS TypeProduced,
+                    0 AS PartTypeProduced
+                FROM 
+                    Production p
+                WHERE 
+                    MONTH(p.Timestamp) = {selectedMonth.Value}
+                    AND YEAR(p.Timestamp) = {fromDate.Year}";
                     }
                     else
                     {
-                        // Multiple days - show daily totals
                         sql = $@"
-                        SELECT 
-                            CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
-                            0 AS HourOfDay,
-                            '' AS HourRange,
-                            COUNT(*) AS ItemsProduced,
-                            0 AS WasteProduced,
-                            0 AS SizeProduced,
-                            0 AS ModelsProduced,
-                            0 AS TypeProduced,
-                            0 AS PartTypeProduced
-                        FROM 
-                            Production p
-                        WHERE 
-                            CONVERT(DATE, p.Timestamp) BETWEEN '{fromDate:yyyy-MM-dd}' AND '{toDate:yyyy-MM-dd}'";
-
-                        if (selectedShift != null && selectedShift.Value != 0)
-                            sql += $" AND p.shift_Id = {selectedShift.Value}";
-
-                        sql += @"
-                        GROUP BY 
-                            CONVERT(DATE, p.Timestamp)
-                        ORDER BY 
-                            ProductionDate";
+                SELECT 
+                    CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+                    0 AS HourOfDay,
+                    '' AS HourRange,
+                    COUNT(*) AS ItemsProduced,
+                    0 AS WasteProduced,
+                    0 AS SizeProduced,
+                    0 AS ModelsProduced,
+                    0 AS TypeProduced,
+                    0 AS PartTypeProduced
+                FROM 
+                    Production p
+                WHERE 
+                    CONVERT(DATE, p.Timestamp) BETWEEN '{fromDate:yyyy-MM-dd}' AND '{toDate:yyyy-MM-dd}'";
                     }
+
+                    if (selectedShift != null && selectedShift.Value != 0)
+                    {
+                        sql += $" AND p.shift_Id = {selectedShift.Value}";
+                    }
+
+                    sql += isSingleDay ? @"
+                GROUP BY 
+                    CONVERT(DATE, p.Timestamp),
+                    DATEPART(HOUR, p.Timestamp)
+                ORDER BY 
+                    ProductionDate,
+                    HourOfDay" : @"
+                GROUP BY 
+                    CONVERT(DATE, p.Timestamp)
+                ORDER BY 
+                    ProductionDate";
 
                     var summaries = context.HourlyProductions
                         .FromSqlRaw(sql)
                         .AsNoTracking()
                         .ToList();
 
-                    // Update chart data
-                    var values = new ChartValues<int>();
-                    var labels = new List<string>();
+                    UpdateChart(summaries, isSingleDay);
 
-                    foreach (var summary in summaries)
-                    {
-                        values.Add(summary.ItemsProduced);
-                        if (isSingleDay)
-                        {
-                            // Use HourRange label like "08:00"
-                            labels.Add(summary.HourRange?.Split('-')[0] ?? summary.HourOfDay.ToString("00") + ":00");
-                        }
-                        else
-                        {
-                            // Use date label like "May 19" or whatever format you prefer
-                            labels.Add(summary.ProductionDate?.ToString("MMM dd") ?? "");
-                        }
-                    }
-
-                    Dispatcher.Invoke(() =>
-                    {
-                        ProductionSeries.Title = "Items";
-                        ProductionSeries.Fill = new SolidColorBrush(Colors.Blue);
-                        ProductionSeries.Values = values;
-
-                        //ProductionChart.AxisX[0].Title = isSingleDay ? "Hourly" : "Daily";
-                        ProductionChart.AxisX[0].Labels = labels;
-                        ProdChart.Text = "Items";
-                    });
+                    ClearAllFilters();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading production data: {ex.Message}", "Error");
+                MessageBox.Show($"Error loading production data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        private void UpdateChart(List<HourlyProduction> summaries, bool isSingleDay)
+        {
+            var values = new ChartValues<int>();
+            var labels = new List<string>();
+
+            foreach (var summary in summaries)
+            {
+                values.Add(summary.ItemsProduced);
+                labels.Add(isSingleDay
+                    ? summary.HourRange?.Split('-')[0] ?? summary.HourOfDay.ToString("00") + ":00"
+                    : summary.ProductionDate?.ToString("MMM dd") ?? "");
+            }
+
+            Dispatcher.Invoke(() =>
+            {
+                ProductionChart.Series.Clear();
+                ProductionChart.Series.Add(new ColumnSeries
+                {
+                    Title = "Items",
+                    Fill = new SolidColorBrush(Colors.Blue),
+                    Values = values
+                });
+
+                ProductionChart.AxisX.Clear();
+                ProductionChart.AxisX.Add(new Axis
+                {
+                    Title = isSingleDay ? "Hour" : "Date",
+                    Labels = labels,
+                    FontSize = 9,
+                    LabelsRotation = 20,
+                    Separator = new LiveCharts.Wpf.Separator { Step = 2, IsEnabled = false }
+                });
+
+                ProductionChart.AxisY.Clear();
+                ProductionChart.AxisY.Add(new Axis
+                {
+                    MinValue = 0,
+                    Separator = new LiveCharts.Wpf.Separator
+                    {
+                        Step = isSingleDay ? 10 : 200,
+                        IsEnabled = true
+                    },
+                    LabelFormatter = value => value.ToString("N0")
+                });
+
+                ProdChart.Text = "Items";
+            });
+        }
+
+        private void ClearAllFilters()
+        {
+            PickedDateFilter.SelectedDate = null;
+            StartDateFilter.SelectedDate = null;
+            EndDateFilter.SelectedDate = null;
+            MonthFilterComboBox.SelectedItem = null;
+            ShiftFilterComboBox.SelectedIndex = -1;
+            _currentFilterType = FilterType.None;
+        }
+
+        //private void ShowWaste(object sender, RoutedEventArgs e)
+        //{
+        //    DateTime? selectedDate = PickedDateFilter.SelectedDate;
+        //    DateTime? startDate = StartDateFilter.SelectedDate;
+        //    DateTime? endDate = EndDateFilter.SelectedDate;
+        //    var selectedShift = ShiftFilterComboBox.SelectedValue as int?;
+
+        //    try
+        //    {
+        //        using (var context = new ProductivityDbContext())
+        //        {
+        //            DateTime fromDate;
+        //            DateTime toDate;
+        //            bool isSingleDay;
+
+        //            // Handle date logic
+        //            //if (startDate.HasValue && endDate.HasValue)
+        //            //{
+        //            //    fromDate = startDate.Value.Date;
+        //            //    toDate = endDate.Value.Date;
+        //            //}
+        //            //else if (startDate.HasValue)
+        //            //{
+        //            //    fromDate = toDate = startDate.Value.Date;
+        //            //}
+        //            //else if (endDate.HasValue)
+        //            //{
+        //            //    fromDate = toDate = endDate.Value.Date;
+        //            //}
+        //            //else
+        //            //{
+        //            //    fromDate = toDate = selectedDate ?? DateTime.Today;
+        //            //}
+
+        //            //bool isSingleDay = fromDate == toDate;
+
+        //            if (_currentFilterType == FilterType.SingleDate && PickedDateFilter.SelectedDate.HasValue)
+        //            {
+        //                fromDate = toDate = PickedDateFilter.SelectedDate.Value;
+        //                isSingleDay = true;
+        //            }
+        //            else if (_currentFilterType == FilterType.DateRange &&
+        //                    (StartDateFilter.SelectedDate.HasValue || EndDateFilter.SelectedDate.HasValue))
+        //            {
+        //                fromDate = StartDateFilter.SelectedDate ?? DateTime.MinValue;
+        //                toDate = EndDateFilter.SelectedDate ?? DateTime.MaxValue;
+        //                isSingleDay = false;
+        //            }
+        //            else
+        //            {
+        //                // Default to today if no active filters
+        //                fromDate = toDate = DateTime.Today;
+        //                isSingleDay = true;
+        //                _currentFilterType = FilterType.None;
+        //            }
+
+        //            string sql;
+
+        //            if (isSingleDay)
+        //            {
+        //                // Single day - show hourly breakdown
+        //                sql = $@"
+        //        SELECT 
+        //            CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+        //            DATEPART(HOUR, p.Timestamp) AS HourOfDay,
+        //            FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
+        //            FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00') + ':00' AS HourRange,
+        //            0 AS ItemsProduced,
+        //            0 AS SizeProduced,
+        //            0 AS ModelsProduced,
+        //            0 AS TypeProduced,
+        //            0 AS PartTypeProduced,
+        //            SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced
+        //        FROM 
+        //            Production p
+        //        JOIN 
+        //            Result r 
+        //        ON 
+        //            p.result_id = r.result_id
+        //        WHERE 
+        //            CONVERT(DATE, p.Timestamp) = '{fromDate:yyyy-MM-dd}'";
+
+        //                if (selectedShift != null && selectedShift.Value != 0)
+        //                    sql += $" AND p.shift_Id = {selectedShift.Value}";
+
+        //                sql += @"
+        //        GROUP BY 
+        //            CONVERT(DATE, p.Timestamp),
+        //            DATEPART(HOUR, p.Timestamp)
+        //        ORDER BY 
+        //            ProductionDate,
+        //            HourOfDay";
+        //            }
+        //            else
+        //            {
+        //                // Multiple days - show daily totals
+        //                sql = $@"
+        //        SELECT 
+        //            CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+        //            0 AS HourOfDay,
+        //            '' AS HourRange,
+        //            0 AS ItemsProduced,
+        //            0 AS SizeProduced,
+        //            0 AS ModelsProduced,
+        //            0 AS TypeProduced,
+        //            0 AS PartTypeProduced,
+        //            SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced
+        //        FROM 
+        //            Production p
+        //        JOIN 
+        //            Result r 
+        //        ON 
+        //            p.result_id = r.result_id
+        //        WHERE 
+        //            CONVERT(DATE, p.Timestamp) BETWEEN '{fromDate:yyyy-MM-dd}' AND '{toDate:yyyy-MM-dd}'";
+
+        //                if (selectedShift != null && selectedShift.Value != 0)
+        //                    sql += $" AND p.shift_Id = {selectedShift.Value}";
+
+        //                sql += @"
+        //        GROUP BY 
+        //            CONVERT(DATE, p.Timestamp)
+        //        ORDER BY 
+        //            ProductionDate";
+        //            }
+
+        //            var summaries = context.HourlyProductions
+        //                .FromSqlRaw(sql)
+        //                .AsNoTracking()
+        //                .ToList();
+
+        //            // Update chart data
+        //            var values = new ChartValues<int>();
+        //            var labels = new List<string>();
+
+        //            foreach (var summary in summaries)
+        //            {
+        //                values.Add(summary.WasteProduced);
+        //                if (isSingleDay)
+        //                {
+        //                    // Use HourRange label like "08:00"
+        //                    labels.Add(summary.HourRange?.Split('-')[0] ?? summary.HourOfDay.ToString("00") + ":00");
+        //                }
+        //                else
+        //                {
+        //                    // Use date label like "May 19" or whatever format you prefer
+        //                    labels.Add(summary.ProductionDate?.ToString("MMM dd") ?? "");
+        //                }
+        //            }
+
+        //            Dispatcher.Invoke(() =>
+        //            {
+        //                ProductionChart.Series.Clear();
+
+        //                var wasteSeries = new ColumnSeries
+        //                {
+        //                    Title = "Waste",
+        //                    Fill = new SolidColorBrush(Colors.Green),
+        //                    Values = values
+        //                };
+
+        //                ProductionChart.Series.Add(wasteSeries);
+        //                ProductionChart.AxisX[0].Labels = labels;
+        //                ProdChart.Text = "Waste";
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Error loading waste data: {ex.Message}", "Error");
+        //    }
+        //}
+
         private void ShowWaste(object sender, RoutedEventArgs e)
         {
-            DateTime? selectedDate = PickedDateFilter.SelectedDate;
-            DateTime? startDate = StartDateFilter.SelectedDate;
-            DateTime? endDate = EndDateFilter.SelectedDate;
-            var selectedShift = ShiftFilterComboBox.SelectedValue as int?;
-
             try
             {
+                // First determine which filter is being applied
+                bool isMonthFilterSelected = MonthFilterComboBox.SelectedItem != null;
+                bool isSingleDateSelected = PickedDateFilter.SelectedDate.HasValue;
+                bool isDateRangeSelected = StartDateFilter.SelectedDate.HasValue || EndDateFilter.SelectedDate.HasValue;
+
+                // Clear other filters based on which one is selected
+                if (isMonthFilterSelected)
+                {
+                    // Clear date filters when month is selected
+                    PickedDateFilter.SelectedDate = null;
+                    StartDateFilter.SelectedDate = null;
+                    EndDateFilter.SelectedDate = null;
+                }
+                else if (isSingleDateSelected || isDateRangeSelected)
+                {
+                    // Clear month filter when date filters are selected
+                    MonthFilterComboBox.SelectedItem = null;
+                }
+
+                DateTime? selectedDate = PickedDateFilter.SelectedDate;
+                DateTime? startDate = StartDateFilter.SelectedDate;
+                DateTime? endDate = EndDateFilter.SelectedDate;
+                var selectedShift = ShiftFilterComboBox.SelectedValue as int?;
+
+                // Safer month parsing
+                int? selectedMonth = null;
+                if (MonthFilterComboBox.SelectedItem is ComboBoxItem selectedMonthItem &&
+                    selectedMonthItem.Tag != null &&
+                    int.TryParse(selectedMonthItem.Tag.ToString(), out int month))
+                {
+                    selectedMonth = month;
+                }
+
                 using (var context = new ProductivityDbContext())
                 {
                     DateTime fromDate;
                     DateTime toDate;
                     bool isSingleDay;
+                    bool isMonthFilter = false;
 
-                    // Handle date logic
-                    //if (startDate.HasValue && endDate.HasValue)
-                    //{
-                    //    fromDate = startDate.Value.Date;
-                    //    toDate = endDate.Value.Date;
-                    //}
-                    //else if (startDate.HasValue)
-                    //{
-                    //    fromDate = toDate = startDate.Value.Date;
-                    //}
-                    //else if (endDate.HasValue)
-                    //{
-                    //    fromDate = toDate = endDate.Value.Date;
-                    //}
-                    //else
-                    //{
-                    //    fromDate = toDate = selectedDate ?? DateTime.Today;
-                    //}
-
-                    //bool isSingleDay = fromDate == toDate;
-
-                    if (_currentFilterType == FilterType.SingleDate && PickedDateFilter.SelectedDate.HasValue)
+                    // Determine which filter is active (order matters!)
+                    if (selectedDate.HasValue)
                     {
-                        fromDate = toDate = PickedDateFilter.SelectedDate.Value;
+                        // Single date filter is active
+                        fromDate = toDate = selectedDate.Value;
                         isSingleDay = true;
+                        _currentFilterType = FilterType.SingleDate;
                     }
-                    else if (_currentFilterType == FilterType.DateRange &&
-                            (StartDateFilter.SelectedDate.HasValue || EndDateFilter.SelectedDate.HasValue))
+                    else if (startDate.HasValue || endDate.HasValue)
                     {
-                        fromDate = StartDateFilter.SelectedDate ?? DateTime.MinValue;
-                        toDate = EndDateFilter.SelectedDate ?? DateTime.MaxValue;
+                        // Date range filter is active
+                        fromDate = startDate ?? DateTime.MinValue;
+                        toDate = endDate ?? DateTime.MaxValue;
                         isSingleDay = false;
+                        _currentFilterType = FilterType.DateRange;
+                    }
+                    else if (selectedMonth.HasValue)
+                    {
+                        // Month filter is active
+                        fromDate = new DateTime(DateTime.Now.Year, selectedMonth.Value, 1);
+                        toDate = fromDate.AddMonths(1).AddDays(-1);
+                        isSingleDay = false;
+                        isMonthFilter = true;
+                        _currentFilterType = FilterType.Month;
                     }
                     else
                     {
-                        // Default to today if no active filters
+                        // NO FILTERS SELECTED - DEFAULT TO TODAY
                         fromDate = toDate = DateTime.Today;
                         isSingleDay = true;
                         _currentFilterType = FilterType.None;
@@ -699,68 +1260,101 @@ namespace WPF_App.Views
                     {
                         // Single day - show hourly breakdown
                         sql = $@"
-                SELECT 
-                    CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
-                    DATEPART(HOUR, p.Timestamp) AS HourOfDay,
-                    FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
-                    FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00') + ':00' AS HourRange,
-                    0 AS ItemsProduced,
-                    0 AS SizeProduced,
-                    0 AS ModelsProduced,
-                    0 AS TypeProduced,
-                    0 AS PartTypeProduced,
-                    SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced
-                FROM 
-                    Production p
-                JOIN 
-                    Result r 
-                ON 
-                    p.result_id = r.result_id
-                WHERE 
-                    CONVERT(DATE, p.Timestamp) = '{fromDate:yyyy-MM-dd}'";
+        SELECT 
+            CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+            DATEPART(HOUR, p.Timestamp) AS HourOfDay,
+            FORMAT(DATEPART(HOUR, p.Timestamp), '00') + ':00-' + 
+            FORMAT((DATEPART(HOUR, p.Timestamp) + 1) % 24, '00') + ':00' AS HourRange,
+            0 AS ItemsProduced,
+            0 AS SizeProduced,
+            0 AS ModelsProduced,
+            0 AS TypeProduced,
+            0 AS PartTypeProduced,
+            SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced
+        FROM 
+            Production p
+        JOIN 
+            Result r 
+        ON 
+            p.result_id = r.result_id
+        WHERE 
+            CONVERT(DATE, p.Timestamp) = '{fromDate:yyyy-MM-dd}'";
 
                         if (selectedShift != null && selectedShift.Value != 0)
                             sql += $" AND p.shift_Id = {selectedShift.Value}";
 
                         sql += @"
-                GROUP BY 
-                    CONVERT(DATE, p.Timestamp),
-                    DATEPART(HOUR, p.Timestamp)
-                ORDER BY 
-                    ProductionDate,
-                    HourOfDay";
+        GROUP BY 
+            CONVERT(DATE, p.Timestamp),
+            DATEPART(HOUR, p.Timestamp)
+        ORDER BY 
+            ProductionDate,
+            HourOfDay";
+                    }
+                    else if (isMonthFilter)
+                    {
+                        // Month filter - show daily totals for the month
+                        sql = $@"
+        SELECT 
+            CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+            0 AS HourOfDay,
+            '' AS HourRange,
+            0 AS ItemsProduced,
+            0 AS SizeProduced,
+            0 AS ModelsProduced,
+            0 AS TypeProduced,
+            0 AS PartTypeProduced,
+            SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced
+        FROM 
+            Production p
+        JOIN 
+            Result r 
+        ON 
+            p.result_id = r.result_id
+        WHERE 
+            MONTH(p.Timestamp) = {selectedMonth.Value}
+            AND YEAR(p.Timestamp) = {fromDate.Year}";
+
+                        if (selectedShift != null && selectedShift.Value != 0)
+                            sql += $" AND p.shift_Id = {selectedShift.Value}";
+
+                        sql += @"
+        GROUP BY 
+            CONVERT(DATE, p.Timestamp)
+        ORDER BY 
+            ProductionDate";
                     }
                     else
                     {
                         // Multiple days - show daily totals
                         sql = $@"
-                SELECT 
-                    CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
-                    0 AS HourOfDay,
-                    '' AS HourRange,
-                    0 AS ItemsProduced,
-                    0 AS SizeProduced,
-                    0 AS ModelsProduced,
-                    0 AS TypeProduced,
-                    0 AS PartTypeProduced,
-                    SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced
-                FROM 
-                    Production p
-                JOIN 
-                    Result r 
-                ON 
-                    p.result_id = r.result_id
-                WHERE 
-                    CONVERT(DATE, p.Timestamp) BETWEEN '{fromDate:yyyy-MM-dd}' AND '{toDate:yyyy-MM-dd}'";
+        SELECT 
+            CAST(CONVERT(DATE, p.Timestamp) AS DATETIME) AS ProductionDate,
+            0 AS HourOfDay,
+            '' AS HourRange,
+            0 AS ItemsProduced,
+            0 AS SizeProduced,
+            0 AS ModelsProduced,
+            0 AS TypeProduced,
+            0 AS PartTypeProduced,
+            SUM(CASE WHEN r.is_defective = 1 THEN 1 ELSE 0 END) AS WasteProduced
+        FROM 
+            Production p
+        JOIN 
+            Result r 
+        ON 
+            p.result_id = r.result_id
+        WHERE 
+            CONVERT(DATE, p.Timestamp) BETWEEN '{fromDate:yyyy-MM-dd}' AND '{toDate:yyyy-MM-dd}'";
 
                         if (selectedShift != null && selectedShift.Value != 0)
                             sql += $" AND p.shift_Id = {selectedShift.Value}";
 
                         sql += @"
-                GROUP BY 
-                    CONVERT(DATE, p.Timestamp)
-                ORDER BY 
-                    ProductionDate";
+        GROUP BY 
+            CONVERT(DATE, p.Timestamp)
+        ORDER BY 
+            ProductionDate";
                     }
 
                     var summaries = context.HourlyProductions
@@ -789,18 +1383,48 @@ namespace WPF_App.Views
 
                     Dispatcher.Invoke(() =>
                     {
-                        ProductionSeries.Title = "Waste";
-                        ProductionSeries.Fill = new SolidColorBrush(Colors.Green);
-                        ProductionSeries.Values = values;
-                        //ProductionChart.AxisX[0].Title = isSingleDay ? "Hourly" : "Daily";
-                        ProductionChart.AxisX[0].Labels = labels;
+                        ProductionChart.Series.Clear();
+
+                        var wasteSeries = new ColumnSeries
+                        {
+                            Title = "Waste",
+                            Fill = new SolidColorBrush(Colors.Red),  // Changed to red for waste to differentiate
+                            Values = values
+                        };
+
+                        ProductionChart.Series.Add(wasteSeries);
+
+                        // Update X-axis labels based on time period
+                        ProductionChart.AxisX.Clear();
+                        ProductionChart.AxisX.Add(new Axis
+                        {
+                            Title = isSingleDay ? "Hour" : "Date",
+                            Labels = labels,
+                            FontSize = 9,
+                            LabelsRotation = 20,
+                            Separator = new LiveCharts.Wpf.Separator { Step = 2, IsEnabled = false }
+                        });
+
+                        // Update Y-axis
+                        ProductionChart.AxisY.Clear();
+                        ProductionChart.AxisY.Add(new Axis
+                        {
+                            MinValue = 0,
+                            Separator = new LiveCharts.Wpf.Separator
+                            {
+                                Step = isSingleDay ? 1 : 5,  // Adjusted step for waste counts which are typically lower
+                                IsEnabled = true
+                            },
+                            LabelFormatter = value => value.ToString("N0")
+                        });
+
                         ProdChart.Text = "Waste";
                     });
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading waste data: {ex.Message}", "Error");
+                MessageBox.Show($"Error loading waste data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -934,10 +1558,16 @@ namespace WPF_App.Views
 
                     Dispatcher.Invoke(() =>
                     {
-                        ProductionSeries.Title = $"Model {modelName}";
-                        ProductionSeries.Fill = new SolidColorBrush(Colors.Orange);
-                        ProductionSeries.Values = values;
-                        //ProductionChart.AxisX[0].Title = isSingleDay ? "Hourly" : "Daily";
+                        ProductionChart.Series.Clear();
+
+                        var modelSeries = new ColumnSeries
+                        {
+                            Title = $"Model {modelName}",
+                            Fill = new SolidColorBrush(Colors.Orange),
+                            Values = values
+                        };
+
+                        ProductionChart.Series.Add(modelSeries);
                         ProductionChart.AxisX[0].Labels = labels;
                         ProdChart.Text = $"Model {modelName}";
                     });
@@ -1089,10 +1719,16 @@ namespace WPF_App.Views
 
                     Dispatcher.Invoke(() =>
                     {
-                        ProductionSeries.Title = $"Size {sizeName}";
-                        ProductionSeries.Fill = new SolidColorBrush(Colors.Yellow);
-                        ProductionSeries.Values = values;
-                        //ProductionChart.AxisX[0].Title = isSingleDay ? "Hourly" : "Daily";
+                        ProductionChart.Series.Clear();
+
+                        var sizeSeries = new ColumnSeries
+                        {
+                            Title = $"Size {sizeName}",
+                            Fill = new SolidColorBrush(Colors.Purple),
+                            Values = values
+                        };
+
+                        ProductionChart.Series.Add(sizeSeries);
                         ProductionChart.AxisX[0].Labels = labels;
                         ProdChart.Text = $"Size {sizeName}";
                     });
@@ -1238,10 +1874,16 @@ namespace WPF_App.Views
 
                     Dispatcher.Invoke(() =>
                     {
-                        ProductionSeries.Title = $"{typeName} Type";
-                        ProductionSeries.Fill = new SolidColorBrush(Colors.Pink);
-                        ProductionSeries.Values = values;
-                        //ProductionChart.AxisX[0].Title = isSingleDay ? "Hourly" : "Daily";
+                        ProductionChart.Series.Clear();
+
+                        var typeSeries = new ColumnSeries
+                        {
+                            Title = $"{typeName} Type",
+                            Fill = new SolidColorBrush(Colors.Pink),
+                            Values = values
+                        };
+
+                        ProductionChart.Series.Add(typeSeries);
                         ProductionChart.AxisX[0].Labels = labels;
                         ProdChart.Text = $"{typeName} Type";
                     });
@@ -1388,10 +2030,16 @@ namespace WPF_App.Views
 
                     Dispatcher.Invoke(() =>
                     {
-                        ProductionSeries.Title = $"{partTypeName} Part";
-                        ProductionSeries.Fill = new SolidColorBrush(Colors.Red);
-                        ProductionSeries.Values = values;
-                        //ProductionChart.AxisX[0].Title = isSingleDay ? "Hourly" : "Daily";
+                        ProductionChart.Series.Clear();
+
+                        var partTypeSeries = new ColumnSeries
+                        {
+                            Title = $"{partTypeName} Part",
+                            Fill = new SolidColorBrush(Colors.Red),
+                            Values = values
+                        };
+
+                        ProductionChart.Series.Add(partTypeSeries);
                         ProductionChart.AxisX[0].Labels = labels;
                         ProdChart.Text = $"{partTypeName} Part";
                     });
@@ -1524,6 +2172,7 @@ namespace WPF_App.Views
             try
             {
                 OperatorDataGrid.Visibility = Visibility.Visible;
+                ConfigureDataGrid(typeof(Operator));
 
                 // Fetch data from database
                 var operators = GetOperatorsFromDatabase();
@@ -1542,6 +2191,7 @@ namespace WPF_App.Views
             try
             {
                 OperatorDataGrid.Visibility = Visibility.Visible;
+                ConfigureDataGrid(typeof(Role));
 
                 // Fetch data from database
                 var roles = GetRolesFromDatabase(); 
@@ -1609,7 +2259,67 @@ namespace WPF_App.Views
             }
         }
 
-        // Example database method
+        private void ConfigureDataGrid(Type dataType)
+        {
+            OperatorDataGrid.Columns.Clear();
+
+            if (_columnConfigurations.TryGetValue(dataType, out var configureAction))
+            {
+                configureAction();
+            }
+        }
+
+        private void ConfigureOperatorColumns()
+        {
+            OperatorDataGrid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "ID",
+                Binding = new Binding("OperatorId"),
+                Width = 80
+            });
+            OperatorDataGrid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "Name",
+                Binding = new Binding("Name"),
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
+            });
+            OperatorDataGrid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "Role",
+                Binding = new Binding("Role"),
+                Width = 120
+            });
+            OperatorDataGrid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "Hired Date",
+                Binding = new Binding("HiredDate"),
+                Width = 120
+            });
+
+            // Add other operator columns...
+        }
+
+        private void ConfigureRoleColumns()
+        {
+            OperatorDataGrid.Columns.Clear();
+
+            OperatorDataGrid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "Role ID",
+                Binding = new Binding("RoleId"),
+                Width = 80
+            });
+            OperatorDataGrid.Columns.Add(new DataGridTextColumn
+            {
+                Header = "Role Name",
+                Binding = new Binding("RoleName"),
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
+            });
+
+            // Add other role columns...
+        }
+
+
         private List<Operator> GetOperatorsFromDatabase()
         {
             try
@@ -1690,6 +2400,14 @@ namespace WPF_App.Views
             }
         }
 
+        private void YearTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            PlaceholderText.Visibility = string.IsNullOrEmpty(YearTextBox.Text)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
+
         public class HourlyProduction
         {
             public int HourOfDay { get; set; }
@@ -1702,7 +2420,5 @@ namespace WPF_App.Views
             public int TypeProduced { get; set; }
             public int PartTypeProduced { get; set; }
         }
-
-       
     }
 }

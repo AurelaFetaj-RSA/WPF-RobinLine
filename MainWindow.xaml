@@ -215,7 +215,7 @@
                         </StackPanel>
                     </RadioButton>
 
-                    <RadioButton Style="{StaticResource menuButton}"
+                    <!--<RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color5}"
                                  Command="{Binding ShowDeviceViewCommand}"
                                  IsEnabled="{Binding CanSwitchTabs}">
@@ -223,7 +223,7 @@
                             <fa:IconImage Icon="MobileAlt" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="{DynamicResource fifthMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
-                    </RadioButton>
+                    </RadioButton>-->
 
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color6}"

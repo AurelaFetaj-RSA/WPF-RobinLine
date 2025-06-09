@@ -343,9 +343,9 @@ namespace WPF_App.Views
                         case "Restart":
                             HandleRestartRequest((bool)value); ;
                             break;
-                        //case "GeneralAlarms":
-                        //    HandleAlarms((ushort[])value);
-                        //    break;
+                        case "GeneralAlarms":
+                            HandleAlarms((ushort[])value);
+                            break;
                     }
                 }
                 catch (Exception ex)
