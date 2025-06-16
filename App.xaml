@@ -13,6 +13,38 @@
                 <!--<ResourceDictionary Source="/Resources/Localization/Dictionary-es-ES.xaml" />
                 <ResourceDictionary Source="/Resources/Localization/Dictionary-fr-FR.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="EditButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="#ADD8E6"/>
+                <Setter Property="Foreground" Value="#0000FF"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Padding" Value="5,2"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="DeleteButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="#FFE1E1"/>
+                <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Padding" Value="5,2"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="DataGridRow">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#FFE8E8E8"/>
+                        <!-- light gray -->
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
     
