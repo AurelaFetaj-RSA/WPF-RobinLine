@@ -3,6 +3,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,9 +24,12 @@ namespace WPF_App.Views
         private string _currentItemModelName;
         private string selectedModel = "";
         private OperatorDisplayDto _originalOperator;
+        private RoleDisplayDto _originalRole;
+        private ShiftDisplayDto _originalShift;
+        private SizeDisplayDto _originalSize;
         private enum FilterType { None, SingleDate, DateRange, Month }
         private FilterType _currentFilterType = FilterType.None;
-        private readonly Dictionary<Type, Action> _columnConfigurations;
+        //private readonly Dictionary<Type, Action> _columnConfigurations;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public bool IsNotFirstPage => CurrentPage > 1;
@@ -53,7 +57,15 @@ namespace WPF_App.Views
                 _pageSize = value;
                 OnPropertyChanged(nameof(PageSize));
                 CurrentPage = 1; // Reset to first page when page size changes
-                LoadPaginatedData();
+
+                if (OperatorDataGrid.Visibility == Visibility.Visible)
+                    LoadPaginatedData();
+                else if (RoleDataGrid.Visibility == Visibility.Visible)
+                    LoadRolePaginatedData();
+                else if (ShiftDataGrid.Visibility == Visibility.Visible)
+                    LoadShiftPaginatedData();
+                else if (SizeDataGrid.Visibility == Visibility.Visible)
+                    LoadSizePaginatedData();
             }
         }
 
@@ -99,13 +111,6 @@ namespace WPF_App.Views
             PickedDateFilter.SelectedDateChanged += PickedDateFilter_SelectedDateChanged;
             StartDateFilter.SelectedDateChanged += RangeDateFilter_SelectedDateChanged;
             EndDateFilter.SelectedDateChanged += RangeDateFilter_SelectedDateChanged;
-
-            _columnConfigurations = new Dictionary<Type, Action>
-            {
-                { typeof(Operator), () => ConfigureOperatorColumns() },
-                { typeof(Role), () => ConfigureRoleColumns() }
-                // Add more configurations as needed
-            };
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -143,9 +148,110 @@ namespace WPF_App.Views
 
                 OnPropertyChanged(nameof(IsNotFirstPage));
                 OnPropertyChanged(nameof(IsNotLastPage));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading paginated data: {ex.Message}");
+            }
+        }
 
+        private void LoadRolePaginatedData()
+        {
+            try
+            {
+                var allRoles = GetRolesFromDatabase();
+                TotalRecords = allRoles.Count;
+                TotalPages = (int)Math.Ceiling((double)TotalRecords / PageSize);
 
+                // Apply pagination
+                var paginatedRoles = allRoles
+                    .Skip((CurrentPage - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
 
+                // Convert to DTO
+                var rolesDto = paginatedRoles.Select((r, index) => new RoleDisplayDto
+                {
+                    No = ((CurrentPage - 1) * PageSize) + index + 1,
+                    Id = r.RoleId,
+                    Name = r.RoleName
+                }).ToList();
+
+                RoleDataGrid.ItemsSource = rolesDto;
+
+                OnPropertyChanged(nameof(IsNotFirstPage));
+                OnPropertyChanged(nameof(IsNotLastPage));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading paginated data: {ex.Message}");
+            }
+        }
+
+        private void LoadShiftPaginatedData()
+        {
+            try
+            {
+                //var allShifts = GetShiftsFromDatabase();
+                var allShifts = GetActiveShiftsFromDatabase();
+                TotalRecords = allShifts.Count;
+                TotalPages = (int)Math.Ceiling((double)TotalRecords / PageSize);
+
+                // Apply pagination
+                var paginatedShifts = allShifts
+                    .Skip((CurrentPage - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
+
+                // Convert to DTO
+                var shiftDto = paginatedShifts.Select((s, index) => new ShiftDisplayDto
+                {
+                    No = ((CurrentPage - 1) * PageSize) + index + 1,
+                    Id = s.ShiftId,
+                    Description = s.Description,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime,
+                    Target = s.TargetProd
+                }).ToList();
+
+                ShiftDataGrid.ItemsSource = shiftDto;
+
+                OnPropertyChanged(nameof(IsNotFirstPage));
+                OnPropertyChanged(nameof(IsNotLastPage));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading paginated data: {ex.Message}");
+            }
+        }
+
+        private void LoadSizePaginatedData()
+        {
+            try
+            {
+                var allSizes = GetSizesFromDatabase();
+                TotalRecords = allSizes.Count;
+                TotalPages = (int)Math.Ceiling((double)TotalRecords / PageSize);
+
+                // Apply pagination
+                var paginatedSizes = allSizes
+                    .Skip((CurrentPage - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
+
+                // Convert to DTO
+                var sizeDto = paginatedSizes.Select((s, index) => new SizeDisplayDto
+                {
+                    No = ((CurrentPage - 1) * PageSize) + index + 1,
+                    Id = s.SizeId,
+                    Value = s.SizeValue,
+                    Type = s.SizeType
+                }).ToList();
+
+                SizeDataGrid.ItemsSource = sizeDto;
+
+                OnPropertyChanged(nameof(IsNotFirstPage));
+                OnPropertyChanged(nameof(IsNotLastPage));
             }
             catch (Exception ex)
             {
@@ -156,7 +262,15 @@ namespace WPF_App.Views
         private void FirstPage_Click(object sender, RoutedEventArgs e)
         {
             CurrentPage = 1;
-            LoadPaginatedData();
+
+            if (OperatorDataGrid.Visibility == Visibility.Visible)
+                LoadPaginatedData();
+            else if (RoleDataGrid.Visibility == Visibility.Visible)
+                LoadRolePaginatedData();
+            else if (ShiftDataGrid.Visibility == Visibility.Visible)
+                LoadShiftPaginatedData();
+            else if (SizeDataGrid.Visibility == Visibility.Visible)
+                LoadSizePaginatedData();
         }
 
         private void PrevPage_Click(object sender, RoutedEventArgs e)
@@ -164,7 +278,14 @@ namespace WPF_App.Views
             if (CurrentPage > 1)
             {
                 CurrentPage--;
-                LoadPaginatedData();
+                if (OperatorDataGrid.Visibility == Visibility.Visible)
+                    LoadPaginatedData();
+                else if (RoleDataGrid.Visibility == Visibility.Visible)
+                    LoadRolePaginatedData();
+                else if (ShiftDataGrid.Visibility == Visibility.Visible)
+                    LoadShiftPaginatedData();
+                else if (SizeDataGrid.Visibility == Visibility.Visible)
+                    LoadSizePaginatedData();
             }
         }
 
@@ -173,14 +294,28 @@ namespace WPF_App.Views
             if (CurrentPage < TotalPages)
             {
                 CurrentPage++;
-                LoadPaginatedData();
+                if (OperatorDataGrid.Visibility == Visibility.Visible)
+                    LoadPaginatedData();
+                else if (RoleDataGrid.Visibility == Visibility.Visible)
+                    LoadRolePaginatedData();
+                else if (ShiftDataGrid.Visibility == Visibility.Visible)
+                    LoadShiftPaginatedData();
+                else if (SizeDataGrid.Visibility == Visibility.Visible)
+                    LoadSizePaginatedData();
             }
         }
 
         private void LastPage_Click(object sender, RoutedEventArgs e)
         {
             CurrentPage = TotalPages;
-            LoadPaginatedData();
+            if (OperatorDataGrid.Visibility == Visibility.Visible)
+                LoadPaginatedData();
+            else if (RoleDataGrid.Visibility == Visibility.Visible)
+                LoadRolePaginatedData();
+            else if (ShiftDataGrid.Visibility == Visibility.Visible)
+                LoadShiftPaginatedData();
+            else if (SizeDataGrid.Visibility == Visibility.Visible)
+                LoadSizePaginatedData();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -286,175 +421,6 @@ namespace WPF_App.Views
             {
                 MessageBox.Show($"Error loading production data: {ex.Message}", "Error");
             }
-        }
-
-        public async void OperatorIsActive_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                bool isChecked = (bool)OperatorIsActive.IsChecked;
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error toggling operator is active toggle: {ex.Message}");
-            }
-        }
-
-        private void AddOperatorButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Get values from UI controls
-            string operatorName = OperatorName.Text;
-            string operatorRole = OperatorRoleComboBox.Text;
-            DateTime? hiredDate = OperatorHiredDate.SelectedDate;
-            bool isActive = OperatorIsActive.IsChecked ?? false;
-
-            if (OperatorRoleComboBox.SelectedItem == null ||
-                OperatorRoleComboBox.SelectedItem is not Role selectedRole ||
-                selectedRole.RoleId == -1) // Check if placeholder is selected
-            {
-                MessageBox.Show("Please select a valid role.");
-                return;
-            }
-
-            // Check if the required fields are filled out
-            if (string.IsNullOrEmpty(operatorName) || string.IsNullOrEmpty(operatorRole) || !hiredDate.HasValue)
-            {
-                MessageBox.Show("Please fill in all fields.");
-                return;
-            }
-
-            // Create a new operator object (assuming you have an Operator class)
-            var newOperator = new Operator
-            {
-                Name = operatorName,
-                Role = operatorRole,
-                HiredDate = hiredDate.Value,
-                IsActive = isActive,
-                RoleId = selectedRole.RoleId
-            };
-
-            using (var context = new ProductivityDbContext())
-            {
-                context.Operators.Add(newOperator);
-                context.SaveChanges();
-            }
-
-            MessageBox.Show("Operator added successfully!");
-
-            OperatorName.Clear();
-            //OperatorRoleComboBox.SelectedIndex = 0;
-            OperatorRoleComboBox.SelectedItem = null;
-            OperatorHiredDate.SelectedDate = null;
-            OperatorIsActive.IsChecked = false;
-        }
-
-        private void AddRoleButton_Click(object sender, RoutedEventArgs e)
-        {
-            string roleName = RoleNameTxt.Text;
-
-            if (string.IsNullOrEmpty(roleName))
-            {
-                MessageBox.Show("Please fill in the field.");
-                return;
-            }
-
-            var newRole = new Role
-            {
-                RoleName = roleName
-            };
-
-            using (var context = new ProductivityDbContext())
-            {
-                context.Roles.Add(newRole);
-                context.SaveChanges();
-            }
-
-            MessageBox.Show("Role added successfully!");
-
-            RoleNameTxt.Clear();
-
-            LoadRolesIntoComboBox();
-        }
-
-        private void AddShiftButton_Click(object sender, RoutedEventArgs e)
-        {
-            string shiftDescription = ShiftDescTxt.Text;
-            TimeSpan startTime = StartTimePicker.Value?.TimeOfDay ?? TimeSpan.Zero;
-            TimeSpan endTime = EndTimePicker.Value?.TimeOfDay ?? TimeSpan.Zero;
-            DateTime? hiredDate = OperatorHiredDate.SelectedDate;
-            bool isActive = ShiftIsActiveToggl.IsChecked ?? false;
-
-            if (!int.TryParse(TargetProductionTxt.Text, out int targetProduction) || targetProduction < 0)
-            {
-                MessageBox.Show("Please enter a valid positive number for Target Production");
-                TargetProductionTxt.Focus();
-                return;
-            }
-
-            // Validate time range
-            //if (startTime >= endTime)
-            //{
-            //    MessageBox.Show("End time must be after start time");
-            //    return;
-            //}
-
-            var newShift = new Shift
-            {
-                Description = shiftDescription,
-                TargetProd = targetProduction,
-                StartTime = startTime,
-                EndTime = endTime,
-                IsActive = isActive
-            };
-
-            using (var context = new ProductivityDbContext())
-            {
-                context.Shifts.Add(newShift);
-                context.SaveChanges();
-            }
-
-            MessageBox.Show("Shift added successfully!");
-
-            ShiftDescTxt.Clear();
-            TargetProductionTxt.Clear();
-            StartTimePicker.Value = null;
-            EndTimePicker.Value = null;
-            ShiftIsActiveToggl.IsChecked = false;
-        }
-
-        private void AddSizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            string sizeValue = SizeValueTxt.Text;
-
-            if (string.IsNullOrEmpty(sizeValue))
-            {
-                MessageBox.Show("Please fill in the field.");
-                return;
-            }
-
-            if (!int.TryParse(sizeValue, out int numericValue))
-            {
-                MessageBox.Show("Please enter a valid number.");
-                return;
-            }
-
-            var newSize = new Size
-            {
-                SizeType = SizeTypeComboBox.Text,
-                SizeValue = sizeValue
-            };
-
-            using (var context = new ProductivityDbContext())
-            {
-                context.Sizes.Add(newSize);
-                context.SaveChanges();
-            }
-
-            MessageBox.Show("Size added successfully!");
-
-            SizeValueTxt.Clear();
-            SizeTypeComboBox.SelectedItem = null;
         }
 
         private void AddItemButton_Click(object sender, RoutedEventArgs e)
@@ -930,16 +896,6 @@ namespace WPF_App.Views
 
                 ProdChart.Text = "Items";
             });
-        }
-
-        private void ClearAllFilters()
-        {
-            PickedDateFilter.SelectedDate = null;
-            StartDateFilter.SelectedDate = null;
-            EndDateFilter.SelectedDate = null;
-            MonthFilterComboBox.SelectedItem = null;
-            ShiftFilterComboBox.SelectedIndex = -1;
-            _currentFilterType = FilterType.None;
         }
 
         private void ShowWaste(object sender, RoutedEventArgs e)
@@ -2277,6 +2233,8 @@ ORDER BY
         {
             ConfigureDataGrid(OperatorDataGrid, typeof(OperatorDisplayDto));
             ConfigureRoleDataGrid(RoleDataGrid, typeof(RoleDisplayDto));
+            ConfigureShiftDataGrid(ShiftDataGrid, typeof(ShiftDisplayDto));
+            ConfigureSizeDataGrid(SizeDataGrid, typeof(SizeDisplayDto));
             // Configure other grids similarly
         }
 
@@ -2340,10 +2298,26 @@ ORDER BY
                 HideAllDataGrids();
                 AddOperator2.Visibility = Visibility.Visible;
                 OperatorDataGrid.Visibility = Visibility.Visible;
+                AddOperatorForm.Visibility = Visibility.Collapsed;
+                EditOperatorForm.Visibility = Visibility.Collapsed;
+
+                RoleDataGrid.Visibility = Visibility.Hidden;
+                AddRole2.Visibility = Visibility.Hidden;
+                AddRoleForm.Visibility = Visibility.Collapsed;
+                EditRoleForm.Visibility = Visibility.Collapsed;
+
+                AddShift2.Visibility = Visibility.Hidden;
+                ShiftDataGrid.Visibility = Visibility.Collapsed;
+                AddShiftForm.Visibility = Visibility.Collapsed;
+                EditShiftForm.Visibility = Visibility.Collapsed;
+
+                AddSize2.Visibility = Visibility.Hidden;
+                SizeDataGrid.Visibility = Visibility.Hidden;
+                AddSizeForm.Visibility = Visibility.Collapsed;
+                EditSizeForm.Visibility = Visibility.Collapsed;
+
                 Pagination.Visibility = Visibility.Visible;
-                //ConfigureDataGrid(typeof(OperatorDisplayDto));
-                //var operators = GetOperatorsDtoFromDatabase();
-                //OperatorDataGrid.ItemsSource = operators;
+
                 LoadPaginatedData();
             }
             catch (Exception ex)
@@ -2358,11 +2332,28 @@ ORDER BY
             {
                 HideAllDataGrids();
                 RoleDataGrid.Visibility = Visibility.Visible;
-                AddOperator2.Visibility = Visibility.Hidden;
                 AddRole2.Visibility = Visibility.Visible;
-                //ConfigureDataGrid(typeof(RoleDisplayDto));
-                var roles = GetRolesDtoFromDatabase();
-                RoleDataGrid.ItemsSource = roles;
+                AddRoleForm.Visibility = Visibility.Collapsed;
+                EditRoleForm.Visibility = Visibility.Collapsed;
+
+                AddOperator2.Visibility = Visibility.Hidden;
+                OperatorDataGrid.Visibility = Visibility.Hidden;
+                AddOperatorForm.Visibility = Visibility.Collapsed;
+                EditOperatorForm.Visibility = Visibility.Collapsed;
+
+                ShiftDataGrid.Visibility = Visibility.Hidden;
+                AddShift2.Visibility = Visibility.Hidden;
+                AddShiftForm.Visibility = Visibility.Collapsed;
+                EditShiftForm.Visibility = Visibility.Collapsed;
+
+                AddSize2.Visibility = Visibility.Hidden;
+                SizeDataGrid.Visibility = Visibility.Hidden;
+                AddSizeForm.Visibility = Visibility.Collapsed;
+                EditSizeForm.Visibility = Visibility.Collapsed;
+
+                Pagination.Visibility = Visibility.Visible;
+
+                LoadRolePaginatedData();
             }
             catch (Exception ex)
             {
@@ -2370,59 +2361,40 @@ ORDER BY
             }
         }
 
-        private List<OperatorDisplayDto> GetOperatorsDtoFromDatabase()
-        {
-            //var operators = GetOperatorsFromDatabase();
-            var operators = GetActiveOperatorsFromDatabase();
-
-            if (operators == null || operators.Count == 0)
-            {
-                Console.WriteLine("No operators found in database!");
-                return new List<OperatorDisplayDto>();
-            }
-
-            return operators.Select((o, index) => new OperatorDisplayDto
-            {
-                No = index + 1,
-                Id = o.OperatorId,
-                Name = o.Name,
-                Role = o.Role,
-                HiredDate = o.HiredDate
-            }).ToList() ?? new List<OperatorDisplayDto>();
-
-        }
-        
-        private List<RoleDisplayDto> GetRolesDtoFromDatabase()
-        {
-            var roles = GetRolesFromDatabase();
-
-            if (roles == null || roles.Count == 0)
-            {
-                Console.WriteLine("No roles found in database!");
-                return new List<RoleDisplayDto>();
-            }
-
-            return roles.Select(r => new RoleDisplayDto
-            {
-                RoleName = r.RoleName
-            }).ToList() ?? new List<RoleDisplayDto>();
-        }
-
         private void ShiftData_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                OperatorDataGrid.Visibility = Visibility.Visible;
+                HideAllDataGrids();
+                ShiftDataGrid.Visibility = Visibility.Visible;
+                AddShift2.Visibility = Visibility.Visible;
+                AddShiftForm.Visibility = Visibility.Collapsed;
+                EditShiftForm.Visibility = Visibility.Collapsed;
+                
+                OperatorDataGrid.Visibility = Visibility.Hidden;
+                AddOperator2.Visibility = Visibility.Hidden;
+                AddOperatorForm.Visibility = Visibility.Collapsed;
+                EditOperatorForm.Visibility = Visibility.Collapsed;
 
-                // Fetch data from database
-                var shifts = GetShiftsFromDatabase();
+                RoleDataGrid.Visibility = Visibility.Hidden;
+                AddRole2.Visibility = Visibility.Hidden;
+                AddRoleForm.Visibility = Visibility.Collapsed;
+                EditRoleForm.Visibility = Visibility.Collapsed;
 
-                // Bind to DataGrid
-                OperatorDataGrid.ItemsSource = shifts;
+                SizeDataGrid.Visibility = Visibility.Hidden;
+                AddSize2.Visibility = Visibility.Hidden;
+                AddSizeForm.Visibility = Visibility.Collapsed;
+                EditSizeForm.Visibility = Visibility.Collapsed;
+
+                Pagination.Visibility = Visibility.Visible;
+
+                //var shifts = GetShiftsDtoFromDatabase();
+                //ShiftDataGrid.ItemsSource = shifts;
+                LoadShiftPaginatedData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading operator data: {ex.Message}");
+                MessageBox.Show($"Error loading role data: {ex.Message}");
             }
         }
 
@@ -2430,17 +2402,36 @@ ORDER BY
         {
             try
             {
-                OperatorDataGrid.Visibility = Visibility.Visible;
+                HideAllDataGrids();
+                SizeDataGrid.Visibility = Visibility.Visible;
+                AddSize2.Visibility = Visibility.Visible;
+                AddSizeForm.Visibility = Visibility.Collapsed;
+                EditSizeForm.Visibility = Visibility.Collapsed;
 
-                // Fetch data from database
-                var sizes = GetSizesFromDatabase();
+                AddOperator2.Visibility = Visibility.Hidden;
+                OperatorDataGrid.Visibility = Visibility.Hidden;
+                AddOperatorForm.Visibility = Visibility.Collapsed;
+                EditOperatorForm.Visibility = Visibility.Collapsed;
 
-                // Bind to DataGrid
-                OperatorDataGrid.ItemsSource = sizes;
+                RoleDataGrid.Visibility = Visibility.Hidden;
+                AddRole2.Visibility = Visibility.Hidden;
+                AddRoleForm.Visibility = Visibility.Collapsed;
+                EditRoleForm.Visibility = Visibility.Collapsed;
+
+                ShiftDataGrid.Visibility = Visibility.Hidden;
+                AddShift2.Visibility = Visibility.Hidden;
+                AddShiftForm.Visibility = Visibility.Collapsed;
+                EditShiftForm.Visibility = Visibility.Collapsed;
+
+                Pagination.Visibility = Visibility.Visible;
+
+                //var shifts = GetShiftsDtoFromDatabase();
+                //ShiftDataGrid.ItemsSource = shifts;
+                LoadSizePaginatedData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading operator data: {ex.Message}");
+                MessageBox.Show($"Error loading role data: {ex.Message}");
             }
         }
 
@@ -2516,7 +2507,7 @@ ORDER BY
             // Add data columns
             foreach (var prop in properties)
             {
-                if (prop.Name == "RoleId")
+                if (prop.Name == "Id")
                     continue;
 
                 var column = new DataGridTextColumn
@@ -2525,9 +2516,9 @@ ORDER BY
                     Binding = new Binding(prop.Name),
                     Width = prop.Name switch
                     {
-                        "RowNumber" => 40,
-                        "Name" => 100,
-                        "Actions" => 300,
+                        "No" => 40,
+                        "Name" => 290,
+                        "Actions" => 200,
                         _ => new DataGridLength(1, DataGridLengthUnitType.Auto) // fallback for all other properties
                     }
                 };
@@ -2542,7 +2533,93 @@ ORDER BY
                 {
                     Header = "Actions",
                     Width = new DataGridLength(165),
-                    CellTemplate = CreateDeleteButtonTemplate()
+                    CellTemplate = CreateRoleDeleteButtonTemplate()
+                });
+            }
+        }
+
+        private void ConfigureShiftDataGrid(DataGrid dataGrid, Type itemType)
+        {
+            dataGrid.Columns.Clear();
+            //var properties = itemType.GetProperties();
+
+            var properties = itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+
+            // Add data columns
+            foreach (var prop in properties)
+            {
+                if (prop.Name == "Id")
+                    continue;
+
+                var column = new DataGridTextColumn
+                {
+                    Header = prop.Name,
+                    Binding = new Binding(prop.Name),
+                    Width = prop.Name switch
+                    {
+                        "No" => 40,
+                        "Description" => 100,
+                        "StartTime" => 80,
+                        "EndTime" => 80,
+                        "Target" => 40,
+                        "Actions" => 200,
+                        _ => new DataGridLength(1, DataGridLengthUnitType.Auto) // fallback for all other properties
+                    }
+                };
+
+                dataGrid.Columns.Add(column);
+            }
+
+            // Add Action column if this is the Operator grid
+            if (dataGrid == ShiftDataGrid)
+            {
+                dataGrid.Columns.Add(new DataGridTemplateColumn
+                {
+                    Header = "Actions",
+                    Width = new DataGridLength(165),
+                    CellTemplate = CreateShiftDeleteButtonTemplate()
+                });
+            }
+        }
+
+        private void ConfigureSizeDataGrid(DataGrid dataGrid, Type itemType)
+        {
+            dataGrid.Columns.Clear();
+            //var properties = itemType.GetProperties();
+
+            var properties = itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+
+            // Add data columns
+            foreach (var prop in properties)
+            {
+                if (prop.Name == "Id")
+                    continue;
+
+                var column = new DataGridTextColumn
+                {
+                    Header = prop.Name,
+                    Binding = new Binding(prop.Name),
+                    Width = prop.Name switch
+                    {
+                        "No" => 40,
+                        "Value" => 120,
+                        "Type" => 120,
+                        "Actions" => 200,
+                        _ => new DataGridLength(1, DataGridLengthUnitType.Auto) // fallback for all other properties
+                    }
+                };
+
+                dataGrid.Columns.Add(column);
+            }
+
+
+            if (dataGrid == SizeDataGrid)
+            {
+                dataGrid.Columns.Add(new DataGridTemplateColumn
+                {
+                    Header = "Actions",
+                    Width = new DataGridLength(165),
+                    CellTemplate = CreateSizeDeleteButtonTemplate()
                 });
             }
         }
@@ -2583,7 +2660,139 @@ ORDER BY
             deleteButtonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(0)); // no extra margin
             if (deleteButtonStyle != null)
                 deleteButtonFactory.SetValue(Button.StyleProperty, deleteButtonStyle);
-            deleteButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(DeleteOperator_Click));
+            deleteButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(SoftDeleteOperator_Click));
+
+            stackPanelFactory.AppendChild(editButtonFactory);
+            stackPanelFactory.AppendChild(deleteButtonFactory);
+
+            return new DataTemplate { VisualTree = stackPanelFactory };
+        }
+
+        private DataTemplate CreateRoleDeleteButtonTemplate()
+        {
+            var editButtonStyle = this.TryFindResource("EditButtonStyle") as Style;
+            var deleteButtonStyle = this.TryFindResource("DeleteButtonStyle") as Style;
+
+            FrameworkElementFactory stackPanelFactory = new FrameworkElementFactory(typeof(StackPanel));
+            stackPanelFactory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+            stackPanelFactory.SetValue(StackPanel.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+
+            double buttonWidth = 50;
+            double buttonHeight = 20;
+
+            // Edit Button
+            FrameworkElementFactory editButtonFactory = new FrameworkElementFactory(typeof(Button));
+            editButtonFactory.SetValue(Button.ContentProperty, "Edit");
+            editButtonFactory.SetValue(Button.CommandParameterProperty, new Binding("Id"));
+            editButtonFactory.SetValue(FrameworkElement.WidthProperty, buttonWidth);
+            editButtonFactory.SetValue(FrameworkElement.HeightProperty, buttonHeight);
+            editButtonFactory.SetValue(Button.PaddingProperty, new Thickness(2, 0, 2, 0));
+            editButtonFactory.SetValue(Button.VerticalContentAlignmentProperty, VerticalAlignment.Center);
+            editButtonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(0, 0, 20, 0)); // right margin for spacing
+            if (editButtonStyle != null)
+                editButtonFactory.SetValue(Button.StyleProperty, editButtonStyle);
+            editButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(EditRole_Click));
+
+            // Delete Button
+            FrameworkElementFactory deleteButtonFactory = new FrameworkElementFactory(typeof(Button));
+            deleteButtonFactory.SetValue(Button.ContentProperty, "Delete");
+            deleteButtonFactory.SetValue(Button.CommandParameterProperty, new Binding("Id"));
+            deleteButtonFactory.SetValue(FrameworkElement.WidthProperty, buttonWidth);
+            deleteButtonFactory.SetValue(FrameworkElement.HeightProperty, buttonHeight);
+            deleteButtonFactory.SetValue(Button.PaddingProperty, new Thickness(2, 0, 2, 0));
+            deleteButtonFactory.SetValue(Button.VerticalContentAlignmentProperty, VerticalAlignment.Center);
+            deleteButtonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(0)); // no extra margin
+            if (deleteButtonStyle != null)
+                deleteButtonFactory.SetValue(Button.StyleProperty, deleteButtonStyle);
+            deleteButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(DeleteRole_Click));
+
+            stackPanelFactory.AppendChild(editButtonFactory);
+            stackPanelFactory.AppendChild(deleteButtonFactory);
+
+            return new DataTemplate { VisualTree = stackPanelFactory };
+        }
+
+        private DataTemplate CreateShiftDeleteButtonTemplate()
+        {
+            var editButtonStyle = this.TryFindResource("EditButtonStyle") as Style;
+            var deleteButtonStyle = this.TryFindResource("DeleteButtonStyle") as Style;
+
+            FrameworkElementFactory stackPanelFactory = new FrameworkElementFactory(typeof(StackPanel));
+            stackPanelFactory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+            stackPanelFactory.SetValue(StackPanel.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+
+            double buttonWidth = 50;
+            double buttonHeight = 20;
+
+            // Edit Button
+            FrameworkElementFactory editButtonFactory = new FrameworkElementFactory(typeof(Button));
+            editButtonFactory.SetValue(Button.ContentProperty, "Edit");
+            editButtonFactory.SetValue(Button.CommandParameterProperty, new Binding("Id"));
+            editButtonFactory.SetValue(FrameworkElement.WidthProperty, buttonWidth);
+            editButtonFactory.SetValue(FrameworkElement.HeightProperty, buttonHeight);
+            editButtonFactory.SetValue(Button.PaddingProperty, new Thickness(2, 0, 2, 0));
+            editButtonFactory.SetValue(Button.VerticalContentAlignmentProperty, VerticalAlignment.Center);
+            editButtonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(0, 0, 20, 0)); // right margin for spacing
+            if (editButtonStyle != null)
+                editButtonFactory.SetValue(Button.StyleProperty, editButtonStyle);
+            editButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(EditShift_Click));
+
+            // Delete Button
+            FrameworkElementFactory deleteButtonFactory = new FrameworkElementFactory(typeof(Button));
+            deleteButtonFactory.SetValue(Button.ContentProperty, "Delete");
+            deleteButtonFactory.SetValue(Button.CommandParameterProperty, new Binding("Id"));
+            deleteButtonFactory.SetValue(FrameworkElement.WidthProperty, buttonWidth);
+            deleteButtonFactory.SetValue(FrameworkElement.HeightProperty, buttonHeight);
+            deleteButtonFactory.SetValue(Button.PaddingProperty, new Thickness(2, 0, 2, 0));
+            deleteButtonFactory.SetValue(Button.VerticalContentAlignmentProperty, VerticalAlignment.Center);
+            deleteButtonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(0)); // no extra margin
+            if (deleteButtonStyle != null)
+                deleteButtonFactory.SetValue(Button.StyleProperty, deleteButtonStyle);
+            deleteButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(SoftDeleteShift_Click));
+
+            stackPanelFactory.AppendChild(editButtonFactory);
+            stackPanelFactory.AppendChild(deleteButtonFactory);
+
+            return new DataTemplate { VisualTree = stackPanelFactory };
+        }
+
+        private DataTemplate CreateSizeDeleteButtonTemplate()
+        {
+            var editButtonStyle = this.TryFindResource("EditButtonStyle") as Style;
+            var deleteButtonStyle = this.TryFindResource("DeleteButtonStyle") as Style;
+
+            FrameworkElementFactory stackPanelFactory = new FrameworkElementFactory(typeof(StackPanel));
+            stackPanelFactory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+            stackPanelFactory.SetValue(StackPanel.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+
+            double buttonWidth = 50;
+            double buttonHeight = 20;
+
+            // Edit Button
+            FrameworkElementFactory editButtonFactory = new FrameworkElementFactory(typeof(Button));
+            editButtonFactory.SetValue(Button.ContentProperty, "Edit");
+            editButtonFactory.SetValue(Button.CommandParameterProperty, new Binding("Id"));
+            editButtonFactory.SetValue(FrameworkElement.WidthProperty, buttonWidth);
+            editButtonFactory.SetValue(FrameworkElement.HeightProperty, buttonHeight);
+            editButtonFactory.SetValue(Button.PaddingProperty, new Thickness(2, 0, 2, 0));
+            editButtonFactory.SetValue(Button.VerticalContentAlignmentProperty, VerticalAlignment.Center);
+            editButtonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(0, 0, 20, 0)); // right margin for spacing
+            if (editButtonStyle != null)
+                editButtonFactory.SetValue(Button.StyleProperty, editButtonStyle);
+            editButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(EditSize_Click));
+
+            // Delete Button
+            FrameworkElementFactory deleteButtonFactory = new FrameworkElementFactory(typeof(Button));
+            deleteButtonFactory.SetValue(Button.ContentProperty, "Delete");
+            deleteButtonFactory.SetValue(Button.CommandParameterProperty, new Binding("Id"));
+            deleteButtonFactory.SetValue(FrameworkElement.WidthProperty, buttonWidth);
+            deleteButtonFactory.SetValue(FrameworkElement.HeightProperty, buttonHeight);
+            deleteButtonFactory.SetValue(Button.PaddingProperty, new Thickness(2, 0, 2, 0));
+            deleteButtonFactory.SetValue(Button.VerticalContentAlignmentProperty, VerticalAlignment.Center);
+            deleteButtonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(0)); // no extra margin
+            if (deleteButtonStyle != null)
+                deleteButtonFactory.SetValue(Button.StyleProperty, deleteButtonStyle);
+            deleteButtonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(DeleteSize_Click));
 
             stackPanelFactory.AppendChild(editButtonFactory);
             stackPanelFactory.AppendChild(deleteButtonFactory);
@@ -2626,56 +2835,6 @@ ORDER BY
             OperatorDataGrid.Columns.Add(actionColumn);
         }
 
-        private void ConfigureOperatorColumns()
-        {
-            OperatorDataGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "ID",
-                Binding = new Binding("OperatorId"),
-                Width = 80
-            });
-            OperatorDataGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Name",
-                Binding = new Binding("Name"),
-                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
-            });
-            OperatorDataGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Role",
-                Binding = new Binding("Role"),
-                Width = 120
-            });
-            OperatorDataGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Hired Date",
-                Binding = new Binding("HiredDate"),
-                Width = 120
-            });
-
-            // Add other operator columns...
-        }
-
-        private void ConfigureRoleColumns()
-        {
-            OperatorDataGrid.Columns.Clear();
-
-            OperatorDataGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Role ID",
-                Binding = new Binding("RoleId"),
-                Width = 80
-            });
-            OperatorDataGrid.Columns.Add(new DataGridTextColumn
-            {
-                Header = "Role Name",
-                Binding = new Binding("RoleName"),
-                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
-            });
-
-            // Add other role columns...
-        }
-
         private List<Operator> GetOperatorsFromDatabase()
         {
             try
@@ -2707,6 +2866,24 @@ ORDER BY
             {
                 MessageBox.Show($"Error loading operators: {ex.Message}");
                 return new List<Operator>(); // Return empty list on error
+            }
+        }
+
+        private List<Shift> GetActiveShiftsFromDatabase()
+        {
+            try
+            {
+                using (var context = new ProductivityDbContext())
+                {
+                    return context.Shifts
+                                .Where(op => op.IsActive == true)  // Filter for active operators
+                                .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading shifts: {ex.Message}");
+                return new List<Shift>(); // Return empty list on error
             }
         }
 
@@ -2790,7 +2967,8 @@ ORDER BY
                     {
                         DeleteOperatorFromDatabase(operatorId);
 
-                        OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
+                        //OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
+                        LoadPaginatedData();
                     }
                     catch (Exception ex)
                     {
@@ -2802,28 +2980,89 @@ ORDER BY
 
         private void DeleteRole_Click(object sender, RoutedEventArgs e)
         {
-            //if (sender is Button button && button.CommandParameter is int operatorId)
-            //{
-            //    var result = MessageBox.Show(
-            //        $"Are you sure you want to delete operator?",
-            //        "Confirm Delete",
-            //        MessageBoxButton.YesNo,
-            //        MessageBoxImage.Warning);
+            if (sender is Button button && button.CommandParameter is int roleId)
+            {
+                var result = MessageBox.Show(
+                    $"Are you sure you want to delete role?",
+                    "Confirm Delete",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
 
-            //    if (result == MessageBoxResult.Yes)
-            //    {
-            //        try
-            //        {
-            //            DeleteOperatorFromDatabase(operatorId);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        DeleteRoleFromDatabase(roleId);
 
-            //            OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            MessageBox.Show($"Error deleting operator: {ex.Message}");
-            //        }
-            //    }
-            //}
+                        //RoleDataGrid.ItemsSource = GetRolesDtoFromDatabase();
+                        LoadRolePaginatedData();
+
+                        MessageBox.Show("Role deleted successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting role: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void DeleteShift_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is int shiftId)
+            {
+                var result = MessageBox.Show(
+                    $"Are you sure you want to delete shift?",
+                    "Confirm Delete",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        DeleteShiftFromDatabase(shiftId);
+
+                        //ShiftDataGrid.ItemsSource = GetShiftsDtoFromDatabase();
+                        LoadShiftPaginatedData();
+
+                        MessageBox.Show("Shift deleted successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting shift: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void DeleteSize_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is int shiftId)
+            {
+                var result = MessageBox.Show(
+                    $"Are you sure you want to delete size?",
+                    "Confirm Delete",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        DeleteSizeFromDatabase(shiftId);
+
+                        //SizeDataGrid.ItemsSource = GetSizesDtoFromDatabase();
+                        LoadSizePaginatedData();
+
+                        MessageBox.Show("Size deleted successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting size: {ex.Message}");
+                    }
+                }
+            }
         }
 
         private void SoftDeleteOperator_Click(object sender, RoutedEventArgs e)
@@ -2831,7 +3070,7 @@ ORDER BY
             if (sender is Button button && button.CommandParameter is int operatorId)
             {
                 var result = MessageBox.Show(
-                    $"Are you sure you want to deactivate this operator?",
+                    $"Are you sure you want to delete this operator?",
                     "Confirm Deactivation",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
@@ -2852,9 +3091,48 @@ ORDER BY
                         }
 
                         // Refresh the DataGrid
-                        OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
+                        //OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
+                        LoadPaginatedData();
 
-                        MessageBox.Show("Operator deactivated successfully.");
+                        MessageBox.Show("Operator delete successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deactivating operator: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void SoftDeleteShift_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is int shiftId)
+            {
+                var result = MessageBox.Show(
+                    $"Are you sure you want to delete this shift?",
+                    "Confirm Deactivation",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        // Update instead of delete
+                        using (var context = new ProductivityDbContext())
+                        {
+                            var operatorToDeactivate = context.Shifts.Find(shiftId);
+                            if (operatorToDeactivate != null)
+                            {
+                                operatorToDeactivate.IsActive = false;
+                                context.SaveChanges();
+                            }
+                        }
+
+                        // Refresh the DataGrid
+                        LoadShiftPaginatedData();
+
+                        MessageBox.Show("Shift deleted successfully.");
                     }
                     catch (Exception ex)
                     {
@@ -2906,42 +3184,88 @@ ORDER BY
 
         private void EditRole_Click(object sender, RoutedEventArgs e)
         {
-            //if (sender is not Button button)
-            //{
-            //    MessageBox.Show("Invalid control triggered this action");
-            //    return;
-            //}
+            if (sender is not Button button)
+            {
+                MessageBox.Show("Invalid control triggered this action");
+                return;
+            }
 
-            //if (button.DataContext is not OperatorDisplayDto selectedOperator)
-            //{
-            //    MessageBox.Show("No operator data available for editing");
-            //    return;
-            //}
+            if (button.DataContext is not RoleDisplayDto selectedRole)
+            {
+                MessageBox.Show("No role data available for editing");
+                return;
+            }
 
-            //_originalOperator = selectedOperator;
+            _originalRole = selectedRole;
 
-            //// Populate the edit form with null checks
-            //EditOperatorNameTextBox.Text = _originalOperator.Name ?? string.Empty;
-            ////EditOperatorHiredDatePicker.SelectedDate = _originalOperator.HiredDate;
-            //// EditOperatorIsActive.IsChecked = _originalOperator.IsActive;
+            // Populate the edit form with null checks
+            EditRoleNameTextBox.Text = _originalRole.Name ?? string.Empty;
 
-            //LoadRolesIntoComboBox();
+            // Show the edit form and hide others
+            EditRoleForm.Visibility = Visibility.Visible;
+            RoleDataGrid.Visibility = Visibility.Collapsed;
+            Pagination.Visibility = Visibility.Collapsed;
+            AddRole2.Visibility = Visibility.Collapsed;
+        }
 
-            //// Set the selected role in ComboBox
-            //if (!string.IsNullOrEmpty(_originalOperator.Role))
-            //{
-            //    if (EditOperatorRoleComboBox.IsEditable)
-            //    {
-            //        // Fallback: Display the text if no exact match found
-            //        EditOperatorRoleComboBox.Text = _originalOperator.Role;
-            //    }
-            //}
+        private void EditShift_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button)
+            {
+                MessageBox.Show("Invalid control triggered this action");
+                return;
+            }
 
-            //// Show the edit form and hide others
-            //EditOperatorForm.Visibility = Visibility.Visible;
-            //OperatorDataGrid.Visibility = Visibility.Collapsed;
-            //Pagination.Visibility = Visibility.Collapsed;
-            //AddOperator2.Visibility = Visibility.Collapsed;
+            if (button.DataContext is not ShiftDisplayDto selectedShift)
+            {
+                MessageBox.Show("No shift data available for editing");
+                return;
+            }
+
+            _originalShift = selectedShift;
+
+            // Populate the edit form with null checks
+            EditShiftDescTextBox.Text = _originalShift.Description ?? string.Empty;
+            EditStartTimePicker.Value = _originalShift.StartTime.HasValue
+                                        ? new DateTime(_originalShift.StartTime.Value.Ticks)
+                                        : (DateTime?)null;
+            EditEndTimePicker.Value = _originalShift.EndTime.HasValue
+                                        ? new DateTime(_originalShift.EndTime.Value.Ticks)
+                                        : (DateTime?)null;
+            EditTargetProductionTxt.Text = (_originalShift.Target ?? 0).ToString();
+
+            // Show the edit form and hide others
+            EditShiftForm.Visibility = Visibility.Visible;
+            ShiftDataGrid.Visibility = Visibility.Collapsed;
+            Pagination.Visibility = Visibility.Collapsed;
+            AddShift2.Visibility = Visibility.Collapsed;
+        }
+
+        private void EditSize_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button)
+            {
+                MessageBox.Show("Invalid control triggered this action");
+                return;
+            }
+
+            if (button.DataContext is not SizeDisplayDto selectedSize)
+            {
+                MessageBox.Show("No size data available for editing");
+                return;
+            }
+
+            _originalSize = selectedSize;
+
+            // Populate the edit form with null checks
+            EditSizeValueTextBox.Text = _originalSize.Value ?? string.Empty;
+            EditSizeTypeTextBox.Text = _originalSize.Type ?? string.Empty;
+
+            // Show the edit form and hide others
+            EditSizeForm.Visibility = Visibility.Visible;
+            SizeDataGrid.Visibility = Visibility.Collapsed;
+            Pagination.Visibility = Visibility.Collapsed;
+            AddSize2.Visibility = Visibility.Collapsed;
         }
 
         private void AddOperator_Click(object sender, RoutedEventArgs e)
@@ -2952,16 +3276,34 @@ ORDER BY
             AddOperator2.Visibility = Visibility.Collapsed;
 
             OperatorNameTextBox.Text = "";
-            //OperatorHiredDatePicker.SelectedDate = DateTime.Today;
-            LoadRoles();
         }
 
         private void AddRole_Click(object sender, RoutedEventArgs e)
         {
-            //RoleDataGrid.Visibility = Visibility.Collapsed;
-            //Pagination.Visibility = Visibility.Collapsed;
-            //AddRoleForm.Visibility = Visibility.Visible;
-            //AddRole2.Visibility = Visibility.Collapsed;
+            RoleDataGrid.Visibility = Visibility.Collapsed;
+            Pagination.Visibility = Visibility.Collapsed;
+            AddRoleForm.Visibility = Visibility.Visible;
+            AddRole2.Visibility = Visibility.Collapsed;
+
+            RoleNameTextBox.Text = "";
+        }
+
+        private void AddShift_Click(object sender, RoutedEventArgs e)
+        {
+            ShiftDataGrid.Visibility = Visibility.Collapsed;
+            Pagination.Visibility = Visibility.Collapsed;
+            AddShiftForm.Visibility = Visibility.Visible;
+            AddShift2.Visibility = Visibility.Collapsed;
+
+            //RoleNameTextBox.Text = "";
+        }
+
+        private void AddSize_Click(object sender, RoutedEventArgs e)
+        {
+            SizeDataGrid.Visibility = Visibility.Collapsed;
+            Pagination.Visibility = Visibility.Collapsed;
+            AddSizeForm.Visibility = Visibility.Visible;
+            AddSize2.Visibility = Visibility.Collapsed;
 
             //RoleNameTextBox.Text = "";
         }
@@ -3040,31 +3382,189 @@ ORDER BY
             _originalOperator = null;
         }
 
-        private void LoadRoles()
+        private void UpdateRole_Click(object sender, RoutedEventArgs e)
         {
-            using (var db = new ProductivityDbContext())
+            // Get values from UI controls
+            string roleName = EditRoleNameTextBox.Text;
+
+            // Validate required fields
+            if (string.IsNullOrEmpty(roleName))
             {
-                // Get roles and transform them for display
-                var roles = db.Roles
-                    .Select(r => new 
-                    {
-                        Id = r.RoleId,
-                        DisplayText = r.RoleName
-                    })
-                    .ToList();
+                MessageBox.Show("Please fill in the role name.");
+                return;
+            }
 
-                // Bind to ComboBox
-                OperatorRoleComboBox.ItemsSource = roles;
-                OperatorRoleComboBox.DisplayMemberPath = "DisplayText"; 
-                OperatorRoleComboBox.SelectedValuePath = "Id";      
+            if (_originalRole == null)
+            {
+                MessageBox.Show("No role selected for editing.");
+                return;
+            }
 
-                // Optional: Select first item by default
-                if (roles.Count > 0)
+            using (var context = new ProductivityDbContext())
+            {
+                // Attach the original role to the current context
+                var roleToUpdate = context.Roles.Find(_originalRole.Id);
+
+                if (roleToUpdate == null)
                 {
-                    OperatorRoleComboBox.SelectedIndex = 0;
+                    MessageBox.Show("Role not found in database.");
+                    return;
                 }
 
+                // Update the properties
+                roleToUpdate.RoleName = roleName;
+
+                // Save changes
+                context.SaveChanges();
             }
+
+            MessageBox.Show("Role updated successfully!");
+
+            // Clear the form
+            EditRoleNameTextBox.Clear();
+
+            //OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
+            LoadRolePaginatedData();
+
+            // Hide the edit form
+            RoleDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddRole2.Visibility = Visibility.Visible;
+            EditRoleForm.Visibility = Visibility.Collapsed;
+
+            // Clear the reference
+            _originalRole = null;
+        }
+
+        private void UpdateShift_Click(object sender, RoutedEventArgs e)
+        {
+            // Get values from UI controls
+            string shiftDesc = EditShiftDescTextBox.Text;
+            TimeSpan startTime = EditStartTimePicker.Value?.TimeOfDay ?? TimeSpan.Zero;
+            TimeSpan endTime = EditEndTimePicker.Value?.TimeOfDay ?? TimeSpan.Zero;
+            bool isActive = true;
+
+            // Check if the required fields are filled out
+            if (string.IsNullOrEmpty(shiftDesc))
+            {
+                MessageBox.Show("Please fill the shift description.");
+                return;
+            }
+
+            if (!int.TryParse(EditTargetProductionTxt.Text, out int targetProduction) || targetProduction < 0)
+            {
+                MessageBox.Show("Please enter a valid positive number for Target Production");
+                EditTargetProductionTxt.Focus();
+                return;
+            }
+
+            if (_originalShift == null)
+            {
+                MessageBox.Show("No shift selected for editing.");
+                return;
+            }
+
+            using (var context = new ProductivityDbContext())
+            {
+                var shiftToUpdate = context.Shifts.Find(_originalShift.Id);
+
+                if (shiftToUpdate == null)
+                {
+                    MessageBox.Show("Shift not found in database.");
+                    return;
+                }
+
+                // Update the properties
+                shiftToUpdate.Description = shiftDesc;
+                shiftToUpdate.StartTime = startTime;
+                shiftToUpdate.EndTime = endTime;
+                shiftToUpdate.TargetProd = targetProduction;
+
+                // Save changes
+                context.SaveChanges();
+            }
+
+            MessageBox.Show("Shift updated successfully!");
+
+            // Clear the form
+            EditShiftDescTextBox.Clear();
+            EditStartTimePicker.Value = null;
+            EditEndTimePicker.Value = null;
+            EditTargetProductionTxt.Clear();
+
+            //OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
+            LoadShiftPaginatedData();
+
+            // Hide the edit form
+            ShiftDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddShift2.Visibility = Visibility.Visible;
+            EditShiftForm.Visibility = Visibility.Collapsed;
+
+            // Clear the reference
+            _originalShift = null;
+        }
+
+        private void UpdateSize_Click(object sender, RoutedEventArgs e)
+        {
+            // Get values from UI controls
+            string sizeValue = EditSizeValueTextBox.Text;
+            string sizeType = EditSizeTypeTextBox.Text;
+
+            // Check if the required fields are filled out
+            if (string.IsNullOrEmpty(sizeValue))
+            {
+                MessageBox.Show("Please fill the size value.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(sizeValue))
+            {
+                MessageBox.Show("Please fill the size type.");
+                return;
+            }
+
+            if (_originalSize == null)
+            {
+                MessageBox.Show("No size selected for editing.");
+                return;
+            }
+
+            using (var context = new ProductivityDbContext())
+            {
+                var sizeToUpdate = context.Sizes.Find(_originalSize.Id);
+
+                if (sizeToUpdate == null)
+                {
+                    MessageBox.Show("Size not found in database.");
+                    return;
+                }
+
+                // Update the properties
+                sizeToUpdate.SizeValue = sizeValue;
+                sizeToUpdate.SizeType = sizeType;
+
+                // Save changes
+                context.SaveChanges();
+            }
+
+            MessageBox.Show("Size updated successfully!");
+
+            // Clear the form
+            EditSizeValueTextBox.Clear();
+            EditSizeTypeTextBox.Clear();
+
+            //OperatorDataGrid.ItemsSource = GetOperatorsDtoFromDatabase();
+            LoadSizePaginatedData();
+
+            // Hide the edit form
+            SizeDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddSize2.Visibility = Visibility.Visible;
+            EditSizeForm.Visibility = Visibility.Collapsed;
+
+            // Clear the reference
+            _originalSize = null;
         }
 
         private void SaveOperator_Click(object sender, RoutedEventArgs e)
@@ -3090,7 +3590,7 @@ ORDER BY
                 return;
             }
 
-            // Create a new operator object (assuming you have an Operator class)
+            // Create a new operator object
             var newOperator = new Operator
             {
                 Name = operatorName,
@@ -3124,6 +3624,146 @@ ORDER BY
             AddOperatorForm.Visibility = Visibility.Collapsed;
         }
 
+        private void SaveRole_Click(object sender, RoutedEventArgs e)
+        {
+            // Get values from UI controls
+            string roleName = RoleNameTextBox.Text;
+
+            // Check if the required fields are filled out
+            if (string.IsNullOrEmpty(roleName))
+            {
+                MessageBox.Show("Please fill the role name.");
+                return;
+            }
+
+            // Create a new role object
+            var newRole = new Role
+            {
+                RoleName = roleName
+            };
+
+            using (var context = new ProductivityDbContext())
+            {
+                context.Roles.Add(newRole);
+                context.SaveChanges();
+            }
+
+            MessageBox.Show("Role added successfully!");
+
+            RoleNameTextBox.Clear();
+
+            LoadRolePaginatedData();
+
+            // Show the DataGrid and pagination
+            RoleDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddRole2.Visibility = Visibility.Visible;
+
+            // Hide the form
+            AddRoleForm.Visibility = Visibility.Collapsed;
+        }
+
+        private void SaveShift_Click(object sender, RoutedEventArgs e)
+        {
+            // Get values from UI controls
+            string shiftDesc = DescriptionTextBox.Text;
+            TimeSpan startTime = StartTimePicker2.Value?.TimeOfDay ?? TimeSpan.Zero;
+            TimeSpan endTime = EndTimePicker2.Value?.TimeOfDay ?? TimeSpan.Zero;
+            //string targetProduction = TargetProductionTxt2.Text;
+            bool isActive = true;
+
+            // Check if the required fields are filled out
+            if (string.IsNullOrEmpty(shiftDesc))
+            {
+                MessageBox.Show("Please fill the shift description.");
+                return;
+            }
+
+            if (!int.TryParse(TargetProductionTxt2.Text, out int targetProduction) || targetProduction < 0)
+            {
+                MessageBox.Show("Please enter a valid positive number for Target Production");
+                TargetProductionTxt2.Focus();
+                return;
+            }
+
+            var newShift = new Shift
+            {
+                Description = shiftDesc,
+                TargetProd = targetProduction,
+                StartTime = startTime,
+                EndTime = endTime,
+                IsActive = isActive
+            };
+
+            using (var context = new ProductivityDbContext())
+            {
+                context.Shifts.Add(newShift);
+                context.SaveChanges();
+            }
+
+            MessageBox.Show("Shift added successfully!");
+
+            DescriptionTextBox.Clear();
+            TargetProductionTxt2.Clear();
+            StartTimePicker2.Value = null;
+            EndTimePicker2.Value = null;
+
+            LoadShiftPaginatedData();
+
+            ShiftDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddShift2.Visibility = Visibility.Visible;
+
+            // Hide the form
+            AddShiftForm.Visibility = Visibility.Collapsed;
+        }
+
+        private void SaveSize_Click(object sender, RoutedEventArgs e)
+        {
+            // Get values from UI controls
+            string sizeValue = SizeValueTextBox.Text;
+            string sizeType = SizeTypeTextBox.Text;
+
+            // Check if the required fields are filled out
+            if (string.IsNullOrEmpty(sizeValue))
+            {
+                MessageBox.Show("Please fill the size value.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(sizeValue))
+            {
+                MessageBox.Show("Please fill the size type.");
+                return;
+            }
+
+            var newSize = new Size
+            {
+                SizeType = sizeType,
+                SizeValue = sizeValue
+            };
+
+            using (var context = new ProductivityDbContext())
+            {
+                context.Sizes.Add(newSize);
+                context.SaveChanges();
+            }
+
+            MessageBox.Show("Size added successfully!");
+
+            SizeValueTextBox.Clear();
+            SizeTypeTextBox.Clear();
+
+            LoadSizePaginatedData();
+
+            SizeDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddSize2.Visibility = Visibility.Visible;
+
+            // Hide the form
+            AddSizeForm.Visibility = Visibility.Collapsed;
+        }
+
         private void CancelOperatorForm_Click(object sender, RoutedEventArgs e)
         {
             // Show the DataGrid and pagination
@@ -3134,6 +3774,42 @@ ORDER BY
             // Hide the form
             AddOperatorForm.Visibility = Visibility.Collapsed;
             EditOperatorForm.Visibility = Visibility.Collapsed;
+        }
+
+        private void CancelRoleForm_Click(object sender, RoutedEventArgs e)
+        {
+            // Show the DataGrid and pagination
+            RoleDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddRole2.Visibility = Visibility.Visible;
+
+            // Hide the form
+            AddRoleForm.Visibility = Visibility.Collapsed;
+            EditRoleForm.Visibility = Visibility.Collapsed;
+        }
+
+        private void CancelShiftForm_Click(object sender, RoutedEventArgs e)
+        {
+            // Show the DataGrid and pagination
+            ShiftDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddShift2.Visibility = Visibility.Visible;
+
+            // Hide the form
+            AddShiftForm.Visibility = Visibility.Collapsed;
+            EditShiftForm.Visibility = Visibility.Collapsed;
+        }
+
+        private void CancelSizeForm_Click(object sender, RoutedEventArgs e)
+        {
+            // Show the DataGrid and pagination
+            SizeDataGrid.Visibility = Visibility.Visible;
+            Pagination.Visibility = Visibility.Visible;
+            AddSize2.Visibility = Visibility.Visible;
+
+            // Hide the form
+            AddSizeForm.Visibility = Visibility.Collapsed;
+            EditSizeForm.Visibility = Visibility.Collapsed;
         }
 
         private void DeleteOperatorFromDatabase(int id)
@@ -3149,11 +3825,63 @@ ORDER BY
             }
         }
 
+        private void DeleteRoleFromDatabase(int id)
+        {
+            using (var context = new ProductivityDbContext())
+            {
+                var roleToDelete = context.Roles.Find(id);
+                if (roleToDelete != null)
+                {
+                    context.Roles.Remove(roleToDelete);
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        private void DeleteShiftFromDatabase(int id)
+        {
+            using (var context = new ProductivityDbContext())
+            {
+                var shiftToDelete = context.Shifts.Find(id);
+                if (shiftToDelete != null)
+                {
+                    context.Shifts.Remove(shiftToDelete);
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        private void DeleteSizeFromDatabase(int id)
+        {
+            using (var context = new ProductivityDbContext())
+            {
+                var sizeToDelete = context.Sizes.Find(id);
+                if (sizeToDelete != null)
+                {
+                    context.Sizes.Remove(sizeToDelete);
+                    context.SaveChanges();
+                }
+            }
+        }
+
         private void YearTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             PlaceholderText.Visibility = string.IsNullOrEmpty(YearTextBox.Text)
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+        }
+
+        public async void ResultIsDefective_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                bool isChecked = (bool)ResultIsDefective.IsChecked;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error toggling operator is active toggle: {ex.Message}");
+            }
         }
 
         public class HourlyProduction

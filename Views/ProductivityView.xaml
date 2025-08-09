@@ -8,14 +8,12 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              Loaded="UserControl_Loaded"
              xmlns:local="clr-namespace:WPF_App.Views"
-             xmlns:converters="clr-namespace:WPF_RobinLine.Converters"
              xmlns:controls="clr-namespace:ModernWpf.Controls;assembly=ModernWpf"
              Height="750" Width="800">
 
     <UserControl.Resources>
         <SolidColorBrush x:Key="backgroundColorBrush" Color="#ededed"/>
         <SolidColorBrush x:Key="fillColorBrush" Color="#683ab7"/>
-        <converters:RowIndexConverter x:Key="RowIndexConverter"/>
     </UserControl.Resources>
 
     <Viewbox Stretch="Uniform">
@@ -809,8 +807,8 @@
                                             FontSize="9" Margin="0,0,10,0" Click="ShiftData_Click"/>
                                     <Button x:Name="SizeData" Content="Size" Width="70" Height="20" 
                                             FontSize="9" Margin="0,0,10,0" Click="SizeData_Click"/>
-                                    <Button x:Name="TargetData" Content="Target" Width="70" Height="20" 
-                                            FontSize="9" Click="TargetData_Click"/>
+                                    <!--<Button x:Name="TargetData" Content="Target" Width="70" Height="20" 
+                                            FontSize="9" Click="TargetData_Click"/>-->
                                 </StackPanel>
 
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
@@ -835,6 +833,29 @@
                                             Click="AddRole_Click"/>
                                 </StackPanel>
 
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                                    <Button x:Name="AddShift2" 
+                                            Content="Add Shift" 
+                                            Width="70" 
+                                            Height="20" 
+                                            FontSize="9" 
+                                            Margin="0,0,0,0" 
+                                            Visibility="Collapsed"
+                                            Click="AddShift_Click"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                                    <Button x:Name="AddSize2" 
+                                            Content="Add Size" 
+                                            Width="70" 
+                                            Height="20" 
+                                            FontSize="9" 
+                                            Margin="0,0,0,0" 
+                                            Visibility="Collapsed"
+                                            Click="AddSize_Click"/>
+                                </StackPanel>
+
+                                <!-- Operator table -->
                                 <DataGrid x:Name="OperatorDataGrid" 
                                           Height="263"
                                           RowHeight="24"
@@ -966,81 +987,6 @@
 
                                 </DataGrid>
 
-                                <!-- Pagination Controls -->
-                                <StackPanel x:Name="Pagination"
-                                            Orientation="Horizontal" 
-                                            HorizontalAlignment="Center" 
-                                            Margin="0,280,0,0" 
-                                            Height="15"
-                                            Grid.Row="3"
-                                            Visibility ="Collapsed">
-                                    <Button x:Name="FirstPageButton" 
-                                            Content="&lt;&lt;" 
-                                            Margin="5,0" 
-                                            Click="FirstPage_Click" 
-                                            Width="30"
-                                            FontSize ="9"
-                                            IsEnabled="{Binding IsNotFirstPage}"/>
-                                    <Button x:Name="PrevPageButton" 
-                                            Content="&lt;" 
-                                            Margin="5,0" 
-                                            Click="PrevPage_Click" 
-                                            Width="30"
-                                            FontSize ="9"
-                                            IsEnabled="{Binding IsNotFirstPage}"/>
-
-                                    <TextBlock Text="Page" 
-                                               VerticalAlignment="Center" 
-                                               Margin="5,0"
-                                               FontSize ="9"/>
-                                    <TextBlock x:Name="CurrentPageTextBox" 
-                                             Text="{Binding CurrentPage}" 
-                                             Width="10" 
-                                             TextAlignment="Center" 
-                                             Margin="5,0"
-                                             FontSize ="9"/>
-                                    <TextBlock Text="of" 
-                                               VerticalAlignment="Center" 
-                                               Margin="5,0"
-                                               FontSize ="9"/>
-                                    <TextBlock x:Name="TotalPagesTextBlock" 
-                                               Text="{Binding TotalPages}" 
-                                               VerticalAlignment="Center" 
-                                               Margin="5,0"
-                                               FontSize ="9"/>
-
-                                    <Button x:Name="NextPageButton" 
-                                            Content="&gt;" 
-                                            Margin="5,0" 
-                                            Click="NextPage_Click" 
-                                            Width="30"
-                                            FontSize ="9"
-                                            IsEnabled="{Binding IsNotLastPage}"/>
-                                    <Button x:Name="LastPageButton" 
-                                            Content="&gt;&gt;" 
-                                            Margin="5,0" 
-                                            Click="LastPage_Click" 
-                                            Width="30"
-                                            FontSize ="9"
-                                            IsEnabled="{Binding IsNotLastPage}"/>
-
-                                    <!--<TextBlock Text="Items per page:" 
-                                               VerticalAlignment="Center" 
-                                               Margin="10,0,5,0"
-                                               FontSize ="9"/>
-                                    <ComboBox x:Name="PageSizeComboBox" 
-                                              SelectedValue="{Binding PageSize}" 
-                                              Width="60" 
-                                              Margin="5,0"
-                                              FontSize ="9">
-                                        <ComboBoxItem Content="10"/>
-                                        <ComboBoxItem Content="25"/>
-                                        <ComboBoxItem Content="50"/>
-                                        <ComboBoxItem Content="100"/>
-                                    </ComboBox>-->
-                                </StackPanel>
-
-                                <!-- Add Operator Form (Collapsed by default) -->
                                 <Border x:Name="AddOperatorForm"
                                         Grid.Row="1"
                                         Margin="0,20,0,10"
@@ -1076,7 +1022,7 @@
                                                        Width="80"
                                                        VerticalAlignment="Center"
                                                        FontSize="9"/>
-                                            
+
                                             <ComboBox x:Name="OperatorRoleComboBox2"
                                                       Width="150"
                                                       Margin="0,0,0,0"
@@ -1124,18 +1070,24 @@
                                                           BorderThickness="0"
                                                           Margin="0,0,0,0"
                                                           Click="OperatorIsActive_Click">
-                                                --><!--<ToggleButton.RenderTransform>
+                                                -->
+                                        <!--<ToggleButton.RenderTransform>
                                                         <TranslateTransform Y="-156"/>
-                                                    </ToggleButton.RenderTransform>--><!--
+                                                    </ToggleButton.RenderTransform>-->
+                                        <!--
                                                 <ToggleButton.Template>
                                                     <ControlTemplate TargetType="ToggleButton">
                                                         <Grid Width="35" Height="17">
-                                                            --><!-- Background Border --><!--
+                                                            -->
+                                        <!-- Background Border -->
+                                        <!--
                                                             <Border x:Name="ToggleBackground"
                                                                     Width="35" Height="17" 
                                                                     CornerRadius="8"
                                                                     Background="Gray"/>
-                                                            --><!-- Toggle Thumb --><!--
+                                                            -->
+                                        <!-- Toggle Thumb -->
+                                        <!--
                                                             <Ellipse x:Name="ToggleThumb"
                                                                      Width="15" Height="15"  
                                                                      Fill="White"
@@ -1266,12 +1218,16 @@
                                                 <ToggleButton.Template>
                                                     <ControlTemplate TargetType="ToggleButton">
                                                         <Grid Width="35" Height="17">
-                                                            --><!-- Background Border --><!--
+                                                            -->
+                                        <!-- Background Border -->
+                                        <!--
                                                             <Border x:Name="ToggleBackground"
                                                                     Width="35" Height="17" 
                                                                     CornerRadius="8"
                                                                     Background="Gray"/>
-                                                            --><!-- Toggle Thumb --><!--
+                                                            -->
+                                        <!-- Toggle Thumb -->
+                                        <!--
                                                             <Ellipse x:Name="ToggleThumb"
                                                                      Width="15" Height="15"  
                                                                      Fill="White"
@@ -1318,6 +1274,7 @@
                                     </StackPanel>
                                 </Border>
 
+                                <!-- Role table -->
                                 <DataGrid x:Name="RoleDataGrid" 
                                           Height="263"
                                           RowHeight="24"
@@ -1448,468 +1405,744 @@
                                     </DataGrid.Columns>
 
                                 </DataGrid>
-                            </Grid>
-                        </TabItem>
 
-                        <TabItem Header="Testing">
-                            <Grid Margin="10">
-                                <!-- Row Definitions -->
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition Height="20"/>
-                                </Grid.RowDefinitions>
+                                <Border x:Name="AddRoleForm"
+                                        Grid.Row="1"
+                                        Margin="0,20,0,10"
+                                        Padding="20"
+                                        Width="300"
+                                        Height="200"
+                                        Background="#F5F5F5"
+                                        BorderBrush="#D0D0D0"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Visibility="Collapsed">
 
-                                <!-- Column Definitions -->
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="130"/>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="120"/>
-                                </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="Add New Role" 
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,10"/>
 
-                                <!-- ! Role Label-->
-                                <TextBlock x:Name="Role"
-                                           Text="Role:"
-                                           Grid.Row="0"
-                                           Grid.Column="0"
-                                           Margin="5,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="12" 
-                                           VerticalAlignment="Center"/>
+                                        <!-- Name Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Name:" 
+                                                       Width="80"
+                                                       FontSize="9"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="RoleNameTextBox"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9"/>
+                                        </StackPanel>
 
-                                <TextBlock x:Name="RoleName"
-                                           Text="Name:"
-                                           Grid.Row="1"
-                                           Grid.Column="0"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <TextBox x:Name="RoleNameTxt"
-                                         Width="100"
-                                         Grid.Row="1"
-                                         Grid.Column="1"
-                                         Margin="10,0,0,0"
-                                         VerticalAlignment="Center"/>
+                                        <!-- Action Buttons -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                                            <Button Content="Save" 
+                                                    Width="80"
+                                                    Margin="0,0,10,0"
+                                                    Click="SaveRole_Click"/>
+                                            <Button Content="Cancel" 
+                                                    Width="80"
+                                                    Click="CancelRoleForm_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <Button x:Name="AddRole"
-                                        Content="Add Role"
-                                        Margin="10,0,0,0"
-                                        Width="100"
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        Padding="8,2"
-                                        VerticalAlignment="Center"
-                                        Click="AddRoleButton_Click">
-                                    <Button.RenderTransform>
-                                        <TranslateTransform Y="5"/>
-                                        <!-- Moves Up -->
-                                    </Button.RenderTransform>
-                                </Button>
+                                <Border x:Name="EditRoleForm"
+                                        Grid.Row="1"
+                                        Margin="0,20,0,10"
+                                        Padding="20"
+                                        Width="300"
+                                        Height="200"
+                                        Background="#F5F5F5"
+                                        BorderBrush="#D0D0D0"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Visibility="Collapsed">
 
-                                <!-- Operator Label -->
-                                <TextBlock x:Name="Operator"
-                                           Text="Operator:"
-                                           Grid.Row="0"
-                                           Grid.Column="3"
-                                           Margin="5,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="12" 
-                                           VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="Edit Role" 
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,10"/>
 
-                                <TextBlock x:Name="Name"
-                                           Text="Name:"
-                                           Grid.Row="1"
-                                           Grid.Column="3"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <TextBox x:Name="OperatorName"
-                                         Width="100"
-                                         Grid.Row="1"
-                                         Grid.Column="4"
-                                         Margin="10,0,0,0"
-                                         VerticalAlignment="Center"/>
+                                        <!-- Name Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Name:" 
+                                                       Width="80"
+                                                       FontSize="9"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="EditRoleNameTextBox"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9"/>
+                                        </StackPanel>
+                                        <!-- Action Buttons -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                                            <Button Content="Update" 
+                                                    Width="80"
+                                                    Margin="0,0,10,0"
+                                                    Click="UpdateRole_Click"/>
+                                            <Button Content="Cancel" 
+                                                    Width="80"
+                                                    Click="CancelRoleForm_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock x:Name="OperatorRole"
-                                           Text="Role:"
-                                           Grid.Row="2"
-                                           Grid.Column="3"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <ComboBox x:Name="OperatorRoleComboBox"
-                                          Width="100"
-                                          Grid.Row="2"
-                                          Grid.Column="4"
-                                          Margin="10,0,0,0"
-                                          VerticalAlignment="Center"
-                                          IsEditable="True"
-                                          IsReadOnly="True">
-                                    <ComboBox.Style>
-                                        <Style TargetType="ComboBox">
-                                            <Setter Property="Text" Value="-- Select Role --"/>
+                                <!-- Shift table -->
+                                <DataGrid x:Name="ShiftDataGrid" 
+                                          Height="263"
+                                          RowHeight="24"
+                                          FontSize="8"
+                                          Grid.Row="2" 
+                                          AutoGenerateColumns="False"
+                                          Margin="0,-25,0,0"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          HeadersVisibility="Column"
+                                          RowHeaderWidth="0"
+                                          ColumnWidth="Auto"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          Visibility="Collapsed"
+                                          GridLinesVisibility="Horizontal"
+                                          HorizontalGridLinesBrush="#D0D0D0">
+
+                                    <DataGrid.Resources>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#E0E0E0"/>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#F0F0F0"/>
+                                    </DataGrid.Resources>
+
+                                    <!-- Row Style with Hover and Selection Effects -->
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="DataGridRow">
+                                            <Setter Property="Background" Value="White"/>
+                                            <Setter Property="FocusVisualStyle">
+                                                <Setter.Value>
+                                                    <Style>
+                                                        <Setter Property="Control.Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate>
+                                                                    <Border/>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Setter.Value>
+                                            </Setter>
+
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
-                                                    <Setter Property="Text" Value="-- Select Role --"/>
-                                                </DataTrigger>
+                                                <!-- Alternate row coloring -->
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                                    <Setter Property="Background" Value="#F5F5F5"/>
+                                                </Trigger>
+
+                                                <!-- Hover effect (light blue) -->
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#E6F2FF"/>
+                                                    <!-- Light blue hover -->
+                                                </Trigger>
+
+                                                <!-- Selected row (gray) -->
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="#E0E0E0"/>
+                                                    <!-- Gray selection -->
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                </Trigger>
+
+                                                <!-- Selected + Hover state -->
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsSelected" Value="True"/>
+                                                        <Condition Property="IsMouseOver" Value="True"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Background" Value="#D0D0D0"/>
+                                                    <!-- Darker gray when selected+hovered -->
+                                                </MultiTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </ComboBox.Style>
-                                </ComboBox>
+                                    </DataGrid.RowStyle>
 
-                                <TextBlock x:Name="HiredDate"
-                                           Text="Hired Date:"
-                                           Grid.Row="3"
-                                           Grid.Column="3"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <DatePicker x:Name="OperatorHiredDate"
-                                            Width="100"
-                                            Grid.Row="3"
-                                            Grid.Column="4"
-                                            Margin="10,0,0,0"
-                                            VerticalAlignment="Center"/>
+                                    <!-- Proper Column Header Style -->
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="#4471ce"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="Padding" Value="5,5"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
 
-                                <TextBlock x:Name="IsActive"
-                                           Text="Is active:"
-                                           Grid.Row="4"
-                                           Grid.Column="3"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <ToggleButton x:Name="OperatorIsActive"
-                                              Width="35" Height="17" 
-                                              Grid.Row="4"
-                                              Grid.Column="4"
-                                              Background="Transparent"
-                                              Cursor="Hand"
-                                              BorderThickness="0"
-                                              Margin="-50,0,0,0"
-                                              Click="OperatorIsActive_Click">
-                                    <!--<ToggleButton.RenderTransform>
-                                        <TranslateTransform Y="-156"/>
-                                    </ToggleButton.RenderTransform>-->
-                                    <ToggleButton.Template>
-                                        <ControlTemplate TargetType="ToggleButton">
-                                            <Grid Width="35" Height="17">
-                                                <!-- Background Border -->
-                                                <Border x:Name="ToggleBackground"
-                                                        Width="35" Height="17" 
-                                                        CornerRadius="8"
-                                                        Background="Gray"/>
-                                                <!-- Toggle Thumb -->
-                                                <Ellipse x:Name="ToggleThumb"
-                                                         Width="15" Height="15"  
-                                                         Fill="White"
-                                                         HorizontalAlignment="Left"
-                                                         Margin="2, 0, 0, 0">
-                                                    <Ellipse.RenderTransform>
-                                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                                    </Ellipse.RenderTransform>
-                                                </Ellipse>
-                                            </Grid>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsChecked" Value="True">
-                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                                        <Setter.Value>
-                                                            <TranslateTransform X="16"/>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                                <Trigger Property="IsChecked" Value="False">
-                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
-                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                                        <Setter.Value>
-                                                            <TranslateTransform X="0"/>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </ToggleButton.Template>
-                                </ToggleButton>
+                                    <!-- Cell Style -->
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Padding" Value="2,0"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="DataGridCell">
+                                                        <Border Padding="{TemplateBinding Padding}" 
+                                                                Background="{TemplateBinding Background}">
+                                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGrid.CellStyle>
 
-                                <Button x:Name="AddOperator"
-                                        Content="Add Operator"
-                                        Margin="10,0,0,0"
-                                        Width="100"
-                                        Grid.Row="5"
-                                        Grid.Column="4"
-                                        Padding="8,2"
-                                        VerticalAlignment="Center"
-                                        Click="AddOperatorButton_Click">
-                                    <Button.RenderTransform>
-                                        <TranslateTransform Y="5"/>
-                                        <!-- Moves Up -->
-                                    </Button.RenderTransform>
-                                </Button>
+                                    <DataGrid.Columns>
+                                        <!-- Your data columns (add these based on your DTO) -->
+                                        <DataGridTextColumn Header="No." Binding="{Binding No}" Width="40"/>
+                                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="160" />
+                                        <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="40"/>
+                                        <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}" Width="40"/>
+                                        <DataGridTextColumn Header="Target" Binding="{Binding Target}" Width="40"/>
 
-                                <!-- Shift Label -->
-                                <TextBlock x:Name="Shift"
-                                           Text="Shift:"
-                                           Grid.Row="4"
-                                           Grid.Column="0"
-                                           Margin="5,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="12" 
-                                           VerticalAlignment="Center"/>
+                                        <!-- Action Column with Delete Button -->
+                                        <DataGridTemplateColumn Header="Actions" Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <Button Content="Edit" 
+                                                                Click="EditShift_Click"
+                                                                CommandParameter="{Binding Id}"
+                                                                Style="{StaticResource EditButtonStyle}"
+                                                                Margin="0,0,80,0"/>
+                                                        <Button Content="Delete" 
+                                                                Click="SoftDeleteShift_Click"
+                                                                CommandParameter="{Binding Id}"
+                                                                Style="{StaticResource DeleteButtonStyle}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
 
-                                <TextBlock x:Name="ShiftDesc"
-                                           Text="Description:"
-                                           Grid.Row="5"
-                                           Grid.Column="0"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <TextBox x:Name="ShiftDescTxt"
-                                         Width="100"
-                                         Grid.Row="5"
-                                         Grid.Column="1"
-                                         Margin="10,0,0,0"
-                                         VerticalAlignment="Center"/>
 
-                                <TextBlock x:Name="StartTime"
-                                           Text="Start time:"
-                                           Grid.Row="6"
-                                           Grid.Column="0"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <xctk:TimePicker 
-                                        x:Name="StartTimePicker"
-                                        Grid.Row="6"
-                                        Grid.Column="1"
-                                        Width="100"
-                                        Margin="10,0,0,0"
-                                        Format="Custom"
-                                        FormatString="HH:mm"
-                                        ShowButtonSpinner="False"
-                                        AllowTextInput="True"
-                                        Watermark="HH:mm"/>
+                                    </DataGrid.Columns>
 
-                                <TextBlock x:Name="EndTime"
-                                           Text="End time:"
-                                           Grid.Row="7"
-                                           Grid.Column="0"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <xctk:TimePicker 
-                                        x:Name="EndTimePicker"
-                                        Grid.Row="7"
-                                        Grid.Column="1"
-                                        Width="100"
-                                        Margin="10,0,0,0"
-                                        Format="Custom"
-                                        FormatString="HH:mm"
-                                        ShowButtonSpinner="False"
-                                        AllowTextInput="True"
-                                        Watermark="HH:mm"/>
+                                </DataGrid>
 
-                                <TextBlock x:Name="TargetProduction"
-                                           Text="Target Production:"
-                                           Grid.Row="8"
-                                           Grid.Column="0"
-                                           Margin="30,0,-18,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <TextBox x:Name="TargetProductionTxt"
-                                         Width="100"
-                                         Grid.Row="8"
-                                         Grid.Column="1"
-                                         Margin="10,0,0,0"
-                                         VerticalAlignment="Center">
-                                    <TextBox.InputScope>
-                                        <InputScope>
-                                            <InputScope.Names>
-                                                <InputScopeName NameValue="Number"/>
-                                            </InputScope.Names>
-                                        </InputScope>
-                                    </TextBox.InputScope>
-                                </TextBox>
+                                <Border x:Name="AddShiftForm"
+                                        Grid.Row="1"
+                                        Margin="0,20,0,10"
+                                        Padding="20"
+                                        Width="300"
+                                        Height="270"
+                                        Background="#F5F5F5"
+                                        BorderBrush="#D0D0D0"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Visibility="Collapsed">
 
-                                <TextBlock x:Name="ShiftIsActive"
-                                           Text="Is active:"
-                                           Grid.Row="9"
-                                           Grid.Column="0"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <ToggleButton x:Name="ShiftIsActiveToggl"
-                                              Width="35" Height="17" 
-                                              Grid.Row="9"
-                                              Grid.Column="1"
-                                              Background="Transparent"
-                                              Cursor="Hand"
-                                              BorderThickness="0"
-                                              Margin="-50,0,0,0"
-                                              Click="OperatorIsActive_Click">
-                                    <!--<ToggleButton.RenderTransform>
-                                            <TranslateTransform Y="-156"/>
-                                            </ToggleButton.RenderTransform>-->
-                                    <ToggleButton.Template>
-                                        <ControlTemplate TargetType="ToggleButton">
-                                            <Grid Width="35" Height="17">
-                                                <!-- Background Border -->
-                                                <Border x:Name="ToggleBackground"
-                                                        Width="35" Height="17" 
-                                                        CornerRadius="8"
-                                                        Background="Gray"/>
-                                                <!-- Toggle Thumb -->
-                                                <Ellipse x:Name="ToggleThumb"
-                                                         Width="15" Height="15"  
-                                                         Fill="White"
-                                                         HorizontalAlignment="Left"
-                                                         Margin="2, 0, 0, 0">
-                                                    <Ellipse.RenderTransform>
-                                                        <TranslateTransform x:Name="ThumbTransform"/>
-                                                    </Ellipse.RenderTransform>
-                                                </Ellipse>
-                                            </Grid>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsChecked" Value="True">
-                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#3f73d1"/>
-                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                                        <Setter.Value>
-                                                            <TranslateTransform X="16"/>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                                <Trigger Property="IsChecked" Value="False">
-                                                    <Setter TargetName="ToggleBackground" Property="Background" Value="#d4dce5"/>
-                                                    <Setter Property="RenderTransform" TargetName="ToggleThumb">
-                                                        <Setter.Value>
-                                                            <TranslateTransform X="0"/>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </ToggleButton.Template>
-                                </ToggleButton>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="Add New Shift" 
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,10"/>
 
-                                <Button x:Name="AddShift"
-                                        Content="Add Shift"
-                                        Margin="10,0,0,0"
-                                        Width="100"
-                                        Grid.Row="10"
-                                        Grid.Column="1"
-                                        Padding="8,2"
-                                        VerticalAlignment="Center"
-                                        Click="AddShiftButton_Click">
-                                    <Button.RenderTransform>
-                                        <TranslateTransform Y="5"/>
-                                    </Button.RenderTransform>
-                                </Button>
+                                        <!-- Description Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Description:" 
+                                                       Width="90"
+                                                       FontSize="9"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="DescriptionTextBox"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9"/>
+                                        </StackPanel>
 
-                                <!-- Size Label -->
-                                <TextBlock x:Name="ShoeSize"
-                                           Text="Size:"
-                                           Grid.Row="7"
-                                           Grid.Column="3"
-                                           Margin="5,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="12" 
-                                           VerticalAlignment="Center"/>
+                                        <!-- StartTime Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Start time:"
+                                                       Width="90"
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>
+                                            <xctk:TimePicker x:Name="StartTimePicker2"
+                                                             Width="150"
+                                                             Padding="2"
+                                                             FontSize="9"
+                                                             Format="Custom"
+                                                             FormatString="HH:mm"
+                                                             ShowButtonSpinner="False"
+                                                             AllowTextInput="True"
+                                                             Watermark="HH:mm"/>
+                                        </StackPanel>
 
-                                <TextBlock x:Name="SizeType"
-                                           Text="Type:"
-                                           Grid.Row="8"
-                                           Grid.Column="3"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <ComboBox x:Name="SizeTypeComboBox"
-                                          Width="100"
-                                          Grid.Row="8"
-                                          Grid.Column="4"
-                                          Margin="10,0,0,0"
-                                          VerticalAlignment="Center"
-                                          IsEditable="True"
-                                          IsReadOnly="True">
-                                    <!-- Manually add items -->
-                                    <ComboBoxItem Content="EU"/>
-                                    <ComboBoxItem Content="UA"/>
+                                        <!-- EndTime Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="End time:" 
+                                                       Width="90"
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>
+                                            <xctk:TimePicker x:Name="EndTimePicker2"
+                                                             Width="150"
+                                                             Padding="2"
+                                                             FontSize="9"
+                                                             Format="Custom"
+                                                             FormatString="HH:mm"
+                                                             ShowButtonSpinner="False"
+                                                             AllowTextInput="True"
+                                                             Watermark="HH:mm"/>
+                                        </StackPanel>
 
-                                    <ComboBox.Style>
-                                        <Style TargetType="ComboBox">
-                                            <Setter Property="Text" Value="-- Select Type --"/>
+                                        <!-- Target Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Target Production:"
+                                                       Width="80"
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="TargetProductionTxt2"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9"
+                                                     Margin="10,0,0,0"
+                                                     VerticalAlignment="Center">
+                                                <TextBox.InputScope>
+                                                    <InputScope>
+                                                        <InputScope.Names>
+                                                            <InputScopeName NameValue="Number"/>
+                                                        </InputScope.Names>
+                                                    </InputScope>
+                                                </TextBox.InputScope>
+                                            </TextBox>
+                                        </StackPanel>
+
+                                        <!-- Action Buttons -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                                            <Button Content="Save" 
+                                                    Width="80"
+                                                    Margin="0,0,10,0"
+                                                    Click="SaveShift_Click"/>
+                                            <Button Content="Cancel" 
+                                                    Width="80"
+                                                    Click="CancelShiftForm_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border x:Name="EditShiftForm"
+                                        Grid.Row="1"
+                                        Margin="0,20,0,10"
+                                        Padding="20"
+                                        Width="300"
+                                        Height="270"
+                                        Background="#F5F5F5"
+                                        BorderBrush="#D0D0D0"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Visibility="Collapsed">
+
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="Edit Shift" 
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,10"/>
+
+                                        <!-- Desc Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Description:" 
+                                                       Width="90"
+                                                       FontSize="9"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="EditShiftDescTextBox"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9"/>
+                                        </StackPanel>
+
+                                        <!-- StartTime Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Start time:"
+                                                       Width="90"
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>
+                                            <xctk:TimePicker x:Name="EditStartTimePicker"
+                                                             Width="150"
+                                                             Padding="2"
+                                                             FontSize="9"
+                                                             Format="Custom"
+                                                             FormatString="HH:mm"
+                                                             ShowButtonSpinner="False"
+                                                             AllowTextInput="True"
+                                                             Watermark="HH:mm"/>
+                                        </StackPanel>
+
+                                        <!-- EndTime Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="End time:" 
+                                                       Width="90"
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>
+                                            <xctk:TimePicker x:Name="EditEndTimePicker"
+                                                             Width="150"
+                                                             Padding="2"
+                                                             FontSize="9"
+                                                             Format="Custom"
+                                                             FormatString="HH:mm"
+                                                             ShowButtonSpinner="False"
+                                                             AllowTextInput="True"
+                                                             Watermark="HH:mm"/>
+                                        </StackPanel>
+
+                                        <!-- Target Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Target Production:"
+                                                       Width="80"
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="EditTargetProductionTxt"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9"
+                                                     Margin="10,0,0,0"
+                                                     VerticalAlignment="Center">
+                                                <TextBox.InputScope>
+                                                    <InputScope>
+                                                        <InputScope.Names>
+                                                            <InputScopeName NameValue="Number"/>
+                                                        </InputScope.Names>
+                                                    </InputScope>
+                                                </TextBox.InputScope>
+                                            </TextBox>
+                                        </StackPanel>
+
+                                        <!-- Action Buttons -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                                            <Button Content="Update" 
+                                                    Width="80"
+                                                    Margin="0,0,10,0"
+                                                    Click="UpdateShift_Click"/>
+                                            <Button Content="Cancel" 
+                                                    Width="80"
+                                                    Click="CancelShiftForm_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Size table -->
+                                <DataGrid x:Name="SizeDataGrid" 
+                                          Height="263"
+                                          RowHeight="24"
+                                          FontSize="8"
+                                          Grid.Row="2" 
+                                          AutoGenerateColumns="False"
+                                          Margin="0,-25,0,0"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          HeadersVisibility="Column"
+                                          RowHeaderWidth="0"
+                                          ColumnWidth="Auto"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          Visibility="Collapsed"
+                                          GridLinesVisibility="Horizontal"
+                                          HorizontalGridLinesBrush="#D0D0D0">
+
+                                    <DataGrid.Resources>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#E0E0E0"/>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#F0F0F0"/>
+                                    </DataGrid.Resources>
+
+                                    <!-- Row Style with Hover and Selection Effects -->
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="DataGridRow">
+                                            <Setter Property="Background" Value="White"/>
+                                            <Setter Property="FocusVisualStyle">
+                                                <Setter.Value>
+                                                    <Style>
+                                                        <Setter Property="Control.Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate>
+                                                                    <Border/>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Setter.Value>
+                                            </Setter>
+
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding SelectedItem, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
-                                                    <Setter Property="Text" Value="-- Select Type --"/>
-                                                </DataTrigger>
+                                                <!-- Alternate row coloring -->
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                                    <Setter Property="Background" Value="#F5F5F5"/>
+                                                </Trigger>
+
+                                                <!-- Hover effect (light blue) -->
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#E6F2FF"/>
+                                                </Trigger>
+
+                                                <!-- Selected row (gray) -->
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="#E0E0E0"/>
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                </Trigger>
+
+                                                <!-- Selected + Hover state -->
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsSelected" Value="True"/>
+                                                        <Condition Property="IsMouseOver" Value="True"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Background" Value="#D0D0D0"/>
+                                                </MultiTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </ComboBox.Style>
-                                </ComboBox>
+                                    </DataGrid.RowStyle>
 
-                                <TextBlock x:Name="SizeValue"
-                                           Text="Value:"
-                                           Grid.Row="9"
-                                           Grid.Column="3"
-                                           Margin="30,0,10,0"
-                                           Foreground="{DynamicResource titleColor7}"
-                                           FontWeight="Bold" 
-                                           FontSize="10" 
-                                           VerticalAlignment="Center"/>
-                                <TextBox x:Name="SizeValueTxt"
-                                         Width="100"
-                                         Grid.Row="9"
-                                         Grid.Column="4"
-                                         Margin="10,0,0,0"
-                                         VerticalAlignment="Center"/>
+                                    <!-- Column Header Style -->
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="#4471ce"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="Padding" Value="5,5"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
 
-                                <Button x:Name="AddSize"
-                                        Content="Add Size"
-                                        Margin="10,0,0,0"
-                                        Width="100"
-                                        Grid.Row="10"
-                                        Grid.Column="4"
-                                        Padding="8,2"
-                                        VerticalAlignment="Center"
-                                        Click="AddSizeButton_Click">
-                                    <Button.RenderTransform>
-                                        <TranslateTransform Y="5"/>
-                                    </Button.RenderTransform>
-                                </Button>
+                                    <!-- Cell Style -->
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Padding" Value="2,0"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="DataGridCell">
+                                                        <Border Padding="{TemplateBinding Padding}" 
+                                                                Background="{TemplateBinding Background}">
+                                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="No." Binding="{Binding No}" Width="40"/>
+                                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="100" />
+                                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100" />
+
+                                        <!-- Action Column -->
+                                        <DataGridTemplateColumn Header="Actions" Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <Button Content="Edit" 
+                                                                Click="EditSize_Click"
+                                                                CommandParameter="{Binding Id}"
+                                                                Style="{StaticResource EditButtonStyle}"
+                                                                Margin="0,0,10,0"/>
+                                                        <Button Content="Delete" 
+                                                                Click="DeleteSize_Click"
+                                                                CommandParameter="{Binding Id}"
+                                                                Style="{StaticResource DeleteButtonStyle}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <Border x:Name="AddSizeForm"
+                                        Grid.Row="1"
+                                        Margin="0,20,0,10"
+                                        Padding="20"
+                                        Width="300"
+                                        Height="200"
+                                        Background="#F5F5F5"
+                                        BorderBrush="#D0D0D0"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Visibility="Collapsed">
+
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="Add New Size" 
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,10"/>
+
+                                        <!-- Value Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Value:" 
+                       Width="90"
+                       FontSize="9"
+                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="SizeValueTextBox"
+                     Width="150"
+                     Padding="2"
+                     FontSize="9">
+                                                <TextBox.InputScope>
+                                                    <InputScope>
+                                                        <InputScope.Names>
+                                                            <InputScopeName NameValue="Number"/>
+                                                        </InputScope.Names>
+                                                    </InputScope>
+                                                </TextBox.InputScope>
+                                            </TextBox>
+                                        </StackPanel>
+
+                                        <!-- Type Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Type:"
+                       Width="90"
+                       FontSize="9" 
+                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="SizeTypeTextBox"
+                     Width="150"
+                     Padding="2"
+                     FontSize="9"/>
+                                        </StackPanel>
+
+                                        <!-- Action Buttons -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                                            <Button Content="Save" 
+                    Width="80"
+                    Margin="0,0,10,0"
+                    Click="SaveSize_Click"/>
+                                            <Button Content="Cancel" 
+                    Width="80"
+                    Click="CancelSizeForm_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border x:Name="EditSizeForm"
+                                        Grid.Row="1"
+                                        Margin="0,20,0,10"
+                                        Padding="20"
+                                        Width="300"
+                                        Height="200"
+                                        Background="#F5F5F5"
+                                        BorderBrush="#D0D0D0"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Visibility="Collapsed">
+
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="Edit Size" 
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,10"/>
+
+                                        <!-- Value Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Value:" 
+                                                        Width="90"
+                                                        FontSize="9"
+                                                        VerticalAlignment="Center"/>
+                                            <TextBox x:Name="EditSizeValueTextBox"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9">
+                                                <TextBox.InputScope>
+                                                    <InputScope>
+                                                        <InputScope.Names>
+                                                            <InputScopeName NameValue="Number"/>
+                                                        </InputScope.Names>
+                                                    </InputScope>
+                                                </TextBox.InputScope>
+                                            </TextBox>
+                                        </StackPanel>
+
+                                        <!-- Type Field -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                            <TextBlock Text="Type:"
+                                                       Width="90"
+                                                       FontSize="9" 
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox x:Name="EditSizeTypeTextBox"
+                                                     Width="150"
+                                                     Padding="2"
+                                                     FontSize="9"/>
+                                        </StackPanel>
+
+                                        <!-- Action Buttons -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                                            <Button Content="Update" 
+                                                    Width="80"
+                                                    Margin="0,0,10,0"
+                                                    Click="UpdateSize_Click"/>
+                                            <Button Content="Cancel" 
+                                                    Width="80"
+                                                    Click="CancelSizeForm_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Pagination Controls -->
+                                <StackPanel x:Name="Pagination"
+            Orientation="Horizontal" 
+            HorizontalAlignment="Center" 
+            Margin="0,280,0,0" 
+            Height="15"
+            Grid.Row="3"
+            Visibility ="Collapsed">
+                                    <Button x:Name="FirstPageButton" 
+            Content="&lt;&lt;" 
+            Margin="5,0" 
+            Click="FirstPage_Click" 
+            Width="30"
+            FontSize ="9"
+            IsEnabled="{Binding IsNotFirstPage}"/>
+                                    <Button x:Name="PrevPageButton" 
+            Content="&lt;" 
+            Margin="5,0" 
+            Click="PrevPage_Click" 
+            Width="30"
+            FontSize ="9"
+            IsEnabled="{Binding IsNotFirstPage}"/>
+
+                                    <TextBlock Text="Page" 
+               VerticalAlignment="Center" 
+               Margin="5,0"
+               FontSize ="9"/>
+                                    <TextBlock x:Name="CurrentPageTextBox" 
+             Text="{Binding CurrentPage}" 
+             Width="10" 
+             TextAlignment="Center" 
+             Margin="5,0"
+             FontSize ="9"/>
+                                    <TextBlock Text="of" 
+               VerticalAlignment="Center" 
+               Margin="5,0"
+               FontSize ="9"/>
+                                    <TextBlock x:Name="TotalPagesTextBlock" 
+               Text="{Binding TotalPages}" 
+               VerticalAlignment="Center" 
+               Margin="5,0"
+               FontSize ="9"/>
+
+                                    <Button x:Name="NextPageButton" 
+            Content="&gt;" 
+            Margin="5,0" 
+            Click="NextPage_Click" 
+            Width="30"
+            FontSize ="9"
+            IsEnabled="{Binding IsNotLastPage}"/>
+                                    <Button x:Name="LastPageButton" 
+            Content="&gt;&gt;" 
+            Margin="5,0" 
+            Click="LastPage_Click" 
+            Width="30"
+            FontSize ="9"
+            IsEnabled="{Binding IsNotLastPage}"/>
+
+                                    <!--<TextBlock Text="Items per page:" 
+               VerticalAlignment="Center" 
+               Margin="10,0,5,0"
+               FontSize ="9"/>
+    <ComboBox x:Name="PageSizeComboBox" 
+              SelectedValue="{Binding PageSize}" 
+              Width="60" 
+              Margin="5,0"
+              FontSize ="9">
+        <ComboBoxItem Content="10"/>
+        <ComboBoxItem Content="25"/>
+        <ComboBoxItem Content="50"/>
+        <ComboBoxItem Content="100"/>
+    </ComboBox>-->
+                                </StackPanel>
                             </Grid>
                         </TabItem>
 
@@ -2261,7 +2494,7 @@
                                                   Cursor="Hand"
                                                   BorderThickness="0"
                                                   Margin="-50,0,0,0"
-                                                  Click="OperatorIsActive_Click">
+                                                  Click="ResultIsDefective_Click">
                                         <ToggleButton.Template>
                                             <ControlTemplate TargetType="ToggleButton">
                                                 <Grid Width="35" Height="17">

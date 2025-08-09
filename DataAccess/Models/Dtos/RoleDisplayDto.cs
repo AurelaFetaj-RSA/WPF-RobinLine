@@ -2,6 +2,8 @@
 {
     public class RoleDisplayDto
     {
-        public string RoleName { get; set; } = null!;
+        public int? Id { get; set; }
+        public int No { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

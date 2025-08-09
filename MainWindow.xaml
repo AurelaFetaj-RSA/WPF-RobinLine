@@ -245,7 +245,7 @@
                         </StackPanel>
                     </RadioButton>
 
-                    <!--<RadioButton Style="{StaticResource menuButton}"
+                    <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color6}"
                                  Command="{Binding ShowProductivityViewCommand}"
                                  IsEnabled="{Binding CanSwitchTabs}">
@@ -253,7 +253,7 @@
                             <fa:IconImage Icon="Clock" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="{DynamicResource thirdMenuItem}" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
-                    </RadioButton>-->
+                    </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color7}"
